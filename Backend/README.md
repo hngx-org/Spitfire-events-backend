@@ -74,7 +74,7 @@ $ pipenv shell
 $ pipenv install
 ```
 
-# Configure Environment Variables
+### Configure Environment Variables
 
 Make sure to set the following environment variables:
 
@@ -87,12 +87,12 @@ Make sure to set the following environment variables:
 $ python3 run.py
 ```
 
-### Run API TESTs
+### Run API Tests
 
-**\*Note:** ensure you are connected to the internet before running tests and are in spitfire-events directory\*
+**Note:** ensure you are connected to the internet before running tests and are in `spitfire-events` directory
 
 ```bash
-# install test suite and http requests library
+# install test suite and HTTP requests library
 $ pip install requests pytest
 
 # Run the tests in test_crud.py
@@ -103,49 +103,23 @@ $ pytest test_event.py -v
 
 <br>
 
-#### **Error Handling**
-
 ---
 
----
+## **Authentication**
 
-> Errors are returned as JSON objects in the following format with their error code
+The authentication mechanism used by this API is ...
 
-```json
-{
-  "error": "error name",
-  "message": "error description"
-}
-```
+## **EndPoints**
 
-The API will return 5 error types, with diffreent descriptions when requests fail;
-
-- 400: Request unprocessable
-- 403: Forbidden
-- 404: resource not found
-- 422: Bad Request
-- 429: Too Many Requests(rate limiting)
-- 500: Internal server error
-
-<br>
-
-<br>
-
-### **EndPoints**
-
----
-
----
-
-<br>
-
-#### **Authentication**
+### Authentication Endpoint
 
 `GET '/auth/${id}'`
 
-- Gets a person from the database using user id
-- Path Parameter: `id`- integer id of person to retrieve
-- Returns: JSON, message and person object containing name id and date created
+- Retrieves a person from the database using user id
+- Path Parameter: `id`- integer ID of the person to retrieve
+- Returns: JSON response with a message and person object containing `id`, `name` and `date created`
+
+Example Response
 
 ```json
 {
@@ -162,11 +136,37 @@ _status code: 200_
 
 ---
 
+## Sample Usage
+
+## **Error Handling**
+
+> Errors are returned as JSON objects in the following format with their error code
+
+```json
+{
+  "error": "error name",
+  "message": "error description"
+}
+```
+
 <br>
 
-### **UML CLASS DIAGRAM**
+The API will return 5 error types, with diffreent descriptions when requests fail;
+
+- 400: Request unprocessable
+- 403: Forbidden
+- 404: resource not found
+- 422: Bad Request
+- 429: Too Many Requests(rate limiting)
+- 500: Internal server error
+
+<br>
+
+## **UML CLASS DIAGRAM**
 
 ---
+
+## Limitations and Assumptions
 
 ## Authors
 
