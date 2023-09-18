@@ -51,11 +51,11 @@ class User(db.Model):
 
 
 class EventComment(db.Model):
-    __tablename__ = "EventComment"
-    event_id = db.Column(db.String(34), db.ForeignKey('event.id'), primary_key=True)
-    user_id = db.Column(db.String(34), db.ForeignKey('users.id'), primary_key=True)
-    body = db.Column(db.String, nullable=False)
-    image = db.Column(db.String, nullable=False)
+    __tablename__ = "event_comment"
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    body = db.Column(db.String(500), nullable=False)
+    image = db.Column(db.String(120), nullable=False)
 
     # Define relationships
     event = db.relationship('Event', backref='comments')
