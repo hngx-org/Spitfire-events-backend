@@ -90,3 +90,36 @@ class Event(db.Model):
             "end_at": self.end_at,
             "thumbnail": self.thumbnail
         }
+
+
+class Group(db.Model):
+    __tablename__ = "group"
+
+    group_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    thumbnail = db.Column(db.String(200))
+
+    def __init__(self, name, thumbnail=None):
+        self.name = name
+        self.thumbnail = thumbnail
+
+    def __repr__(self):
+        return f'Group Name: {self.name}'
+    
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def update(self):
+        db.session.commit()
+    
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+    
+    def format(self):
+        return {
+            "group_id": self.group_id,
+            "name": self.name,
+            "thumbnail": self.thumbnail
+        }
