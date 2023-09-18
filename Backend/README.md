@@ -31,7 +31,7 @@ Hosted for live testing on **https://**
 ```bash
 $ git clone https://github.com/hngx-org/spitfire-events.git
 
-$ cd spipfire-events
+$ cd Backend/spitfire-events
 ```
 
 ### Install Dependencies
@@ -60,6 +60,9 @@ $ pipenv shell
 # install dependencies in requirements.txt or pipfile
 $ pipenv install
 ```
+#### sample envs
+SECRET_KEY
+SQLALCHEMY_DATABASE_URI
 
 
 ### Run the Server
