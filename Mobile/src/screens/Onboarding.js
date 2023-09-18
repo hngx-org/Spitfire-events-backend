@@ -5,10 +5,12 @@ import Constants from "expo-constants";
 
 const Onboarding = () => {
   const handleLoginWithGoogle = () => {
+    // Authentification Google
     console.log("google");
   };
   const handleLoginWithTwitter = () => {
     console.log("twitter");
+    // Twitter Authentification
   };
   return (
     <SafeAreaView style={styles.container}>
