@@ -69,5 +69,5 @@ class UserGroup(db.Model):
 
     def delete(self):
         '''remove a user'''
-        db.session.delete()
+        db.session.delete(self)
         db.session.commit()
