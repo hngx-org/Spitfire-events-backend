@@ -95,8 +95,8 @@ class Event(db.Model):
 class UserGroup(db.Model):
     '''class that models the UserGroup table'''
     __tablename__ = 'UserGroup'
-    UserID = db.Column(db.Integer, db.models.ForeignKey("User.UserID"), primary_key=True)
-    GroupID = db.Column(db.Integer, db.models.ForeignKey("Group.GroupID"), primary_key=True)
+    user_id = db.Column(db.Integer, db.models.ForeignKey("User.UserID"), primary_key=True)
+    group_id = db.Column(db.Integer, db.models.ForeignKey("Group.GroupID"), primary_key=True)
 
     def save(self):
         '''add a new user'''
