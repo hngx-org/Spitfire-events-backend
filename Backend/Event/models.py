@@ -26,7 +26,7 @@ class User(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def format(self):
+    def user_format(self):
         return {
             "user_id": self.user_id,
             "display_name": self.display_name,
@@ -68,7 +68,7 @@ class Event(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def format(self):
+    def event_format(self):
         return {
             "event_id": self.event_id,
             "title": self.title,
