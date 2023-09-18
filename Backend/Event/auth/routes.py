@@ -3,7 +3,7 @@ from Event.models import User
 from Event.utils import query_one_filtered
 
 
-auth = Blueprint("auth", __name__, url_prefix="/auth")
+auth = Blueprint("auth", __name__, url_prefix="/auth")#url_prefix includes /auth before all endpoints in blueprint
 
 
 # sample Endpoint gets user details from db
@@ -16,11 +16,16 @@ def see_sess():
                 "message": "Success",
                 "email": user.email,
                 "user_name": user.user_name,
-                "is_active": user.is_active,
-                "roles": user.roles.value,
-                "created_on": user.date_created,
+                "created_on": user.date_created
             }
         )
+        """
+        or
+        return jsonify({"message:"success",
+                        "user": user.format()
+                        })
+        """
+
     except Exception as e:
         return (
             jsonify(

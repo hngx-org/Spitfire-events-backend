@@ -1,34 +1,39 @@
 from flask_sqlalchemy import SQLAlchemy
 from Event import db
 
-
 class User(db.Model):
     __tablename__ = "user"
-
+    
     user_id = db.Column(db.Integer, primary_key=True)
     display_name = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String(200), unique=True, nullable=False)
     avatar = db.Column(db.String(200), nullable=False)
 
+
     def __init__(self, display_name, email, avatar):
         self.display_name = display_name
+
         self.email = email
         self.avatar = avatar
 
     def __repr__(self):
         return f'Display Name: {self.display_name}, Email: {self.email}'
 
+    # safely add record/object to db
     def insert(self):
         db.session.add(self)
         db.session.commit()
 
+    # safely update record/object in db
     def update(self):
         db.session.commit()
 
+    # safely delete record/object from db
     def delete(self):
         db.session.delete(self)
         db.session.commit()
 
+    # output object properties in clean dict format
     def format(self):
         return {
             "user_id": self.user_id,

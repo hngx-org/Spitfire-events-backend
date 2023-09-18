@@ -3,13 +3,15 @@
 import * as React from "react";
 import {NavigationContainer} from "@react-navigation/native";
 import { TabNavigator } from "./src/navigators/TabNavigator";
+import Home from "./src/screens/Home";
 
-function App() {
+const App = () => {
   return (
     <NavigationContainer>
-      <TabNavigator />
+      {/* <TabNavigator /> */}
+      <Home />
     </NavigationContainer>
   );
-}
+};
 
 export default App;
