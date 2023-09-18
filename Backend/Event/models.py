@@ -19,15 +19,15 @@ class User(db.Model):
     def __repr__(self):
         return f'Display Name: {self.display_name}, Email: {self.email}'
 
-    def user_insert(self):
+    def insert(self):
         db.session.add(self)
         db.session.commit()
 
-    def user_update(self):
+    def update(self):
         self.verified = True
         db.session.commit()
 
-    def user_delete(self):
+    def delete(self):
         db.session.delete(self)
         db.session.commit()
 
