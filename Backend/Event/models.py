@@ -1,18 +1,20 @@
 from flask_sqlalchemy import SQLAlchemy
 from Event import db
+from werkzeug import generate_password_hash, check_passwork_hash
 
+#User Model
 class User(db.Model):
-    __tablename__ = "user"
+    __tablename__ = "users"
     
     user_id = db.Column(db.Integer, primary_key=True)
     display_name = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String(200), unique=True, nullable=False)
+
     avatar = db.Column(db.String(200), nullable=False)
 
 
     def __init__(self, display_name, email, avatar):
         self.display_name = display_name
-
         self.email = email
         self.avatar = avatar
 
@@ -42,9 +44,9 @@ class User(db.Model):
             "avatar": self.avatar
         }
 
-
+#Event Model
 class Event(db.Model):
-    __tablename__ = "event"
+    __tablename__ = "events"
 
     event_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50), unique=True, nullable=False)
@@ -68,17 +70,21 @@ class Event(db.Model):
     def __repr__(self):
         return f'Title: {self.title}, Description: {self.description}, Creator: {self.creator}, Location: {self.location}, Starts: {self.start_at}, Ends: {self.end_at}'
 
+    # safely add record/object to db
     def insert(self):
         db.session.add(self)
         db.session.commit()
 
+    # safely update record/object to db
     def update(self):
         db.session.commit()
 
+    # safely delete record/object to db
     def delete(self):
         db.session.delete(self)
         db.session.commit()
 
+    # output object properties in clean dict format
     def format(self):
         return {
             "event_id": self.event_id,
