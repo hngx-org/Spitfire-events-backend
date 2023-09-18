@@ -20,10 +20,10 @@ def create_app(config_class=App_Config):
     app.config["SESSION_SQLALCHEMY"] = db
     app.config.from_object(App_Config)
     # Initialize CORS
-    CORS(app,supports_credentials=True)
+    CORS(app, supports_credentials=True)
     # Initialize SQLAlchemy
     db.init_app(app)
-    
+
     # register endpoint(blueprints)
     from Event.user.routes import users
     from Event.auth.routes import auth

@@ -3,7 +3,6 @@ from Event import db
 from uuid import uuid4
 
 
-
 def get_uuid():
     return uuid4().hex
 
@@ -49,5 +48,3 @@ class User(db.Model):
             "user_name": self.user_name,
             "date_created": self.date_created,
         }
-
-

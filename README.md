@@ -46,7 +46,8 @@ $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
-> if you use pipenv
+#### if you use pipenv
+
 ```bash
 $ pip install pipenv
 
@@ -67,7 +68,7 @@ $ python3 run.py
 ```
 
 ### Run API TESTs
-***Note:** ensure you are connected to the internet before running tests and are in crudhng directory*
+***Note:** ensure you are connected to the internet before running tests and are in spitfire-events directory*
 ```bash
 # install test suite and http requests library
 $ pip install requests pytest

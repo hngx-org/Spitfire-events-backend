@@ -3,16 +3,14 @@ from Event.models import User
 from Event.utils import query_one_filtered
 
 
-
 auth = Blueprint("auth", __name__, url_prefix="/auth")
 
 
 # sample Endpoint gets user details from db
 @auth.route("/@me")
-
 def see_sess():
     try:
-        user = query_one_filtered(User, id=1 )
+        user = query_one_filtered(User, id=1)
         return jsonify(
             {
                 "message": "Success",
@@ -33,4 +31,3 @@ def see_sess():
             ),
             500,
         )
-
