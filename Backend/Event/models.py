@@ -94,7 +94,7 @@ class Event(db.Model):
 
 class UserGroup(db.Model):
     '''class that models the UserGroup table'''
-    __table__name = 'UserGroup'
+    __tablename__ = 'UserGroup'
     UserID = db.Column(db.Integer, db.models.ForeignKey("User.UserID"), primary_key=True)
     GroupID = db.Column(db.Integer, db.models.ForeignKey("Group.GroupID"), primary_key=True)
 
