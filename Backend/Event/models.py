@@ -48,3 +48,13 @@ class User(db.Model):
             "user_name": self.user_name,
             "date_created": self.date_created,
         }
+    
+class EventComment(db.Model):
+    event_id = db.Column(db.String(34), db.ForeignKey('event.id'), primary_key=True)
+    user_id = db.Column(db.String(34), db.ForeignKey('users.id'), primary_key=True)
+    body = db.Column(db.String, nullable=False)
+    image = db.Column(db.String, nullable=False)
+
+    # Define relationships
+    event = db.relationship('Event', backref='comments')
+    user = db.relationship('User', backref='comments')
