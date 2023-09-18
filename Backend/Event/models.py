@@ -48,3 +48,20 @@ class User(db.Model):
             "user_name": self.user_name,
             "date_created": self.date_created,
         }
+
+
+class UserGroup(db.Model):
+    '''class that models the UserGroup table'''
+    __table__name = 'UserGroup'
+    UserID = db.Column(db.Integer, db.models.ForeignKey("User.UserID"), primary_key=True)
+    GroupID = db.Column(db.Integer, db.models.ForeignKey("Group.GroupID"), primary_key=True)
+
+    def save(self):
+        '''add a new user'''
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        '''remove a user'''
+        db.session.delete()
+        db.session.commit()
