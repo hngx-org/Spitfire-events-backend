@@ -2,13 +2,14 @@ from datetime import datetime
 from Event import db
 from uuid import uuid4
 
-
+# generates unique id (optional)
 def get_uuid():
     return uuid4().hex
 
 
+# sample Table class to follow
 class User(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "users" #explicitly name tables
     id = db.Column(
         db.String(34), primary_key=True, unique=True, nullable=False, default=get_uuid
     )
@@ -17,6 +18,7 @@ class User(db.Model):
     password = db.Column(db.String(64), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+    # class constructor/initializer for ide class properties suggestion
     def __init__(
         self,
         user_name,
@@ -30,17 +32,21 @@ class User(db.Model):
     def __repr__(self):
         return f"user_name({self.user_name}), email({self.email}), date_created({self.date_created}))"
 
+    # safely add record/object to db
     def insert(self):
         db.session.add(self)
         db.session.commit()
 
+    # safely update record/object in db
     def update(self):
         db.session.commit()
 
+    # safely delete record/object from db
     def delete(self):
         db.session.delete(self)
         db.session.commit()
 
+    # output object properties in clean dict format
     def format(self):
         return {
             "id": self.id,

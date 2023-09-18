@@ -35,7 +35,7 @@ def create_app(config_class=App_Config):
     app.register_blueprint(events)
     app.register_blueprint(error)
 
-    # create db tables if not exists
+    # create db tables from models if not exists
     with app.app_context():
         db.create_all()
 
