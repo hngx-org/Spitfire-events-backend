@@ -48,8 +48,10 @@ class User(db.Model):
             "user_name": self.user_name,
             "date_created": self.date_created,
         }
-    
+
+
 class EventComment(db.Model):
+    __tablename__ = "EventComment"
     event_id = db.Column(db.String(34), db.ForeignKey('event.id'), primary_key=True)
     user_id = db.Column(db.String(34), db.ForeignKey('users.id'), primary_key=True)
     body = db.Column(db.String, nullable=False)
@@ -58,3 +60,31 @@ class EventComment(db.Model):
     # Define relationships
     event = db.relationship('Event', backref='comments')
     user = db.relationship('User', backref='comments')
+
+    def __init__(self, event_id, user_id, body, image):
+        self.event_id = event_id
+        self.user_id = user_id
+        self.body = body
+        self.image = image
+
+    def __repr__(self):
+        return f'event_id: {self.event_id}, user_id: {self.user_id}, body: {self.body}, image: {self.image}'
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            "event_id": self.event_id,
+            "user_id": self.user_id,
+            "body": self.body,
+            "image": self.image
+        }
