@@ -45,7 +45,7 @@ class Event(db.Model):
     title = db.Column(db.String(50), unique=True, nullable=False)
     description = db.Column(db.String(200), nullable=False)
     creator = db.Column(db.Integer, db.ForeignKey(
-        user.user_id), nullable=False)
+        "user.user_id"), nullable=False)
     location = db.Column(db.String(50), nullable=False)
     start_at = db.Column(db.DateTime(), nullable=False)
     end_at = db.Column(db.DateTime(), nullable=False)
