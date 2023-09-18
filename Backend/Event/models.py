@@ -51,9 +51,9 @@ class User(db.Model):
 
 
 class EventComment(db.Model):
-    __tablename__ = "event_comment"
-    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    __tablename__ = "eventcomment"
+    events_id = db.Column(db.Integer, db.ForeignKey('event.event_id'), nullable=False)
+    users_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
     body = db.Column(db.String(500), nullable=False)
     image = db.Column(db.String(120), nullable=False)
 
