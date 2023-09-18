@@ -29,9 +29,9 @@ Hosted for live testing on **https://**
 ### **Set up the server (local)**
 ### Clone The Repository
 ```bash
-$ git clone https://
+$ git clone https://github.com/hngx-org/spitfire-events.git
 
-$ cd crudhng
+$ cd spipfire-events
 ```
 
 ### Install Dependencies
@@ -45,6 +45,21 @@ $ source venv/bin/activate
 # Install Dependencies
 $ pip install -r requirements.txt
 ```
+
+> if you use pipenv
+```bash
+$ pip install pipenv
+
+# create virtuel environment
+$ pipenv --python 3.10
+
+# Activate virtual env
+$ pipenv shell
+
+# install dependencies in requirements.txt or pipfile
+$ pipenv install
+```
+
 
 ### Run the Server
 ```bash
