@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from Event import db
 
@@ -24,7 +23,6 @@ class User(db.Model):
         db.session.commit()
 
     def update(self):
-        self.verified = True
         db.session.commit()
 
     def delete(self):
@@ -47,7 +45,7 @@ class Event(db.Model):
     title = db.Column(db.String(50), unique=True, nullable=False)
     description = db.Column(db.String(200), nullable=False)
     creator = db.Column(db.Integer, db.ForeignKey(
-        User.user_id))
+        user.user_id), nullable=False)
     location = db.Column(db.String(50), nullable=False)
     start_at = db.Column(db.DateTime(), nullable=False)
     end_at = db.Column(db.DateTime(), nullable=False)
@@ -66,12 +64,10 @@ class Event(db.Model):
         return f'Title: {self.title}, Description: {self.description}, Creator: {self.creator}, Location: {self.location}, Starts: {self.start_at}, Ends: {self.end_at}'
 
     def insert(self):
-        self.creator.verified = True
         db.session.add(self)
         db.session.commit()
 
     def update(self):
-        self.creator.verified = True
         db.session.commit()
 
     def delete(self):
