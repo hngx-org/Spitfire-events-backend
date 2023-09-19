@@ -172,6 +172,33 @@ class Comments(db.Model):
 class Image(db.Model):
     """
     Model Schema for images.
+
+    Attributes:
+        image_id (int):
+            Primary key for the table.
+        comment_id (int):
+            Foreign key for the comment table.
+        image_url (str):
+            The URL or path to the image.
+        comment (EventComment):
+            The relationship to the EventComment table.
+
+    Methods:
+        __init__(self, comment_id, image_url):
+            Constructor for the Image class.
+        __repr__(self):
+            Representation of the Image class.
+        insert(self):
+            Inserts a new Image object into the database.
+        update(self):
+            Updates an existing Image object in the database.
+        delete(self):
+            Deletes an existing Image object from the database.
+        format(self):
+            Returns a dictionary representation of the Image object.
+
+    Examples:
+        image = Image(comment_id=1, image_url="https://example.com/image.jpg")
     """
     __tablename__ = "images"
 
