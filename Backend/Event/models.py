@@ -11,11 +11,11 @@ def get_uuid():
 class User(db.Model):
     __tablename__ = "users"
 
-    user_id = db.Column(db.String(36), primary_key=True, unique=True, 
+    user_id = db.Column(db.String(60), primary_key=True, unique=True, 
                         default=get_uuid, nullable=False)
-    display_name = db.Column(db.String(30), unique=True, nullable=False)
-    email = db.Column(db.String(200), unique=True, nullable=False)
-    avatar = db.Column(db.String(200), nullable=False)
+    display_name = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    avatar = db.Column(db.String(255), nullable=False)
 
     def __init__(self, display_name, email, avatar):
         self.display_name = display_name
@@ -52,17 +52,17 @@ class User(db.Model):
 class Event(db.Model):
     __tablename__ = "events"
 
-    event_id = db.Column(db.String(36), primary_key=True, default=get_uuid)
-    title = db.Column(db.String(50), unique=True, nullable=False)
-    description = db.Column(db.String(999), nullable=False)
-    creator = db.Column(db.String(36), db.ForeignKey(
+    event_id = db.Column(db.String(60), primary_key=True, default=get_uuid)
+    title = db.Column(db.String(60), unique=True, nullable=False)
+    description = db.Column(db.String(225), nullable=False)
+    creator = db.Column(db.String(60), db.ForeignKey(
         "user.user_id"), nullable=False)
-    location = db.Column(db.String(50), nullable=False)
+    location = db.Column(db.String(1024), nullable=False)
     start_date = db.Column(db.Date(), nullable=False)
     start_time = db.Column(db.Time(), nullable=False)
     end_date = db.Column(db.Date(), nullable=False)
     end_time = db.Column(db.Time(), nullable=False)
-    thumbnail = db.Column(db.String(200), nullable=False)
+    thumbnail = db.Column(db.String(255), nullable=False)
 
     def __init__(self, title, description, creator, location, start_date, start_time, end_date, end_time, thumbnail):
         self.title = title
