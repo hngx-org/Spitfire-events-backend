@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from Event import db
+from flask.views import MethodView
 
 class User(db.Model):
     __tablename__ = "user"
@@ -99,3 +100,10 @@ class EventComment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     body = db.Column(db.String(1000), nullable=False)
     image = db.Column(db.String(200), nullable=False)
+    
+    
+    def __init__(self, body, image):
+        self.body = body
+        self.image = image
+       
+    
