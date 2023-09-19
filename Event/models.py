@@ -2,14 +2,14 @@ from flask_sqlalchemy import SQLAlchemy
 from Event import db
 from flask.views import MethodView
 
+
 class User(db.Model):
     __tablename__ = "user"
-    
+
     user_id = db.Column(db.Integer, primary_key=True)
     display_name = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String(200), unique=True, nullable=False)
     avatar = db.Column(db.String(200), nullable=False)
-
 
     def __init__(self, display_name, email, avatar):
         self.display_name = display_name
@@ -92,30 +92,66 @@ class Event(db.Model):
             "thumbnail": self.thumbnail
         }
 
+
 class EventComment(db.Model):
-    """Model schema for the comments in the events section"""
+    """Model schema for the comments in the events section
+
+        Attributes:
+            comment_id (int):
+                Primary key for the table
+            event_id (int):
+                Foreign key for the event table
+            user_id (int):
+                Foreign key for the user table
+            body (str):
+                The comment body
+            image (str):
+                The image associated with the comment
+            created_at (datetime):
+                The timestamp for when the comment was created
+            event (Event):
+                The relationship to the event table
+            user (User):
+                The relationship to the user table
+
+
+        Methods:
+            __init__(self,event_id,user_id, body, image ):
+              Constructor for the EventComment class.
+            __repr__(self):
+              Representation of the EventComment class.
+            insert(self): Inserts a new EventComment object into the database.
+            update(self): Updates an existing EventComment object in the database.
+            delete(self): Deletes an existing EventComment object from the database.
+            format(self): Returns a dictionary representation of the EventComment object.
+
+
+        Examples:
+            comment = EventComment(event_id=1, user_id=1, body="This is a comment", image="https://www.google.com")
+
+    """
     __tablename__ = "eventcomments"
 
-    id = db.Column(db.Integer, primary_key = True) # Primary Table Key
+    comment_id = db.Column(db.Integer, primary_key = True) # Primary Table Key
     event_id = db.Column(db.Integer, db.ForeignKey('event.event_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
     body = db.Column(db.String(1000), nullable=False)
     image = db.Column(db.String(200), nullable=False)
-    created_at = db.Column(db.DateTime(), nullable=False) # Timestamp column
-    
-    #Add relationships to Event and User models
+    created_at = db.Column(db.DateTime(), nullable=False)  # Timestamp column
+
+    # Add relationships to Event and User models
     event = db.relationship('Event', backref=db.backref('comments', lazy = True))
     user = db.relationship('User', backref=db.backref('comments', lazy=True))
 
-
-    def __init__(self,event_id,user_id, body, image):
+    def __init__(self, event_id, user_id, body, image):
         self.body = body
         self.image = image
         self.event_id = event_id
         self.user_id = user_id
 
     def __repr__(self):
-        return f'event_id: {self.event_id}, user_id: {self.user_id}, body: {self.body}, image: {self.image}'
+        return f'event_id: {self.event_id}, user_id: {self.user_id},' \
+                'body: {self.body}, image: {self.image}'
 
     def insert(self):
         db.session.add(self)
@@ -134,4 +170,4 @@ class EventComment(db.Model):
             "user_id": self.user_id,
             "body": self.body,
             "image": self.image
-        }    
+        }
