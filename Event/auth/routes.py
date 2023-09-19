@@ -1,7 +1,6 @@
 from flask import jsonify, Blueprint
 from Event.models import User
 from Event.utils import query_one_filtered
-from Event import db
 
 
 auth = Blueprint("auth", __name__, url_prefix="/api/auth")#url_prefix includes /auth before all endpoints in blueprint
