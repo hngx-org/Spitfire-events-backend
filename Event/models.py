@@ -105,6 +105,7 @@ class Group(db.Model):
     thumbnail = db.Column(db.String(200))
     admin_id = db.Column(db.Integer, db.ForeignKey('admin.admin_id'))
     
+    
     # relationship with admin
     admins = db.relationship(
         'Admin',
