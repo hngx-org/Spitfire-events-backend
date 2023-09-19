@@ -91,6 +91,11 @@ class Event(db.Model):
             "thumbnail": self.thumbnail
         }
 
+admin_group_association = db.Table(
+    'admin_group_association',
+    db.Column('admin_id', db.Integer, db.ForeignKey('admin.admin_id')),
+    db.Column('group_id', db.Integer, db.ForeignKey('group.group_id'))
+)
 
 class Group(db.Model):
     __tablename__ = "group"
@@ -98,10 +103,19 @@ class Group(db.Model):
     group_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     thumbnail = db.Column(db.String(200))
+    admin_id = db.Column(db.Integer, db.ForeignKey('admin.admin_id'))
+    
+    # relationship with admin
+    admins = db.relationship(
+        'Admin',
+        secondary=admin_group_association,
+        back_populates='groups'
+    )
 
-    def __init__(self, name, thumbnail=None):
+    def __init__(self, name, thumbnail=None, admin_id=None):
         self.name = name
         self.thumbnail = thumbnail
+        self.admin_id = admin_id
 
     def __repr__(self):
         return f'Group Name: {self.name}'
@@ -123,3 +137,22 @@ class Group(db.Model):
             "name": self.name,
             "thumbnail": self.thumbnail
         }
+
+class Admin(db.Model):
+    __tablename__ = "admin"
+
+    admin_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+
+   #relationship with group
+    groups = db.relationship(
+        'Group',
+        secondary=admin_group_association,
+        back_populates='admins'
+    )
+    def __init__(self, username):
+        self.username = username
+       
+
+    def __repr__(self):
+        return f'Admin Username: {self.username}'
