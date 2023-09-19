@@ -134,10 +134,9 @@ class EventComment(db.Model):
 
     comment_id = db.Column(db.Integer, primary_key = True) # Primary Table Key
     event_id = db.Column(db.Integer, db.ForeignKey('event.event_id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     body = db.Column(db.String(1000), nullable=False)
     image = db.Column(db.String(200), nullable=False)
-    created_at = db.Column(db.DateTime(), nullable=False)  # Timestamp column
 
     # Add relationships to Event and User models
     event = db.relationship('Event', backref=db.backref('comments', lazy = True))
