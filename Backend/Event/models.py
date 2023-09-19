@@ -13,12 +13,13 @@ class users(db.Model):
     user_id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     display_name = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String(200), unique=True, nullable=False)
+    password = db.Column(db.String(200), unique=True, nullable=False)
     avatar = db.Column(db.String(200), nullable=False)
     # interests = db.relationship("events", secondary=interested_events, backref="event")
-    def __init__(self, display_name, email, avatar):
+    def __init__(self, display_name, password, email, avatar):
         self.display_name = display_name
-
         self.email = email
+        self.password = password
         self.avatar = avatar
 
     def __repr__(self):
