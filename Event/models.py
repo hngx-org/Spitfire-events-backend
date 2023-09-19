@@ -96,11 +96,31 @@ class Group(db.Model):
     __tablename__ = "group"
     
 
-    id = db.Column(db.Integer, primary_key=True)
+    group_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
 
     def __init__(self, title):
         self.title = title
 
     def __repr__(self):
-        return f'Group ID: {self.id}, Title: {self.title}'
+        return f'Group ID: {self.group_id}, Title: {self.title}'
+    
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+        
+    def format(self):
+        
+        return {
+            "group_id": self.group_id,
+            "title": self.title
+        }
+        
+        
