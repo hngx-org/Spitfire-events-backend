@@ -97,7 +97,7 @@ class EventComment(db.Model):
     """Model schema for the comments in the events section
 
         Attributes:
-            comment_id (int):
+            id (int):
                 Primary key for the table
             event_id (int):
                 Foreign key for the event table
@@ -130,7 +130,7 @@ class EventComment(db.Model):
             comment = EventComment(event_id=1, user_id=1, body="This is a comment", image="https://www.google.com")
 
     """
-    __tablename__ = "eventcomments"
+    __tablename__ = "comments"
 
     comment_id = db.Column(db.Integer, primary_key = True) # Primary Table Key
     event_id = db.Column(db.Integer, db.ForeignKey('event.event_id'), nullable=False)
