@@ -102,7 +102,7 @@ class Comments(db.Model):
     """Model schema for the comments in the events section
 
         Attributes:
-            id (int):
+            id (str):
                 Primary key for the table
             event_id (int):
                 Foreign key for the event table
@@ -136,8 +136,8 @@ class Comments(db.Model):
     __tablename__ = "comments"
 
     id = db.Column(db.String, primary_key = True, default=get_uuid) # Primary Table Key
-    event_id = db.Column(db.Integer, db.ForeignKey('event.event_id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     body = db.Column(db.String(1000), nullable=False)
 
     # Add relationships to Event and User models
@@ -180,7 +180,7 @@ class Image(db.Model):
     Model Schema for images.
 
     Attributes:
-        image_id (int):
+        image_id (str):
             Primary key for the table.
         comment_id (int):
             Foreign key for the comment table.
