@@ -171,6 +171,7 @@ class EventComment(db.Model):
             "image": self.image
         }
 
+
 class Image(db.Model):
     """
     Model Schema for images.
@@ -178,7 +179,7 @@ class Image(db.Model):
     __tablename__ = "images"
 
     image_id = db.Column(db.Integer, primary_key=True) # Primary key
-    comment_id = db.Column(db.Integer, db.ForeignKey('eventcomments.comment_id'), nullable=False)
+    comment_id = db.Column(db.Integer, db.ForeignKey('comments.comment_id'), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
 
     # Relationship
