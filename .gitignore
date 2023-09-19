@@ -22,7 +22,5 @@ htmlcov/
 .coverage
 .coverage.*
 *,cover
-__pycache__/*
 __pycache__/
-*/__pycache__/
 */__pycache__/*
