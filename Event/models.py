@@ -303,6 +303,7 @@ class UserGroups(db.Model):
         db.session.commit()
 
     def update(self):
+        '''update user record to db'''
         db.session.commit()
 
     def delete(self):
