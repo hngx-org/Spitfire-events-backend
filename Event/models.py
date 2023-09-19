@@ -307,6 +307,7 @@ class UserGroups(db.Model):
         db.session.commit()
 
     def delete(self):
+        ''''delete user record from db'''
         db.session.delete(self)
         db.session.commit()
 
