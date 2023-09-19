@@ -90,3 +90,12 @@ class Event(db.Model):
             "end_at": self.end_at,
             "thumbnail": self.thumbnail
         }
+
+class EventComment(db.Model):
+    """Model schema for the comments in the events section"""
+    __tablename__ = "event_comments"
+
+    event_id = db.Column(db.Integer, db.ForeignKey('event.event_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    body = db.Column(db.String(1000), nullable=False)
+    image = db.Column(db.String(200), nullable=False)
