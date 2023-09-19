@@ -151,8 +151,8 @@ class Comments(db.Model):
     __tablename__ = "comments"
 
     id = db.Column(db.String, primary_key = True, default=get_uuid) # Primary Table Key
-    event_id = db.Column(db.String(36), db.ForeignKey('event.id'), nullable=False)
-    user_id = db.Column(db.String(36), db.ForeignKey('user.id'),  nullable=False)
+    event_id = db.Column(db.String(36), db.ForeignKey('events.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),  nullable=False)
     body = db.Column(db.String(1000), nullable=False)
 
     # Add relationships to Event and User models
