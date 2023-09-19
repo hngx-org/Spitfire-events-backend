@@ -1,14 +1,21 @@
 from flask_sqlalchemy import SQLAlchemy
 from Event import db
+from uuid import uuid4
 from werkzeug import generate_password_hash, check_passwork_hash
+
+def get_uuid():
+    # generates unique id
+    return uuid4().hex
 
 #User Model
 class User(db.Model):
     __tablename__ = "users"
-    
-    user_id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.String(36), primary_key=True, unique=True,
+                        default=get_uuid, nullable=False)
     display_name = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String(200), unique=True, nullable=False)
+    password = db.Column(db.String(16), nullable=False)
     avatar = db.Column(db.String(200), nullable=False)
     password_hash = db.Column(db.String(128))
 
@@ -26,10 +33,10 @@ class User(db.Model):
     def verify_password(self, password):
         return check_passwork_hash(self.password_hash, password)
 
-
-    def __init__(self, display_name, email, avatar):
+    def __init__(self, display_name, password, email, avatar):
         self.display_name = display_name
         self.email = email
+        self.password = password
         self.avatar = avatar
 
     def __repr__(self):
@@ -55,6 +62,7 @@ class User(db.Model):
             "user_id": self.user_id,
             "display_name": self.display_name,
             "email": self.email,
+            "password": self.password,
             "avatar": self.avatar
         }
 
@@ -62,27 +70,31 @@ class User(db.Model):
 class Event(db.Model):
     __tablename__ = "events"
 
-    event_id = db.Column(db.Integer, primary_key=True)
+    event_id = db.Column(db.String(36), primary_key=True, default=get_uuid)
     title = db.Column(db.String(50), unique=True, nullable=False)
-    description = db.Column(db.String(200), nullable=False)
-    creator = db.Column(db.Integer, db.ForeignKey(
+    description = db.Column(db.String(999), nullable=False)
+    creator = db.Column(db.String(36), db.ForeignKey(
         "user.user_id"), nullable=False)
     location = db.Column(db.String(50), nullable=False)
-    start_at = db.Column(db.DateTime(), nullable=False)
-    end_at = db.Column(db.DateTime(), nullable=False)
+    start_date = db.Column(db.Date(), nullable=False)
+    start_time = db.Column(db.Time(), nullable=False)
+    end_date = db.Column(db.Date(), nullable=False)
+    end_time = db.Column(db.Time(), nullable=False)
     thumbnail = db.Column(db.String(200), nullable=False)
 
-    def __init__(self, title, description, creator, location, start_at, end_at, thumbnail):
+    def __init__(self, title, description, creator, location, start_date, start_time, end_date, end_time, thumbnail):
         self.title = title
         self.description = description
         self.creator = creator
         self.location = location
-        self.start_at = start_at
-        self.end_at = end_at
+        self.start_date = start_date
+        self.start_time = start_time
+        self.end_date = end_date
+        self.end_time = end_time
         self.thumbnail = thumbnail
 
     def __repr__(self):
-        return f'Title: {self.title}, Description: {self.description}, Creator: {self.creator}, Location: {self.location}, Starts: {self.start_at}, Ends: {self.end_at}'
+        return f'Title: {self.title}, Description: {self.description}, Creator: {self.creator}, Location: {self.location}, Start Date: {self.start_date}, Start Time: {self.start_time}, End Date: {self.end_date},  End Time: {self.end_time}'
 
     # safely add record/object to db
     def insert(self):
@@ -106,7 +118,9 @@ class Event(db.Model):
             "description": self.description,
             "creator": self.creator,
             "location": self.location,
-            "start_at": self.start_at,
-            "end_at": self.end_at,
+            "start_date": self.start_date,
+            "start_time": self.start_time,
+            "end_date": self.end_date,
+            "end_time": self.end_time,
             "thumbnail": self.thumbnail
         }
