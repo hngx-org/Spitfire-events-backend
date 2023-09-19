@@ -90,3 +90,16 @@ class Event(db.Model):
             "end_at": self.end_at,
             "thumbnail": self.thumbnail
         }
+        
+
+class Group(db.Model):
+    __tablename__ = "group"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+
+    def __init__(self, title):
+        self.title = title
+
+    def __repr__(self):
+        return f'Group ID: {self.id}, Title: {self.title}'
