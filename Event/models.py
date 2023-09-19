@@ -211,3 +211,4 @@ class Image(db.Model):
             "comment_id": self.comment_id,
             "image_url": self.image_url
         }
+
