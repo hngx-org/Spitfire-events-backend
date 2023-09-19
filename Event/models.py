@@ -219,7 +219,7 @@ class Images(db.Model):
             Returns a dictionary representation of the Image object.
 
     Examples:
-        image = Image(comment_id=1, image_url="https://example.com/image.jpg")
+        image = Images(comment_id=1, image_url="https://example.com/image.jpg")
     """
     __tablename__ = "images"
 
@@ -255,3 +255,63 @@ class Images(db.Model):
             "comment_id": self.comment_id,
             "image_url": self.image_url
         }
+
+
+class UserGroups(db.Model):
+    """
+    Model Schema for images.
+
+    Attributes:
+        user_id (str):
+            Foreign key for the user table.
+        group_id (str):
+            Foreign key for the group table.
+        
+
+    Methods:
+        __init__(self, user_id, group_id):
+            Constructor for the UserGroups class.
+        __repr__(self):
+            Representation of the UserGroups class.
+        insert(self):
+            Inserts a new UserGroups object into the database.
+        update(self):
+            Updates an existing UserGroups object in the database.
+        delete(self):
+            Deletes an existing UserGroups object from the database.
+        format(self):
+            Returns a dictionary representation of the UserGroups object.
+
+    Examples:
+        usergroup = UserGroups(user_id=1, group_id=1f)
+    """
+    __tablename__ = "usergroups"
+
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),  nullable=False)
+    group_id = db.Column(db.String(36), db.ForeignKey('groups.id'),  nullable=False)
+
+    def __init__(self, user_id, group_id):
+        self.user_id = user_id
+        self.group_id = group_id
+
+    def __repr__(self):
+        return f'user_id: {self.user_id}, group_id: {self.group_id}'
+    
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            "user_id": self.user_id,
+            "group_id": self.group_id
+        }
+
+
