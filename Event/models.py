@@ -1,5 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from Event import db
+import uuid 
+
 
 class User(db.Model):
     __tablename__ = "user"
@@ -93,10 +95,10 @@ class Event(db.Model):
         
 
 class Group(db.Model):
-    __tablename__ = "group"
+    __tablename__ = "groups"
     
 
-    group_id = db.Column(db.Integer, primary_key=True)
+    group_id =db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()), unique=True, nullable=False)
     title = db.Column(db.String(100), nullable=False)
 
     def __init__(self, title):
