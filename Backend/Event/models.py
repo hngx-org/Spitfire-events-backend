@@ -11,32 +11,15 @@ def get_uuid():
 class User(db.Model):
     __tablename__ = "users"
 
-    user_id = db.Column(db.String(36), primary_key=True, unique=True,
+    user_id = db.Column(db.String(36), primary_key=True, unique=True, 
                         default=get_uuid, nullable=False)
     display_name = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String(200), unique=True, nullable=False)
-    password = db.Column(db.String(16), nullable=False)
     avatar = db.Column(db.String(200), nullable=False)
-    password_hash = db.Column(db.String(128))
 
-    #Create and check password hash
-    @property
-    def password(self):
-        raise AttributeError("Password is not a readable attribute")
-    
-    #Generate password hash
-    @password.setter
-    def password(self, password):
-        self.password_hash = generate_password_hash(password)
-    
-    #verify password hash
-    def verify_password(self, password):
-        return check_passwork_hash(self.password_hash, password)
-
-    def __init__(self, display_name, password, email, avatar):
+    def __init__(self, display_name, email, avatar):
         self.display_name = display_name
         self.email = email
-        self.password = password
         self.avatar = avatar
 
     def __repr__(self):
@@ -62,10 +45,9 @@ class User(db.Model):
             "user_id": self.user_id,
             "display_name": self.display_name,
             "email": self.email,
-            "password": self.password,
             "avatar": self.avatar
         }
-
+    
 #Event Model
 class Event(db.Model):
     __tablename__ = "events"
