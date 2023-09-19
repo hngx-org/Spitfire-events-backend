@@ -54,28 +54,31 @@ class users(db.Model):
 class events(db.Model):
     __tablename__ = "events"
 
-    event_id = db.Column(db.String(36), primary_key=True,
-                         default=str(uuid.uuid4()))
+    event_id = db.Column(db.String(36), primary_key=True, default=get_uuid)
     title = db.Column(db.String(50), unique=True, nullable=False)
     description = db.Column(db.String(999), nullable=False)
     creator = db.Column(db.String(36), db.ForeignKey(
         "user.user_id"), nullable=False)
     location = db.Column(db.String(50), nullable=False)
-    start_at = db.Column(db.DateTime(), nullable=False)
-    end_at = db.Column(db.DateTime(), nullable=False)
+    start_date = db.Column(db.Date(), nullable=False)
+    start_time = db.Column(db.Time(), nullable=False)
+    end_date = db.Column(db.Date(), nullable=False)
+    end_time = db.Column(db.Time(), nullable=False)
     thumbnail = db.Column(db.String(200), nullable=False)
 
-    def __init__(self, title, description, creator, location, start_at, end_at, thumbnail):
+    def __init__(self, title, description, creator, location, start_date, start_time, end_date, end_time, thumbnail):
         self.title = title
         self.description = description
         self.creator = creator
         self.location = location
-        self.start_at = start_at
-        self.end_at = end_at
+        self.start_date = start_date
+        self.start_time = start_time
+        self.end_date = end_date
+        self.end_time = end_time
         self.thumbnail = thumbnail
 
     def __repr__(self):
-        return f'Title: {self.title}, Description: {self.description}, Creator: {self.creator}, Location: {self.location}, Starts: {self.start_at}, Ends: {self.end_at}'
+        return f'Title: {self.title}, Description: {self.description}, Creator: {self.creator}, Location: {self.location}, Start Date: {self.start_date}, Start Time: {self.start_time}, End Date: {self.end_date},  End Time: {self.end_time}'
 
     def insert(self):
         db.session.add(self)
@@ -95,7 +98,9 @@ class events(db.Model):
             "description": self.description,
             "creator": self.creator,
             "location": self.location,
-            "start_at": self.start_at,
-            "end_at": self.end_at,
+            "start_date": self.start_date,
+            "start_time": self.start_time,
+            "end_date": self.end_date,
+            "end_time": self.end_time,
             "thumbnail": self.thumbnail
         }
