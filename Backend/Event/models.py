@@ -9,8 +9,23 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     display_name = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String(200), unique=True, nullable=False)
-
     avatar = db.Column(db.String(200), nullable=False)
+
+    #Create and check password hash
+    password_hash = db.Column(db.String(128))
+
+    @property
+    def password(self):
+        raise AttributeError("Password is not a readable attribute")
+    
+    #Generate password hash
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    #verify password hash
+    def verify_password(self, password):
+        return check_passwork_hash(self.password_hash, password)
 
 
     def __init__(self, display_name, email, avatar):
