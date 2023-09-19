@@ -114,7 +114,7 @@ class Events(db.Model):
         }
         
 
-class Group(db.Model):
+class Groups(db.Model):
     __tablename__ = "groups"
     
 

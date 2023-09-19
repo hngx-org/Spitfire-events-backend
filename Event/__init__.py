@@ -25,15 +25,9 @@ def create_app(config_class=App_Config):
     db.init_app(app)
 
     # register endpoint(blueprints)
-    from Event.user.routes import users
-    from Event.auth.routes import auth
-    from Event.events.routes import events
-    from Event.errors.handlers import error
+    from Event.api import apis
 
-    app.register_blueprint(users)
-    app.register_blueprint(auth)
-    app.register_blueprint(events)
-    app.register_blueprint(error)
+    app.register_blueprint(apis)
 
     # create db tables from models if not exists
     with app.app_context():
