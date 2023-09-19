@@ -15,8 +15,8 @@ class Users(db.Model):
                    default=get_uuid, nullable=False)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    access_token = db.Column(db.String(120), nullable=False),
-    refresh_token = db.Column(db.String(120), nullable=False)
+    access_token = db.Column(db.String(120), nullable=True),
+    refresh_token = db.Column(db.String(120), nullable=True)
     avatar = db.Column(db.String(255), nullable=False)
 
     def __init__(self, name, email, avatar):
@@ -47,8 +47,6 @@ class Users(db.Model):
             "id": self.id,
             "name": self.name,
             "email": self.email,
-            "access_token": self.access_token,
-            "refresh_token": self.refresh_token,
             "avatar": self.avatar
         }
 
@@ -145,7 +143,7 @@ class Comments(db.Model):
 
 
         Examples:
-            comment = Comment(event_id=1, user_id=1, body="This is a comment", image="https://www.google.com")
+            comment = Comments(event_id=1, user_id=1, body="This is a comment", image="https://www.google.com")
 
     """
     __tablename__ = "comments"
@@ -195,7 +193,7 @@ class Images(db.Model):
     Model Schema for images.
 
     Attributes:
-        image_id (str):
+        id (str):
             Primary key for the table.
         comment_id (str):
             Foreign key for the comment table.
@@ -259,7 +257,7 @@ class Images(db.Model):
 
 class UserGroups(db.Model):
     """
-    Model Schema for images.
+    Model Schema for usergroups.
 
     Attributes:
         user_id (str):
@@ -298,16 +296,13 @@ class UserGroups(db.Model):
         return f'user_id: {self.user_id}, group_id: {self.group_id}'
     
     def insert(self):
-        '''insert new user to db'''
         db.session.add(self)
         db.session.commit()
 
     def update(self):
-        '''update user record to db'''
         db.session.commit()
 
     def delete(self):
-        ''''delete user record from db'''
         db.session.delete(self)
         db.session.commit()
 
