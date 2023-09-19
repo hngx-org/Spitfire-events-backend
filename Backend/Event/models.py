@@ -1,14 +1,14 @@
 from flask_sqlalchemy import SQLAlchemy
 from Event import db
 from uuid import uuid4
-
+from werkzeug import generate_password_hash, check_passwork_hash
 
 def get_uuid():
     # generates unique id
     return uuid4().hex
 
-
-class users(db.Model):
+#User Model
+class User(db.Model):
     __tablename__ = "users"
 
     user_id = db.Column(db.String(36), primary_key=True, unique=True,
@@ -17,6 +17,21 @@ class users(db.Model):
     email = db.Column(db.String(200), unique=True, nullable=False)
     password = db.Column(db.String(16), nullable=False)
     avatar = db.Column(db.String(200), nullable=False)
+    password_hash = db.Column(db.String(128))
+
+    #Create and check password hash
+    @property
+    def password(self):
+        raise AttributeError("Password is not a readable attribute")
+    
+    #Generate password hash
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    #verify password hash
+    def verify_password(self, password):
+        return check_passwork_hash(self.password_hash, password)
 
     def __init__(self, display_name, password, email, avatar):
         self.display_name = display_name
@@ -51,8 +66,8 @@ class users(db.Model):
             "avatar": self.avatar
         }
 
-
-class events(db.Model):
+#Event Model
+class Event(db.Model):
     __tablename__ = "events"
 
     event_id = db.Column(db.String(36), primary_key=True, default=get_uuid)
@@ -81,17 +96,21 @@ class events(db.Model):
     def __repr__(self):
         return f'Title: {self.title}, Description: {self.description}, Creator: {self.creator}, Location: {self.location}, Start Date: {self.start_date}, Start Time: {self.start_time}, End Date: {self.end_date},  End Time: {self.end_time}'
 
+    # safely add record/object to db
     def insert(self):
         db.session.add(self)
         db.session.commit()
 
+    # safely update record/object to db
     def update(self):
         db.session.commit()
 
+    # safely delete record/object to db
     def delete(self):
         db.session.delete(self)
         db.session.commit()
 
+    # output object properties in clean dict format
     def format(self):
         return {
             "event_id": self.event_id,
