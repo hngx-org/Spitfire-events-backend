@@ -207,7 +207,7 @@ class Image(db.Model):
     image_url = db.Column(db.String(255), nullable=False)
 
     # Relationship
-    #comment = relationship('Comment', back_populates='images')
+    comment = db.relationship('Comment', back_populates='images')
 
 
     def __init__(self, comment_id, image_url):
