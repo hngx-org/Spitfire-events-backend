@@ -8,7 +8,7 @@ def get_uuid():
     return uuid4().hex
 
 
-class User(db.Model):
+class Users(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.String(60), primary_key=True, unique=True,
@@ -53,7 +53,7 @@ class User(db.Model):
         }
 
 
-class Event(db.Model):
+class Events(db.Model):
     __tablename__ = "events"
 
     id = db.Column(db.String(60), primary_key=True, default=get_uuid)
