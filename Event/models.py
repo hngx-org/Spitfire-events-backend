@@ -135,7 +135,7 @@ class Comments(db.Model):
     """
     __tablename__ = "comments"
 
-    id = db.Column(db.Integer, primary_key = True, default=get_uuid) # Primary Table Key
+    id = db.Column(db.String, primary_key = True, default=get_uuid) # Primary Table Key
     event_id = db.Column(db.Integer, db.ForeignKey('event.event_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     body = db.Column(db.String(1000), nullable=False)
@@ -208,7 +208,7 @@ class Image(db.Model):
     """
     __tablename__ = "images"
 
-    id = db.Column(db.Integer, primary_key=True, default=get_uuid) # Primary key
+    id = db.Column(db.String, primary_key=True, default=get_uuid) # Primary key
     comment_id = db.Column(db.Integer, db.ForeignKey('comments.id'), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
 
