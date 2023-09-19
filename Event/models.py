@@ -1,6 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
 from Event import db
-from flask.views import MethodView
 
 
 class User(db.Model):
@@ -97,7 +96,7 @@ class EventComment(db.Model):
     """Model schema for the comments in the events section
 
         Attributes:
-            comment_id (int):
+            id (int):
                 Primary key for the table
             event_id (int):
                 Foreign key for the event table
@@ -130,7 +129,7 @@ class EventComment(db.Model):
     """
     __tablename__ = "comments"
 
-    comment_id = db.Column(db.Integer, primary_key = True) # Primary Table Key
+    id = db.Column(db.Integer, primary_key = True) # Primary Table Key
     event_id = db.Column(db.Integer, db.ForeignKey('event.event_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     body = db.Column(db.String(1000), nullable=False)
@@ -176,12 +175,12 @@ class Image(db.Model):
     """
     __tablename__ = "images"
 
-    image_id = db.Column(db.Integer, primary_key=True) # Primary key
+    id = db.Column(db.Integer, primary_key=True) # Primary key
     comment_id = db.Column(db.Integer, db.ForeignKey('comments.comment_id'), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
 
     # Relationship
-    comment = relationship('Comment', back_populates='images')
+    #comment = relationship('Comment', back_populates='images')
 
 
     def __init__(self, image_id, comment_id, image_url):
