@@ -136,8 +136,8 @@ class Comments(db.Model):
     __tablename__ = "comments"
 
     id = db.Column(db.String, primary_key = True, default=get_uuid) # Primary Table Key
-    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    event_id = db.Column(db.String, db.ForeignKey('event.id'),default=get_uuid, nullable=False)
+    user_id = db.Column(db.String, db.ForeignKey('user.id'),default=get_uuid, nullable=False)
     body = db.Column(db.String(1000), nullable=False)
 
     # Add relationships to Event and User models
@@ -175,7 +175,7 @@ class Comments(db.Model):
         }
 
 
-class Image(db.Model):
+class Images(db.Model):
     """
     Model Schema for images.
 
@@ -209,7 +209,7 @@ class Image(db.Model):
     __tablename__ = "images"
 
     id = db.Column(db.String, primary_key=True, default=get_uuid) # Primary key
-    comment_id = db.Column(db.Integer, db.ForeignKey('comments.id'), nullable=False)
+    comment_id = db.Column(db.String, db.ForeignKey('comments.id'),default=get_uuid, nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
 
     # Relationship
