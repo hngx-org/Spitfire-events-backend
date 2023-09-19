@@ -94,10 +94,10 @@ class Event(db.Model):
 
 class EventComment(db.Model):
     """Model schema for the comments in the events section"""
-    __tablename__ = "event_comments"
+    __tablename__ = "eventcomments"
 
     event_id = db.Column(db.Integer, db.ForeignKey('event.event_id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
     body = db.Column(db.String(1000), nullable=False)
     image = db.Column(db.String(200), nullable=False)
     
@@ -105,5 +105,27 @@ class EventComment(db.Model):
     def __init__(self, body, image):
         self.body = body
         self.image = image
-       
-    
+        self.event_id = event_id
+        self.user_id = user_id
+
+    def __repr__(self):
+        return f'event_id: {self.event_id}, user_id: {self.user_id}, body: {self.body}, image: {self.image}'
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            "event_id": self.event_id,
+            "user_id": self.user_id,
+            "body": self.body,
+            "image": self.image
+        }    
