@@ -171,3 +171,43 @@ class EventComment(db.Model):
             "body": self.body,
             "image": self.image
         }
+
+class Image(db.Model):
+    """
+    Model Schema for images.
+    """
+    __tablename__ = "images"
+
+    image_id = db.Column(db.Integer, primary_key=True) # Primary key
+    comment_id = db.Column(db.Integer, db.ForeignKey('eventcomments.comment_id'), nullable=False)
+    image_url = db.Column(db.String(255), nullable=False)
+
+    # Relationship
+
+
+    def __init__(self, image_id, comment_id, image_url):
+        self.image_id = image_id
+        self.comment_id = comment_id
+        self.image_url = image_url
+
+    def __repr__(self):
+        return f'image_id: {self.image_id}, comment_id: {self.comment_id},' \
+                'image_url: {self.image_url}'
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            "image_id": self.image_id,
+            "comment_id": self.comment_id,
+            "image_url": self.image_url
+        }
