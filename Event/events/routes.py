@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from Event.models import User
+from Event.models import Users, Events
 from Event.utils import (
     query_one_filtered,
     query_paginate_filtered,
@@ -7,10 +7,15 @@ from Event.utils import (
 )
 from Event import db
 
-events = Blueprint("events", __name__, url_prefix="/events")#url_prefix includes /events before all endpoints in blueprint
+# url_prefix includes /events before all endpoints in blueprint
+events = Blueprint("events", __name__, url_prefix="/events")
 
 
-
-@events.route("/", methods=["POST"])
-def add_provider():
-    return
+@events.route("/api/events/<id>", methods=["DELETE"])
+def delete_event(id):
+    del_event = query_one_filtered(Events, id)
+    if del_event:
+        del_event.delete()
+        return jsonify(response={"success": "Event deleted."}), 200
+    else:
+        return jsonify(error={"Not Found": "Event not found."}), 404
