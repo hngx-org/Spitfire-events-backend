@@ -298,6 +298,7 @@ class UserGroups(db.Model):
         return f'user_id: {self.user_id}, group_id: {self.group_id}'
     
     def insert(self):
+        '''insert new user to db'''
         db.session.add(self)
         db.session.commit()
 
