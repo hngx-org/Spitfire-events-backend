@@ -27,16 +27,16 @@ class User(db.Model):
     def __repr__(self):
         return f'Name: {self.name}, Email: {self.email}'
 
-    # safely add record/object to db
+    # insert record/object to db
     def insert(self):
         db.session.add(self)
         db.session.commit()
 
-    # safely update record/object in db
+    # update record/object in db
     def update(self):
         db.session.commit()
 
-    # safely delete record/object from db
+    # delete record/object from db
     def delete(self):
         db.session.delete(self)
         db.session.commit()
@@ -82,16 +82,17 @@ class Event(db.Model):
     def __repr__(self):
         return f'Title: {self.title}, Description: {self.description}, Creator: {self.creator}, Location: {self.location}, Start Date: {self.start_date}, Start Time: {self.start_time}, End Date: {self.end_date},  End Time: {self.end_time}'
 
-    # safely add record/object to db
+    # insert record/object to db
+
     def insert(self):
         db.session.add(self)
         db.session.commit()
 
-    # safely update record/object to db
+    # update record/object to db
     def update(self):
         db.session.commit()
 
-    # safely delete record/object to db
+    # delete record/object to db
     def delete(self):
         db.session.delete(self)
         db.session.commit()
