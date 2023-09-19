@@ -96,13 +96,19 @@ class EventComment(db.Model):
     """Model schema for the comments in the events section"""
     __tablename__ = "eventcomments"
 
+    id = db.Column(db.Integer, primary_key = True) # Primary Table Key
     event_id = db.Column(db.Integer, db.ForeignKey('event.event_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
     body = db.Column(db.String(1000), nullable=False)
     image = db.Column(db.String(200), nullable=False)
+    created_at = db.Column(db.DateTime(), nullable=False) # Timestamp column
     
-    
-    def __init__(self, body, image):
+    #Add relationships to Event and User models
+    event = db.relationship('Event', backref=db.backref('comments', lazy = True))
+    user = db.relationship('User', backref=db.backref('comments', lazy=True))
+
+
+    def __init__(self,event_id,user_id, body, image):
         self.body = body
         self.image = image
         self.event_id = event_id
