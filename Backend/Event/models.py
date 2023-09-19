@@ -1,29 +1,31 @@
 from flask_sqlalchemy import SQLAlchemy
 from Event import db
 from uuid import uuid4
-from werkzeug import generate_password_hash, check_passwork_hash
+
 
 def get_uuid():
     # generates unique id
     return uuid4().hex
 
-#User Model
+
 class User(db.Model):
     __tablename__ = "users"
 
-    user_id = db.Column(db.String(60), primary_key=True, unique=True, 
-                        default=get_uuid, nullable=False)
-    display_name = db.Column(db.String(120), unique=True, nullable=False)
+    id = db.Column(db.String(60), primary_key=True, unique=True,
+                   default=get_uuid, nullable=False)
+    name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    access_token = db.Column(db.String(120), nullable=False),
+    refresh_token = db.Column(db.String(120), nullable=False)
     avatar = db.Column(db.String(255), nullable=False)
 
-    def __init__(self, display_name, email, avatar):
-        self.display_name = display_name
+    def __init__(self, name, email, avatar):
+        self.name = name
         self.email = email
         self.avatar = avatar
 
     def __repr__(self):
-        return f'Display Name: {self.display_name}, Email: {self.email}'
+        return f'Name: {self.name}, Email: {self.email}'
 
     # safely add record/object to db
     def insert(self):
@@ -42,21 +44,23 @@ class User(db.Model):
     # output object properties in clean dict format
     def format(self):
         return {
-            "user_id": self.user_id,
-            "display_name": self.display_name,
+            "id": self.id,
+            "name": self.name,
             "email": self.email,
+            "access_token": self.access_token,
+            "refresh_token": self.refresh_token,
             "avatar": self.avatar
         }
-    
-#Event Model
+
+
 class Event(db.Model):
     __tablename__ = "events"
 
-    event_id = db.Column(db.String(60), primary_key=True, default=get_uuid)
+    id = db.Column(db.String(60), primary_key=True, default=get_uuid)
     title = db.Column(db.String(60), unique=True, nullable=False)
     description = db.Column(db.String(225), nullable=False)
     creator = db.Column(db.String(60), db.ForeignKey(
-        "user.user_id"), nullable=False)
+        "users.id"), nullable=False)
     location = db.Column(db.String(1024), nullable=False)
     start_date = db.Column(db.Date(), nullable=False)
     start_time = db.Column(db.Time(), nullable=False)
@@ -95,7 +99,7 @@ class Event(db.Model):
     # output object properties in clean dict format
     def format(self):
         return {
-            "event_id": self.event_id,
+            "id": self.id,
             "title": self.title,
             "description": self.description,
             "creator": self.creator,
