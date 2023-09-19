@@ -104,9 +104,9 @@ class Comments(db.Model):
         Attributes:
             id (str):
                 Primary key for the table
-            event_id (int):
+            event_id (str):
                 Foreign key for the event table
-            user_id (int):
+            user_id (str):
                 Foreign key for the user table
             body (str):
                 The comment body
@@ -136,8 +136,8 @@ class Comments(db.Model):
     __tablename__ = "comments"
 
     id = db.Column(db.String, primary_key = True, default=get_uuid) # Primary Table Key
-    event_id = db.Column(db.String, db.ForeignKey('event.id'),default=get_uuid, nullable=False)
-    user_id = db.Column(db.String, db.ForeignKey('user.id'),default=get_uuid, nullable=False)
+    event_id = db.Column(db.String(36), db.ForeignKey('event.id'), default=get_uuid, nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), default=get_uuid, nullable=False)
     body = db.Column(db.String(1000), nullable=False)
 
     # Add relationships to Event and User models
@@ -182,11 +182,11 @@ class Images(db.Model):
     Attributes:
         image_id (str):
             Primary key for the table.
-        comment_id (int):
+        comment_id (str):
             Foreign key for the comment table.
         image_url (str):
             The URL or path to the image.
-        comment (EventComment):
+        comment (Comment):
             The relationship to the EventComment table.
 
     Methods:
@@ -209,7 +209,7 @@ class Images(db.Model):
     __tablename__ = "images"
 
     id = db.Column(db.String, primary_key=True, default=get_uuid) # Primary key
-    comment_id = db.Column(db.String, db.ForeignKey('comments.id'),default=get_uuid, nullable=False)
+    comment_id = db.Column(db.String(36), db.ForeignKey('comments.id'), default=get_uuid, nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
 
     # Relationship
