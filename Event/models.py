@@ -1,5 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 from Event import db
+from uuid import uuid4
+
+
+def get_uuid():
+    # generates unique id
+    return uuid4().hex
 
 
 class User(db.Model):
@@ -46,7 +52,7 @@ class User(db.Model):
 class Event(db.Model):
     __tablename__ = "event"
 
-    event_id = db.Column(db.Integer, primary_key=True)
+    event_id = db.Column(db.Integer, primary_key=True, default=get_uuid)
     title = db.Column(db.String(50), unique=True, nullable=False)
     description = db.Column(db.String(200), nullable=False)
     creator = db.Column(db.Integer, db.ForeignKey(
@@ -129,7 +135,7 @@ class Comments(db.Model):
     """
     __tablename__ = "comments"
 
-    id = db.Column(db.Integer, primary_key = True) # Primary Table Key
+    id = db.Column(db.Integer, primary_key = True, default=get_uuid) # Primary Table Key
     event_id = db.Column(db.Integer, db.ForeignKey('event.event_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     body = db.Column(db.String(1000), nullable=False)
@@ -202,7 +208,7 @@ class Image(db.Model):
     """
     __tablename__ = "images"
 
-    id = db.Column(db.Integer, primary_key=True) # Primary key
+    id = db.Column(db.Integer, primary_key=True, default=get_uuid) # Primary key
     comment_id = db.Column(db.Integer, db.ForeignKey('comments.id'), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
 
