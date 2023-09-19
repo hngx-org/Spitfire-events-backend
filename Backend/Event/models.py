@@ -1,15 +1,20 @@
 from flask_sqlalchemy import SQLAlchemy
 from Event import db
+import uuid
 
-class User(db.Model):
-    __tablename__ = "user"
+
+# interested_events = db.Table("interested_events",
+#                              db.Column("user_id", db.String(36), db.ForeignKey("user.user_id")),
+#                              db.Column("event_id", db.String(36), db.ForeignKey("event.event_id")))
+
+class users(db.Model):
+    __tablename__ = "users"
     
-    user_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     display_name = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String(200), unique=True, nullable=False)
     avatar = db.Column(db.String(200), nullable=False)
-
-
+    # interests = db.relationship("events", secondary=interested_events, backref="event")
     def __init__(self, display_name, email, avatar):
         self.display_name = display_name
 
@@ -43,13 +48,13 @@ class User(db.Model):
         }
 
 
-class Event(db.Model):
-    __tablename__ = "event"
+class events(db.Model):
+    __tablename__ = "events"
 
-    event_id = db.Column(db.Integer, primary_key=True)
+    event_id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     title = db.Column(db.String(50), unique=True, nullable=False)
     description = db.Column(db.String(200), nullable=False)
-    creator = db.Column(db.Integer, db.ForeignKey(
+    creator = db.Column(db.String(36), db.ForeignKey(
         "user.user_id"), nullable=False)
     location = db.Column(db.String(50), nullable=False)
     start_at = db.Column(db.DateTime(), nullable=False)
