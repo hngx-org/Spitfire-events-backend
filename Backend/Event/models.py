@@ -54,7 +54,7 @@ class events(db.Model):
 
     event_id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     title = db.Column(db.String(50), unique=True, nullable=False)
-    description = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.String(999), nullable=False)
     creator = db.Column(db.String(36), db.ForeignKey(
         "user.user_id"), nullable=False)
     location = db.Column(db.String(50), nullable=False)
