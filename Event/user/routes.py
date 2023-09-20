@@ -1,3 +1,5 @@
+""" Module containing all users routes """
+
 from Event.models import Users, Groups
 from Event import db
 from flask import jsonify, Blueprint, request
