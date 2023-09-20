@@ -8,7 +8,7 @@ error = Blueprint("error", __name__)
 def clean_up(exc):
     try:
         db.session.remove()
-    except:
+    except Exception:
         pass
 
 

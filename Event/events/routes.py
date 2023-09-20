@@ -6,8 +6,8 @@ from Event.utils import (
     query_paginated,
 )
 
-events = Blueprint("events", __name__, url_prefix="/api/events")#url_prefix includes /events before all endpoints in blueprint
-
+# url_prefix includes /events before all endpoints in blueprint
+events = Blueprint("events", __name__, url_prefix="/api/events")
 
 
 @events.route("/", methods=["POST"])

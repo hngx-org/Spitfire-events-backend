@@ -7,7 +7,7 @@ def get_uuid():
     # generates unique id
     return uuid4().hex
 
-  
+
 class Users(db.Model):
     __tablename__ = "users"
 
@@ -66,8 +66,8 @@ class Events(db.Model):
     end_time = db.Column(db.Time(), nullable=False)
     thumbnail = db.Column(db.String(255), nullable=False)
 
-
-    def __init__(self, title, description, creator, location, start_date, start_time, end_date, end_time, thumbnail):
+    def __init__(self, title, description, creator, location, start_date,
+                 start_time, end_date, end_time, thumbnail):
         self.title = title
         self.description = description
         self.creator = creator
@@ -79,7 +79,10 @@ class Events(db.Model):
         self.thumbnail = thumbnail
 
     def __repr__(self):
-        return f'Title: {self.title}, Description: {self.description}, Creator: {self.creator}, Location: {self.location}, Start Date: {self.start_date}, Start Time: {self.start_time}, End Date: {self.end_date},  End Time: {self.end_time}'
+        return (f'Title: {self.title}, Description: {self.description},
+                Creator: {self.creator}, Location: {self.location},
+                Start Date: {self.start_date}, Start Time: {self.start_time},
+                End Date: {self.end_date},  End Time: {self.end_time}')
 
     # safely add record/object to db
     def insert(self):
@@ -136,25 +139,32 @@ class Comments(db.Model):
               Constructor for the EventComment class.
             __repr__(self):
               Representation of the EventComment class.
-            insert(self): Inserts a new EventComment object into the database.
-            update(self): Updates an existing EventComment object in the database.
-            delete(self): Deletes an existing EventComment object from the database.
-            format(self): Returns a dictionary representation of the EventComment object.
+            insert(self): Inserts a new EventComment object into the
+            database.
+            update(self): Updates an existing EventComment object in the
+            database.
+            delete(self): Deletes an existing EventComment object from the
+            database.
+            format(self): Returns a dictionary representation of the
+            EventComment object.
 
 
         Examples:
-            comment = Comments(event_id=1, user_id=1, body="This is a comment", image="https://www.google.com")
+            comment = Comments(event_id=1, user_id=1, body="This is a comment",
+            image="https://www.google.com")
 
     """
     __tablename__ = "comments"
 
-    id = db.Column(db.String, primary_key = True, default=get_uuid) # Primary Table Key
-    event_id = db.Column(db.String(36), db.ForeignKey('events.id'), nullable=False)
-    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),  nullable=False)
+    id = db.Column(db.String, primary_key=True, default=get_uuid)
+    event_id = db.Column(db.String(36), db.ForeignKey('events.id'),
+                         nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),
+                        nullable=False)
     body = db.Column(db.String(1000), nullable=False)
 
     # Add relationships to Event and User models
-    event = db.relationship('Event', backref=db.backref('comments', lazy = True))
+    event = db.relationship('Event', backref=db.backref('comments', lazy=True))
     user = db.relationship('User', backref=db.backref('comments', lazy=True))
     images = db.relationship('Image', backref='comment', lazy='dynamic')
 
@@ -221,13 +231,13 @@ class Images(db.Model):
     """
     __tablename__ = "images"
 
-    id = db.Column(db.String, primary_key=True, default=get_uuid) # Primary key
-    comment_id = db.Column(db.String(36), db.ForeignKey('comments.id'), nullable=False)
+    id = db.Column(db.String, primary_key=True, default=get_uuid)
+    comment_id = db.Column(db.String(36), db.ForeignKey('comments.id'),
+                           nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
 
     # Relationship
     comment = db.relationship('Comment', back_populates='images')
-
 
     def __init__(self, comment_id, image_url):
         self.comment_id = comment_id
@@ -264,7 +274,7 @@ class UserGroups(db.Model):
             Foreign key for the user table.
         group_id (str):
             Foreign key for the group table.
-        
+
 
     Methods:
         __init__(self, user_id, group_id):
@@ -285,8 +295,10 @@ class UserGroups(db.Model):
     """
     __tablename__ = "usergroups"
 
-    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),  nullable=False)
-    group_id = db.Column(db.String(36), db.ForeignKey('groups.id'),  nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),
+                        nullable=False)
+    group_id = db.Column(db.String(36), db.ForeignKey('groups.id'),
+                         nullable=False)
 
     def __init__(self, user_id, group_id):
         self.user_id = user_id
@@ -294,7 +306,7 @@ class UserGroups(db.Model):
 
     def __repr__(self):
         return f'user_id: {self.user_id}, group_id: {self.group_id}'
-    
+
     def insert(self):
         db.session.add(self)
         db.session.commit()
@@ -311,5 +323,3 @@ class UserGroups(db.Model):
             "user_id": self.user_id,
             "group_id": self.group_id
         }
-
-

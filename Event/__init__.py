@@ -19,7 +19,7 @@ def create_app(config_class=App_Config):
     app = Flask(__name__)
     app.config["SESSION_SQLALCHEMY"] = db
     app.config.from_object(App_Config)
-    if app.config["SQLALCHEMY_DATABASE_URI"]=="sqlite:///test.db":
+    if app.config["SQLALCHEMY_DATABASE_URI"] == "sqlite:///test.db":
         print("Using test Database")
     # Initialize CORS
     CORS(app, supports_credentials=True)
