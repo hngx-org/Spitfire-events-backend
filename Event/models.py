@@ -29,10 +29,12 @@ class Users(db.Model):
     Returns:
         _type_: _description_
     """
+
     __tablename__ = "users"
 
-    id = db.Column(db.String(60), primary_key=True, unique=True,
-                   default=get_uuid, nullable=False)
+    id = db.Column(
+        db.String(60), primary_key=True, unique=True, default=get_uuid, nullable=False
+    )
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     access_token = db.Column(db.String(120), nullable=True)
@@ -57,25 +59,22 @@ class Users(db.Model):
         Returns:
             _type_: _description_
         """
-        return f'Name: {self.name}, Email: {self.email}'
+        return f"Name: {self.name}, Email: {self.email}"
 
     # safely add record/object to db
     def insert(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.add(self)
         db.session.commit()
 
     # safely update record/object in db
     def update(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.commit()
 
     # safely delete record/object from db
     def delete(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.delete(self)
         db.session.commit()
 
@@ -90,7 +89,7 @@ class Users(db.Model):
             "id": self.id,
             "name": self.name,
             "email": self.email,
-            "avatar": self.avatar
+            "avatar": self.avatar,
         }
 
 
@@ -104,13 +103,13 @@ class Events(db.Model):
     Returns:
         _type_: _description_
     """
+
     __tablename__ = "events"
-# pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments
     id = db.Column(db.String(60), primary_key=True, default=get_uuid)
     title = db.Column(db.String(60), unique=True, nullable=False)
     description = db.Column(db.String(225), nullable=False)
-    creator = db.Column(db.String(60), db.ForeignKey(
-        "users.id"), nullable=False)
+    creator = db.Column(db.String(60), db.ForeignKey("users.id"), nullable=False)
     location = db.Column(db.String(1024), nullable=False)
     start_date = db.Column(db.Date(), nullable=False)
     start_time = db.Column(db.Time(), nullable=False)
@@ -118,8 +117,18 @@ class Events(db.Model):
     end_time = db.Column(db.Time(), nullable=False)
     thumbnail = db.Column(db.String(255), nullable=False)
 
-    def __init__(self, title, description, creator, location, start_date,
-                 start_time, end_date, end_time, thumbnail):
+    def __init__(
+        self,
+        title,
+        description,
+        creator,
+        location,
+        start_date,
+        start_time,
+        end_date,
+        end_time,
+        thumbnail,
+    ):
         """_summary_
 
         Args:
@@ -149,28 +158,27 @@ class Events(db.Model):
         Returns:
             _type_: _description_
         """
-        return (f'Title: {self.title}, Description: {self.description}, '
-                f'Creator: {self.creator}, Location: {self.location}, '
-                f'Start Date: {self.start_date}, Start Time: {self.start_time}, '
-                f'End Date: {self.end_date}, End Time: {self.end_time}')
+        return (
+            f"Title: {self.title}, Description: {self.description}, "
+            f"Creator: {self.creator}, Location: {self.location}, "
+            f"Start Date: {self.start_date}, Start Time: {self.start_time}, "
+            f"End Date: {self.end_date}, End Time: {self.end_time}"
+        )
 
     # safely add record/object to db
     def insert(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.add(self)
         db.session.commit()
 
     # safely update record/object to db
     def update(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.commit()
 
     # safely delete record/object to db
     def delete(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.delete(self)
         db.session.commit()
 
@@ -191,7 +199,7 @@ class Events(db.Model):
             "start_time": self.start_time,
             "end_date": self.end_date,
             "end_time": self.end_time,
-            "thumbnail": self.thumbnail
+            "thumbnail": self.thumbnail,
         }
 
 
@@ -204,11 +212,12 @@ class Groups(db.Model):
     Returns:
         _type_: _description_
     """
+
     __tablename__ = "groups"
 
-
-    group_id = db.Column(db.String(36), primary_key=True, default=get_uuid, unique=True,
-                         nullable=False)
+    group_id = db.Column(
+        db.String(36), primary_key=True, default=get_uuid, unique=True, nullable=False
+    )
     title = db.Column(db.String(100), nullable=False)
 
     def __init__(self, title):
@@ -225,22 +234,19 @@ class Groups(db.Model):
         Returns:
             _type_: _description_
         """
-        return f'Group ID: {self.group_id}, Title: {self.title}'
+        return f"Group ID: {self.group_id}, Title: {self.title}"
 
     def insert(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.add(self)
         db.session.commit()
 
     def update(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.commit()
 
     def delete(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.delete(self)
         db.session.commit()
 
@@ -250,65 +256,62 @@ class Groups(db.Model):
         Returns:
             _type_: _description_
         """
-        return {
-            "id": self.group_id,
-            "title": self.title
-        }
+        return {"id": self.group_id, "title": self.title}
 
 
 class Comments(db.Model):
     """Model schema for the comments in the events section
 
-        Attributes:
-            id (str):
-                Primary key for the table
-            event_id (str):
-                Foreign key for the event table
-            user_id (str):
-                Foreign key for the user table
-            body (str):
-                The comment body
-            image (str):
-                The image associated with the comment
-            event (Event):
-                The relationship to the event table
-            user (User):
-                The relationship to the user table
+    Attributes:
+        id (str):
+            Primary key for the table
+        event_id (str):
+            Foreign key for the event table
+        user_id (str):
+            Foreign key for the user table
+        body (str):
+            The comment body
+        image (str):
+            The image associated with the comment
+        event (Event):
+            The relationship to the event table
+        user (User):
+            The relationship to the user table
 
 
-        Methods:
-            __init__(self,event_id,user_id, body, image ):
-              Constructor for the EventComment class.
-            __repr__(self):
-              Representation of the EventComment class.
-            insert(self): Inserts a new EventComment object into the
-            database.
-            update(self): Updates an existing EventComment object in the
-            database.
-            delete(self): Deletes an existing EventComment object from the
-            database.
-            format(self): Returns a dictionary representation of the
-            EventComment object.
+    Methods:
+        __init__(self,event_id,user_id, body, image ):
+          Constructor for the EventComment class.
+        __repr__(self):
+          Representation of the EventComment class.
+        insert(self): Inserts a new EventComment object into the
+        database.
+        update(self): Updates an existing EventComment object in the
+        database.
+        delete(self): Deletes an existing EventComment object from the
+        database.
+        format(self): Returns a dictionary representation of the
+        EventComment object.
 
 
-        Examples:
-            comment = Comments(event_id=1, user_id=1, body="This is a comment",
-            image="https://www.google.com")
+    Examples:
+        comment = Comments(event_id=1, user_id=1, body="This is a comment",
+        image="https://www.google.com")
 
     """
+
     __tablename__ = "comments"
 
     id = db.Column(db.String, primary_key=True, default=get_uuid)
-    event_id = db.Column(db.String(36), db.ForeignKey('events.id'),
-                         nullable=False)
-    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),
-                        nullable=False)
+    event_id = db.Column(db.String(36), db.ForeignKey("events.id"), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey("users.id"), nullable=False)
     body = db.Column(db.String(1000), nullable=False)
 
     # Add relationships to Event and User models
-    event = db.relationship('Event', backref=db.backref('comments', lazy=True))
-    user = db.relationship('User', backref=db.backref('comments', lazy=True))
-    images = db.relationship('Image', backref='comment', lazy='dynamic')
+
+    event = db.relationship("Event", backref=db.backref("comments", lazy=True))
+    user = db.relationship("User", backref=db.backref("comments", lazy=True))
+    images = db.relationship("Image", backref="comment", lazy="dynamic")
 
     def __init__(self, event_id, user_id, body):
         """_summary_
@@ -328,23 +331,21 @@ class Comments(db.Model):
         Returns:
             _type_: _description_
         """
-        return f'event_id: {self.event_id}, user_id: {self.user_id},' \
-                'body: {self.body}'
+        return (
+            f"event_id: {self.event_id}, user_id: {self.user_id}," "body: {self.body}"
+        )
 
     def insert(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.add(self)
         db.session.commit()
 
     def update(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.commit()
 
     def delete(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.delete(self)
         db.session.commit()
 
@@ -359,7 +360,7 @@ class Comments(db.Model):
             "event_id": self.event_id,
             "user_id": self.user_id,
             "body": self.body,
-            "images": [image.format() for image in self.images]
+            "images": [image.format() for image in self.images],
         }
 
 
@@ -394,15 +395,15 @@ class Images(db.Model):
     Examples:
         image = Images(comment_id=1, image_url="https://example.com/image.jpg")
     """
+
     __tablename__ = "images"
 
     id = db.Column(db.String, primary_key=True, default=get_uuid)
-    comment_id = db.Column(db.String(36), db.ForeignKey('comments.id'),
-                           nullable=False)
+    comment_id = db.Column(db.String(36), db.ForeignKey("comments.id"), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
 
     # Relationship
-    comment = db.relationship('Comment', back_populates='images')
+    comment = db.relationship("Comment", back_populates="images")
 
     def __init__(self, comment_id, image_url):
         """_summary_
@@ -420,22 +421,19 @@ class Images(db.Model):
         Returns:
             _type_: _description_
         """
-        return f'comment_id: {self.comment_id}, image_url: {self.image_url}'
+        return f"comment_id: {self.comment_id}, image_url: {self.image_url}"
 
     def insert(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.add(self)
         db.session.commit()
 
     def update(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.commit()
 
     def delete(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.delete(self)
         db.session.commit()
 
@@ -448,7 +446,7 @@ class Images(db.Model):
         return {
             "image_id": self.id,
             "comment_id": self.comment_id,
-            "image_url": self.image_url
+            "image_url": self.image_url,
         }
 
 
@@ -461,7 +459,6 @@ class UserGroups(db.Model):
             Foreign key for the user table.
         group_id (str):
             Foreign key for the group table.
-
 
     Methods:
         __init__(self, user_id, group_id):
@@ -480,12 +477,17 @@ class UserGroups(db.Model):
     Examples:
         usergroup = UserGroups(user_id=1, group_id=1f)
     """
+
     __tablename__ = "usergroups"
 
-    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),
-                        nullable=False)
-    group_id = db.Column(db.String(36), db.ForeignKey('groups.id'),
-                         nullable=False)
+    # creating a temporary primary key for user group
+    id = db.Column(
+        db.String(60), primary_key=True, default=get_uuid
+    )  # Primary Table Key
+    user_id = db.Column(db.String(36), db.ForeignKey("users.id"), nullable=False)
+    group_id = db.Column(
+        db.String(36), db.ForeignKey("groups.group_id"), nullable=False
+    )
 
     def __init__(self, user_id, group_id):
         """_summary_
@@ -503,22 +505,19 @@ class UserGroups(db.Model):
         Returns:
             _type_: _description_
         """
-        return f'user_id: {self.user_id}, group_id: {self.group_id}'
+        return f"user_id: {self.user_id}, group_id: {self.group_id}"
 
     def insert(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.add(self)
         db.session.commit()
 
     def update(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.commit()
 
     def delete(self):
-        """_summary_
-        """
+        """_summary_"""
         db.session.delete(self)
         db.session.commit()
 
@@ -528,7 +527,4 @@ class UserGroups(db.Model):
         Returns:
             _type_: _description_
         """
-        return {
-            "group_id": self.group_id,
-            "title": self.title
-        }
+        return {"user_id": self.user_id, "group_id": self.group_id}
