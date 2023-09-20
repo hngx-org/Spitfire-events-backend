@@ -6,6 +6,7 @@
 
 # pylint: disable=unused-import
 # pylint: disable=C0103
+# pylint: disable=W0622
 from uuid import uuid4
 from flask_sqlalchemy import SQLAlchemy
 from Event import db
