@@ -526,21 +526,22 @@ class UserGroups(db.Model):
 
 <<<<<<< HEAD
 class Likes(db.Model):
-     """Model schema for the likes
+     """
+     Model schema for the likes
 
-        Attributes:
-            comment_id (str):
-                Foreign key for the comments table
-            user_id (str):
-                Foreign key for the users table
+    Attributes:
+        comment_id (str):
+            Foreign key for the comments table
+        user_id (str):
+            Foreign key for the users table
 
-        Methods:
-            __init__(self, comment_id, user_id):
-              Constructor for the Likes class.
+    Methods:
+        __init__(self, comment_id, user_id):
+            Constructor for the Likes class.
 
-            insert(self): Inserts a like object into the database.
-            delete(self): Deletes an existing Like object from the database.
-            format(self): Returns a dictionary representation
+        insert(self): Inserts a like object into the database.
+        delete(self): Deletes an existing Like object from the database.
+        format(self): Returns a dictionary representation
     """
     __tablename__ = "likes"
 
