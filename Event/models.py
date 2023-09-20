@@ -15,7 +15,7 @@ class Users(db.Model):
                    default=get_uuid, nullable=False)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    access_token = db.Column(db.String(120), nullable=True),
+    access_token = db.Column(db.String(120), nullable=True)
     refresh_token = db.Column(db.String(120), nullable=True)
     avatar = db.Column(db.String(255), nullable=False)
 
@@ -285,8 +285,8 @@ class UserGroups(db.Model):
     """
     __tablename__ = "usergroups"
 
-    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),  nullable=False)
-    group_id = db.Column(db.String(36), db.ForeignKey('groups.id'),  nullable=False)
+    user_id = db.Column(db.String(60), db.ForeignKey('users.id'), primary_key=True,  nullable=False)
+    group_id = db.Column(db.String(60), db.ForeignKey('groups.id'), primary_key=True, nullable=False)
 
     def __init__(self, user_id, group_id):
         self.user_id = user_id
