@@ -16,6 +16,6 @@ def delete_event(id):
 
         if del_event:
             del_event.delete()
-            return jsonify(response={"success": "Event deleted."}), 204
+            return jsonify(response={"success": "Event deleted"}), 204
     except Exception as error:
-        return jsonify(error={"Not Found": "Event not found."}), 404
+        return jsonify(error={"Not Found": "Event not found"}), 404
