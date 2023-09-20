@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from Event.models import User
+from Event.models import Users
 from Event.utils import (
     query_one_filtered,
     query_paginate_filtered,
