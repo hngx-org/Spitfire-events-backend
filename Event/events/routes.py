@@ -139,3 +139,4 @@ def add_comments(event_id):
 #             'status': 'failed',
 #             'message': 'An error occured while fetching all images'
 #         }), 400
+
