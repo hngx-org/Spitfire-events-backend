@@ -6,16 +6,16 @@ from Event.utils import (
 from Event import db
 
 # url_prefix includes /events before all endpoints in blueprint
-events = Blueprint("events", __name__, url_prefix="/events")
+events = Blueprint("events", __name__, url_prefix="/api/event")
 
 
-@events.route("/api/event/<id>", methods=["DELETE"])
+@events.route("/<id>", methods=["DELETE"])
 def delete_event(id):
     try:
         del_event = query_one_filtered(table=Events, id=id)
 
         if del_event:
             del_event.delete()
-            return jsonify(response={"success": "Event deleted."}), 200
+            return jsonify(response={"success": "Event deleted."}), 204
     except Exception as error:
         return jsonify(error={"Not Found": "Event not found."}), 404
