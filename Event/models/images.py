@@ -3,11 +3,7 @@
 
 from Event import db
 from models.base_model import BaseModel
-from uuid import uuid4
 
-def get_uuid():
-    """Generates a unique id."""
-    return uuid4().hex
 
 class Images(BaseModel):
     """
@@ -32,8 +28,13 @@ class Images(BaseModel):
 
     __tablename__ = "images"
 
-    id = db.Column(db.String, primary_key=True, default=get_uuid)  # Primary key
-    comment_id = db.Column(db.String(36), db.ForeignKey('comments.id'), nullable=False)
+    comment_id = (
+            db.Column(
+                db.String(120),
+                db.ForeignKey('comments.id'),
+                nullable=False
+                )
+            )
     image_url = db.Column(db.String(255), nullable=False)
 
     def __init__(self, comment_id, image_url):
@@ -43,7 +44,10 @@ class Images(BaseModel):
 
     def __repr__(self):
         """Representation of the Image class."""
-        return f'comment_id: {self.comment_id}, image_url: {self.image_url}'
+        return (
+                'comment_id: {}, image_url: {}'
+                .format(self.comment_id, self.image_url)
+                )
 
     def format(self):
         """Returns a dictionary representation of the Image object."""
