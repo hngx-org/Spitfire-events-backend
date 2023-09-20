@@ -1,3 +1,7 @@
+# pylint: disable=cyclic-import
+"""_summary_
+"""
+# pylint: disable=unused-import
 from flask import Blueprint, request, jsonify
 from Event.models import Users, Comments, Images
 from Event.utils import (
@@ -135,3 +139,4 @@ def add_comments(event_id):
 #             'status': 'failed',
 #             'message': 'An error occured while fetching all images'
 #         }), 400
+
