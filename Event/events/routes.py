@@ -3,13 +3,8 @@
 """
 # pylint: disable=unused-import
 from flask import Blueprint, request, jsonify
-from Event.models import Users, Comments, Images
-from Event.utils import (
-    query_one_filtered,
-    query_all_filtered,
-    query_paginate_filtered,
-    query_paginated,
-)
+from Event.models import Comments, Images
+from Event.utils import query_all_filtered
 
 # url_prefix includes /api/events before all endpoints in blueprint
 events = Blueprint("events", __name__, url_prefix="/api/events")
@@ -93,50 +88,3 @@ def add_comments(event_id):
             ),
             400,
         )
-
-
-# """
-# POST /api/comments/<comment_id>/images: Add an image to a comment
-# GET /api/comments/<comment_id>/images: Get images for a comment
-# """
-# @events.route("/<comment_id>/images", methods=["GET", "POST"])
-# def add_images(comment_id):
-#     """Add an image or images to a comment in an event discussion
-#         Args:
-#             comment_id (str): The id of the comment in the discussion
-#     """
-#     if request.method == 'POST':
-#         try:
-#             image_url = request.get_json().get('image_url')
-#             new_image = Images(comment_id, image_url)
-#             new_image.insert()
-#             return jsonify({
-#                 'status': 'success',
-#                 'message': 'Image saved successfully',
-#                 'data': {
-#                     'id': new_image.id,
-#                     'image_url': new_image.image_url
-#                 }
-#             })
-#         except Exception as error:
-#             print(f'{type(error).__name__}: {error}')
-#             return jsonify({
-#                 'status': 'failed',
-#                 'message': 'image data could not be saved, an error occured',
-#             }), 400
-
-#     # GET images
-#     try:
-#         all_images = query_all_filtered('images', comment_id=comment_id)
-#         return jsonify({
-#             'status': 'success',
-#             'message': 'all images successfully fetched',
-#             'data': all_images
-#         })
-#     except Exception as error:
-#         print(f'{type(error).__name__}: {error}')
-#         return jsonify({
-#             'status': 'failed',
-#             'message': 'An error occured while fetching all images'
-#         }), 400
-
