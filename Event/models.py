@@ -284,7 +284,7 @@ class UserGroups(db.Model):
         usergroup = UserGroups(user_id=1, group_id=1f)
     """
     __tablename__ = "usergroups"
-
+    #creating a temporary primary key for user group
     id = db.Column(db.String(60), primary_key = True, default=get_uuid) # Primary Table Key
     user_id = db.Column(db.String(36), db.ForeignKey('users.id'),  nullable=False)
     group_id = db.Column(db.String(36), db.ForeignKey('groups.id'),  nullable=False)
@@ -312,5 +312,3 @@ class UserGroups(db.Model):
             "user_id": self.user_id,
             "group_id": self.group_id
         }
-
-
