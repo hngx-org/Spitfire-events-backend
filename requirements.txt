@@ -22,4 +22,5 @@ pytest==7.4.2
 python-dotenv==1.0.0
 requests==2.31.0
 sqlalchemy==2.0.21
+utils==1.0.1
 docstring==0.1.2.4
