@@ -2,6 +2,12 @@
 from flask import jsonify, Blueprint, request
 from Event.utils import query_all_filtered
 from Event.models import Images
+"""_summary_
+
+    Returns:
+        _type_: _description_
+    """
+
 
 comments = Blueprint("comments", __name__, url_prefix="/api/comments")
 
