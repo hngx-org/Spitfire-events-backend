@@ -1,0 +1,21 @@
+name: Feature / Functionality Request
+description: Request a new feature or functionality
+title: "[Feature Request] "
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Request Description
+      description: Describe the new feature or functionality you'd like to request
+    validations:
+      required: true
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use Case
+      description: Explain how this feature would benefit users or the project
+  - type: textarea
+    id: proposed_implementation
+    attributes:
+      label: Proposed Implementation
+      description: If you have initial ideas on how this feature could be implemented, please share them here
