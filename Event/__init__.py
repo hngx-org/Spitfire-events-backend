@@ -14,8 +14,7 @@ from Event.config import App_Config
 
 db = SQLAlchemy()
 
-# pylint: disable=unused-argument
-def create_app(config_class=App_Config):
+def create_app():
     """
     Create a new instance of the app with the given configuration.
 

@@ -459,7 +459,6 @@ class UserGroups(db.Model):
         group_id (str):
             Foreign key for the group table.
 
-
     Methods:
         __init__(self, user_id, group_id):
             Constructor for the UserGroups class.
