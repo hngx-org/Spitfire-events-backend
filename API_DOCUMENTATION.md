@@ -185,7 +185,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Endpoint**: **GET/POST** /api/auth/logout
 - **Description**: log out user session
 - **Success Response**:
-    - **Status Code**: 200 (OK)
+    - **Status Code**: 204 (OK)
     - **Response**:
     ```JSON
     {
