@@ -1,7 +1,7 @@
 from flask import jsonify, Blueprint
 
 
-comments = Blueprint("groups", __name__, url_prefix="/api/comments")
+comments = Blueprint("comments", __name__, url_prefix="/api/comments")
 
 
 @comments.route("/")
