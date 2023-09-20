@@ -1,9 +1,14 @@
-## Describe your changes
+## Description:
+Explain the functionality or bug fix implemented in this pull request, including its purpose and significance.
 
-## Issue ticket number and link
+## Changes Made:
+Provide a detailed overview of the code changes made to introduce this implemtation, along with any relevant code snippets or files.
 
-## Checklist before requesting a review
-- [ ] I have performed a self-review of my code
-- [ ] If it is a core feature, I have added thorough tests.
-- [ ] Do we need to implement analytics?
-- [ ] Will this be part of a product update? If yes, please write one phrase about this update.
+## Related Issue:
+Link to the related issue this implementation fixes for context.
+
+## Testing Done:
+Describe the testing you've conducted to ensure the new implementation works as expected, including any test cases, inputs, and results.
+
+## Screenshots (if applicable):
+Attach screenshots, if applicable, to showcase the newly implemented feature or bug fix.
