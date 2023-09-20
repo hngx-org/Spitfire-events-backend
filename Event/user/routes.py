@@ -1,8 +1,6 @@
-from Event.models import Users, Groups, get_uuid
+from Event.models import Users, Groups
 from Event import db
 from flask import jsonify, Blueprint, request
-
-from Event.utils import query_paginate_filtered, query_one_filtered
 
 
 users = Blueprint("users", __name__, url_prefix="/api/users")
@@ -10,6 +8,7 @@ users = Blueprint("users", __name__, url_prefix="/api/users")
 
 @users.route("/")
 def get_active_signals():
+    ''''''
     return
 
 @users.route("/groups", methods=['POST'], strict_slashes=False)
@@ -32,11 +31,11 @@ def remove_group_member(group_id, user_id):
 
     Returns:
     tuple: A tuple containing response message and status code.
-    """    
+    """
     # Retrieve the group and user from the database
     group_id = Users.query.get(group_id)
     user_id = Groups.query.get(user_id)
-    
+
     # Check if the group and user exist
     if group_id is None or user_id is None:
         return jsonify({"error": "Group or user not found"}), 404
@@ -48,5 +47,5 @@ def remove_group_member(group_id, user_id):
     # Remove the user from the group
     group_id.members.remove(user_id)
     db.session.commit()
-    
+
     return jsonify({"message": "User remove from group successfully"}), 200
