@@ -3,8 +3,8 @@
 """
 # pylint: disable=unused-import
 from flask import Blueprint, request, jsonify
-from Event.models.images import Images
-from Event.models.comments import Comments
+from Event.models import Images
+from Event.models import Comments
 from Event.utils import query_all_filtered
 
 # url_prefix includes /api/events before all endpoints in blueprint
