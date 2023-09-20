@@ -15,7 +15,7 @@ class Users(db.Model):
                    default=get_uuid, nullable=False)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    access_token = db.Column(db.String(120), nullable=False),
+    access_token = db.Column(db.String(120), nullable=False)
     refresh_token = db.Column(db.String(120), nullable=False)
     avatar = db.Column(db.String(255), nullable=False)
 
@@ -58,8 +58,8 @@ class Events(db.Model):
 
     id = db.Column(db.String(60), primary_key=True, default=get_uuid)
     title = db.Column(db.String(60), unique=True, nullable=False)
-    description = db.Column(db.String(225), nullable=False)
-    creator = db.Column(db.String(60), db.ForeignKey(
+    description = db.Column(db.String(1024), nullable=False)
+    creator_id = db.Column(db.String(60), db.ForeignKey(
         "users.id"), nullable=False)
     location = db.Column(db.String(1024), nullable=False)
     start_date = db.Column(db.Date(), nullable=False)
@@ -150,15 +150,15 @@ class Comments(db.Model):
     """
     __tablename__ = "comments"
 
-    id = db.Column(db.String, primary_key = True, default=get_uuid) # Primary Table Key
-    event_id = db.Column(db.String(36), db.ForeignKey('events.id'), nullable=False)
-    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),  nullable=False)
-    body = db.Column(db.String(1000), nullable=False)
+    id = db.Column(db.String(60), primary_key = True, default=get_uuid) # Primary Table Key
+    event_id = db.Column(db.String(60), db.ForeignKey('events.id'), nullable=False)
+    user_id = db.Column(db.String(60), db.ForeignKey('users.id'),  nullable=False)
+    body = db.Column(db.String(1024), nullable=False)
 
     # Add relationships to Event and User models
-    event = db.relationship('Event', backref=db.backref('comments', lazy = True))
-    user = db.relationship('User', backref=db.backref('comments', lazy=True))
-    images = db.relationship('Image', backref='comment', lazy='dynamic')
+    event = db.relationship('Events', backref=db.backref('comments', lazy=True))
+    user = db.relationship('Users', backref=db.backref('comments', lazy=True))
+    images = db.relationship('Images', backref='comment', lazy='dynamic')
 
     def __init__(self, event_id, user_id, body):
         self.body = body
@@ -223,12 +223,12 @@ class Images(db.Model):
     """
     __tablename__ = "images"
 
-    id = db.Column(db.String, primary_key=True, default=get_uuid) # Primary key
-    comment_id = db.Column(db.String(36), db.ForeignKey('comments.id'), nullable=False)
+    id = db.Column(db.String(60), primary_key=True, default=get_uuid) # Primary key
+    comment_id = db.Column(db.String(60), db.ForeignKey('comments.id'), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
 
-    # Relationship
-    comment = db.relationship('Comment', back_populates='images')
+    # Relationship? doesn't backref already handle this?
+    # comment = db.relationship('Comment', back_populates='images')
 
 
     def __init__(self, comment_id, image_url):
