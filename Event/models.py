@@ -308,6 +308,7 @@ class Comments(db.Model):
     body = db.Column(db.String(1000), nullable=False)
 
     # Add relationships to Event and User models
+
     event = db.relationship("Event", backref=db.backref("comments", lazy=True))
     user = db.relationship("User", backref=db.backref("comments", lazy=True))
     images = db.relationship("Image", backref="comment", lazy="dynamic")
@@ -458,7 +459,6 @@ class UserGroups(db.Model):
             Foreign key for the user table.
         group_id (str):
             Foreign key for the group table.
-
 
     Methods:
         __init__(self, user_id, group_id):
