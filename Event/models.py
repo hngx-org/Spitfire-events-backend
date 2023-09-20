@@ -3,8 +3,13 @@
     Returns:
         _type_: _description_
     """
+
+from flask_sqlalchemy import SQLAlchemy
+from Event import db
+
 from uuid import uuid4
 from Event import db
+
 
 
 def get_uuid():
@@ -190,6 +195,40 @@ class Events(db.Model):
             "end_time": self.end_time,
             "thumbnail": self.thumbnail
         }
+
+
+class Groups(db.Model):
+    __tablename__ = "groups"
+    
+
+    group_id = db.Column(db.String(36), primary_key=True, default=get_uuid, unique=True, nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+
+    def __init__(self, title):
+        self.title = title
+
+    def __repr__(self):
+        return f'Group ID: {self.group_id}, Title: {self.title}'
+    
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+        
+    def format(self):
+        
+        return {
+            "id": self.group_id,
+            "title": self.title
+        }
+        
+
 
 
 class Comments(db.Model):
@@ -457,6 +496,17 @@ class UserGroups(db.Model):
         """
         db.session.delete(self)
         db.session.commit()
+        
+    def format(self):
+        
+        return {
+            "group_id": self.group_id,
+            "title": self.title
+        }
+        
+        
+        
+
 
     def format(self):
         """_summary_
