@@ -1,5 +1,6 @@
 """_summary_
     """
+# pylint: disable=cyclic-import
 import requests
 
 BASE_URI = "https://.../"
