@@ -158,7 +158,7 @@ class Comments(db.Model):
     # Add relationships to Event and User models
     event = db.relationship('Event', backref=db.backref('comments', lazy = True))
     user = db.relationship('User', backref=db.backref('comments', lazy=True))
-    images = db.relationship('Image', backref='comment', lazy='dynamic')
+    images = db.relationship('Image', backref='comments', lazy='dynamic')
 
     def __init__(self, event_id, user_id, body):
         self.body = body
