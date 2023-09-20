@@ -1,4 +1,4 @@
-from Event.models.users import Users
+from Event.models.groups import Groups
 from Event.models.base_model import get_uuid
 from flask import jsonify, Blueprint
 
@@ -7,9 +7,9 @@ from Event import db
 import os
 
 
-users = Blueprint("users", __name__)
+groups = Blueprint("groups", __name__)
 
 
-@users.route("/users")
+@groups.route("/groups")
 def get_active_signals():
-    return jsonify({"message": "User table sucessfully tested"})
+    return jsonify({"message": "Group table Successfully Created"})

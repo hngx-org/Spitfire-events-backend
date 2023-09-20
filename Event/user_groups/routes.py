@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from Event.models.events import Events
+from Event.models.user_groups import UserGroups
 from Event.utils import (
     query_one_filtered,
     query_paginate_filtered,
@@ -8,9 +8,9 @@ from Event.utils import (
 from Event import db
 
 # events = Blueprint("events", __name__, url_prefix="/events")#url_prefix includes /events before all endpoints in blueprint
-events = Blueprint("events", __name__) #url_prefix includes /events before all endpoints in blueprint
+user_groups = Blueprint("user_groups", __name__) #url_prefix includes /events before all endpoints in blueprint
 
 
-@events.route("/events")
+@user_groups.route("/user_groups")
 def add_provider():
-    return jsonify({"message":"Events table successfully created"})
+    return jsonify({"message":"UserGroups table successfully created"})

@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from Event.models.events import Events
+from Event.models.comments import Comments
 from Event.utils import (
     query_one_filtered,
     query_paginate_filtered,
@@ -8,9 +8,9 @@ from Event.utils import (
 from Event import db
 
 # events = Blueprint("events", __name__, url_prefix="/events")#url_prefix includes /events before all endpoints in blueprint
-events = Blueprint("events", __name__) #url_prefix includes /events before all endpoints in blueprint
+comments = Blueprint("comments", __name__) #url_prefix includes /events before all endpoints in blueprint
 
 
-@events.route("/events")
+@comments.route("/comments")
 def add_provider():
-    return jsonify({"message":"Events table successfully created"})
+    return jsonify({"message":"Comments table successfully created"})
