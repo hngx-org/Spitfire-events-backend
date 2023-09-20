@@ -7,15 +7,16 @@ def get_uuid():
     # generates unique id
     return uuid4().hex
 
-  
+
 class Users(db.Model):
     __tablename__ = "users"
 
-    id = db.Column(db.String(60), primary_key=True, unique=True,
-                   default=get_uuid, nullable=False)
+    id = db.Column(
+        db.String(60), primary_key=True, unique=True, default=get_uuid, nullable=False
+    )
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    access_token = db.Column(db.String(120), nullable=True),
+    access_token = db.Column(db.String(120), nullable=True)
     refresh_token = db.Column(db.String(120), nullable=True)
     avatar = db.Column(db.String(255), nullable=False)
 
@@ -25,7 +26,7 @@ class Users(db.Model):
         self.avatar = avatar
 
     def __repr__(self):
-        return f'Name: {self.name}, Email: {self.email}'
+        return f"Name: {self.name}, Email: {self.email}"
 
     # safely add record/object to db
     def insert(self):
@@ -47,7 +48,7 @@ class Users(db.Model):
             "id": self.id,
             "name": self.name,
             "email": self.email,
-            "avatar": self.avatar
+            "avatar": self.avatar,
         }
 
 
@@ -57,8 +58,7 @@ class Events(db.Model):
     id = db.Column(db.String(60), primary_key=True, default=get_uuid)
     title = db.Column(db.String(60), unique=True, nullable=False)
     description = db.Column(db.String(225), nullable=False)
-    creator = db.Column(db.String(60), db.ForeignKey(
-        "users.id"), nullable=False)
+    creator = db.Column(db.String(60), db.ForeignKey("users.id"), nullable=False)
     location = db.Column(db.String(1024), nullable=False)
     start_date = db.Column(db.Date(), nullable=False)
     start_time = db.Column(db.Time(), nullable=False)
@@ -66,8 +66,18 @@ class Events(db.Model):
     end_time = db.Column(db.Time(), nullable=False)
     thumbnail = db.Column(db.String(255), nullable=False)
 
-
-    def __init__(self, title, description, creator, location, start_date, start_time, end_date, end_time, thumbnail):
+    def __init__(
+        self,
+        title,
+        description,
+        creator,
+        location,
+        start_date,
+        start_time,
+        end_date,
+        end_time,
+        thumbnail,
+    ):
         self.title = title
         self.description = description
         self.creator = creator
@@ -79,7 +89,7 @@ class Events(db.Model):
         self.thumbnail = thumbnail
 
     def __repr__(self):
-        return f'Title: {self.title}, Description: {self.description}, Creator: {self.creator}, Location: {self.location}, Start Date: {self.start_date}, Start Time: {self.start_time}, End Date: {self.end_date},  End Time: {self.end_time}'
+        return f"Title: {self.title}, Description: {self.description}, Creator: {self.creator}, Location: {self.location}, Start Date: {self.start_date}, Start Time: {self.start_time}, End Date: {self.end_date},  End Time: {self.end_time}"
 
     # safely add record/object to db
     def insert(self):
@@ -107,56 +117,57 @@ class Events(db.Model):
             "start_time": self.start_time,
             "end_date": self.end_date,
             "end_time": self.end_time,
-            "thumbnail": self.thumbnail
+            "thumbnail": self.thumbnail,
         }
 
 
 class Comments(db.Model):
     """Model schema for the comments in the events section
 
-        Attributes:
-            id (str):
-                Primary key for the table
-            event_id (str):
-                Foreign key for the event table
-            user_id (str):
-                Foreign key for the user table
-            body (str):
-                The comment body
-            image (str):
-                The image associated with the comment
-            event (Event):
-                The relationship to the event table
-            user (User):
-                The relationship to the user table
+    Attributes:
+        id (str):
+            Primary key for the table
+        event_id (str):
+            Foreign key for the event table
+        user_id (str):
+            Foreign key for the user table
+        body (str):
+            The comment body
+        image (str):
+            The image associated with the comment
+        event (Event):
+            The relationship to the event table
+        user (User):
+            The relationship to the user table
 
 
-        Methods:
-            __init__(self,event_id,user_id, body, image ):
-              Constructor for the EventComment class.
-            __repr__(self):
-              Representation of the EventComment class.
-            insert(self): Inserts a new EventComment object into the database.
-            update(self): Updates an existing EventComment object in the database.
-            delete(self): Deletes an existing EventComment object from the database.
-            format(self): Returns a dictionary representation of the EventComment object.
+    Methods:
+        __init__(self,event_id,user_id, body, image ):
+          Constructor for the EventComment class.
+        __repr__(self):
+          Representation of the EventComment class.
+        insert(self): Inserts a new EventComment object into the database.
+        update(self): Updates an existing EventComment object in the database.
+        delete(self): Deletes an existing EventComment object from the database.
+        format(self): Returns a dictionary representation of the EventComment object.
 
 
-        Examples:
-            comment = Comments(event_id=1, user_id=1, body="This is a comment", image="https://www.google.com")
+    Examples:
+        comment = Comments(event_id=1, user_id=1, body="This is a comment", image="https://www.google.com")
 
     """
+
     __tablename__ = "comments"
 
-    id = db.Column(db.String, primary_key = True, default=get_uuid) # Primary Table Key
-    event_id = db.Column(db.String(36), db.ForeignKey('events.id'), nullable=False)
-    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),  nullable=False)
+    id = db.Column(db.String, primary_key=True, default=get_uuid)  # Primary Table Key
+    event_id = db.Column(db.String(36), db.ForeignKey("events.id"), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey("users.id"), nullable=False)
     body = db.Column(db.String(1000), nullable=False)
 
     # Add relationships to Event and User models
-    event = db.relationship('Event', backref=db.backref('comments', lazy = True))
-    user = db.relationship('User', backref=db.backref('comments', lazy=True))
-    images = db.relationship('Image', backref='comment', lazy='dynamic')
+    event = db.relationship("Event", backref=db.backref("comments", lazy=True))
+    user = db.relationship("User", backref=db.backref("comments", lazy=True))
+    images = db.relationship("Image", backref="comment", lazy="dynamic")
 
     def __init__(self, event_id, user_id, body):
         self.body = body
@@ -164,8 +175,9 @@ class Comments(db.Model):
         self.user_id = user_id
 
     def __repr__(self):
-        return f'event_id: {self.event_id}, user_id: {self.user_id},' \
-                'body: {self.body}'
+        return (
+            f"event_id: {self.event_id}, user_id: {self.user_id}," "body: {self.body}"
+        )
 
     def insert(self):
         db.session.add(self)
@@ -184,7 +196,7 @@ class Comments(db.Model):
             "event_id": self.event_id,
             "user_id": self.user_id,
             "body": self.body,
-            "images": [image.format() for image in self.images]
+            "images": [image.format() for image in self.images],
         }
 
 
@@ -219,22 +231,22 @@ class Images(db.Model):
     Examples:
         image = Images(comment_id=1, image_url="https://example.com/image.jpg")
     """
+
     __tablename__ = "images"
 
-    id = db.Column(db.String, primary_key=True, default=get_uuid) # Primary key
-    comment_id = db.Column(db.String(36), db.ForeignKey('comments.id'), nullable=False)
+    id = db.Column(db.String, primary_key=True, default=get_uuid)  # Primary key
+    comment_id = db.Column(db.String(36), db.ForeignKey("comments.id"), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
 
     # Relationship
-    comment = db.relationship('Comment', back_populates='images')
-
+    comment = db.relationship("Comment", back_populates="images")
 
     def __init__(self, comment_id, image_url):
         self.comment_id = comment_id
         self.image_url = image_url
 
     def __repr__(self):
-        return f'comment_id: {self.comment_id}, image_url: {self.image_url}'
+        return f"comment_id: {self.comment_id}, image_url: {self.image_url}"
 
     def insert(self):
         db.session.add(self)
@@ -251,65 +263,69 @@ class Images(db.Model):
         return {
             "image_id": self.id,
             "comment_id": self.comment_id,
-            "image_url": self.image_url
+            "image_url": self.image_url,
         }
 
 
-class UserGroups(db.Model):
-    """
-    Model Schema for usergroups.
+# This class is commented till the Groups class is created. this is to prevent code breaks from missing foreign key in groups table
 
-    Attributes:
-        user_id (str):
-            Foreign key for the user table.
-        group_id (str):
-            Foreign key for the group table.
-        
+# class UserGroups(db.Model):
+#     """
+#     Model Schema for usergroups.
 
-    Methods:
-        __init__(self, user_id, group_id):
-            Constructor for the UserGroups class.
-        __repr__(self):
-            Representation of the UserGroups class.
-        insert(self):
-            Inserts a new UserGroups object into the database.
-        update(self):
-            Updates an existing UserGroups object in the database.
-        delete(self):
-            Deletes an existing UserGroups object from the database.
-        format(self):
-            Returns a dictionary representation of the UserGroups object.
-
-    Examples:
-        usergroup = UserGroups(user_id=1, group_id=1f)
-    """
-    __tablename__ = "usergroups"
-
-    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),  nullable=False)
-    group_id = db.Column(db.String(36), db.ForeignKey('groups.id'),  nullable=False)
-
-    def __init__(self, user_id, group_id):
-        self.user_id = user_id
-        self.group_id = group_id
-
-    def __repr__(self):
-        return f'user_id: {self.user_id}, group_id: {self.group_id}'
-    
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
-    def format(self):
-        return {
-            "user_id": self.user_id,
-            "group_id": self.group_id
-        }
+#     Attributes:
+#         id (str):
+#             Primary key for the table.
+#         user_id (str):
+#             Foreign key for the user table.
+#         group_id (str):
+#             Foreign key for the group table.
 
 
+#     Methods:
+#         __init__(self, user_id, group_id):
+#             Constructor for the UserGroups class.
+#         __repr__(self):
+#             Representation of the UserGroups class.
+#         insert(self):
+#             Inserts a new UserGroups object into the database.
+#         update(self):
+#             Updates an existing UserGroups object in the database.
+#         delete(self):
+#             Deletes an existing UserGroups object from the database.
+#         format(self):
+#             Returns a dictionary representation of the UserGroups object.
+
+#     Examples:
+#         usergroup = UserGroups(user_id=1, group_id=1f)
+#     """
+#     __tablename__ = "usergroups"
+
+#     id = id = db.Column(db.String, primary_key=True, default=get_uuid)
+#     user_id = db.Column(db.String(36), db.ForeignKey('users.id'),  nullable=False)
+#     group_id = db.Column(db.String(36), db.ForeignKey('groups.id'),  nullable=False)
+
+#     def __init__(self, user_id, group_id):
+#         self.user_id = user_id
+#         self.group_id = group_id
+
+#     def __repr__(self):
+#         return f'id: {self.id} ,user_id: {self.user_id}, group_id: {self.group_id}'
+
+#     def insert(self):
+#         db.session.add(self)
+#         db.session.commit()
+
+#     def update(self):
+#         db.session.commit()
+
+#     def delete(self):
+#         db.session.delete(self)
+#         db.session.commit()
+
+#     def format(self):
+#         return {
+#             "id": self.id,
+#             "user_id": self.user_id,
+#             "group_id": self.group_id
+#         }

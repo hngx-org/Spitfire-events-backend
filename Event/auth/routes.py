@@ -1,22 +1,24 @@
 from flask import jsonify, Blueprint
-from Event.models import User
+from Event.models import Users
 from Event.utils import query_one_filtered
 
 
-auth = Blueprint("auth", __name__, url_prefix="/api/auth")#url_prefix includes /auth before all endpoints in blueprint
+auth = Blueprint(
+    "auth", __name__, url_prefix="/api/auth"
+)  # url_prefix includes /auth before all endpoints in blueprint
 
 
 # sample Endpoint gets user details from db
 @auth.route("/@me")
 def see_sess():
     try:
-        user = query_one_filtered(User, id=1)
+        user = query_one_filtered(Users, id=1)
         return jsonify(
             {
                 "message": "Success",
                 "email": user.email,
                 "user_name": user.user_name,
-                "created_on": user.date_created
+                "created_on": user.date_created,
             }
         )
         """
