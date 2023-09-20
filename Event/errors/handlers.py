@@ -13,7 +13,16 @@ error = Blueprint("error", __name__)
 
 
 class CustomError(Exception):
+    """Exception class for custom errors
+        """
     def __init__(self, error, code, message):
+        """constructor for custom error class
+
+        Args:
+            error (_type_): Error Name
+            code (_type_): HTTP error code
+            message (_type_): error message
+        """
         self.error = error
         self.code = code
         self.message = message

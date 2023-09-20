@@ -36,7 +36,7 @@ class Users(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     avatar = db.Column(db.String(255), nullable=False)
 
-    def __init__(self, id,name, email, avatar):
+    def __init__(self,id,name, email, avatar):
         """_summary_
 
         Args:

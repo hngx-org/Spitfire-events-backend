@@ -7,13 +7,13 @@
 # pylint: disable=unused-import
 import os
 import requests
-from Event.models import Users
-from Event.errors.handlers import CustomError
 from google.oauth2 import id_token
-from Event.utils import query_one_filtered, is_logged_in
 from google.auth.transport import requests
 from google.auth.exceptions import GoogleAuthError
 from flask import jsonify, Blueprint, request, session
+from Event.models import Users
+from Event.errors.handlers import CustomError
+from Event.utils import query_one_filtered, is_logged_in
 
 auth = Blueprint(
     "auth", __name__, url_prefix="/api/auth"
@@ -25,6 +25,8 @@ IOS_CLIENT_ID = os.environ.get("IOS_CLIENT_ID")
 
 @auth.route("/gauth", methods=["POST"])
 def register_or_login():
+    """_summary_
+        """
     data = request.get_json()
 
     # lets collect the credential token from request body
@@ -37,8 +39,8 @@ def register_or_login():
         id_info = id_token.verify_oauth2_token(
             id_token=credential_token, request=requests.Request()
         )
-    except GoogleAuthError as e:
-        print(e)  # TODO remove when ready for production
+    except GoogleAuthError as error:
+        print(error)
         return jsonify({"error": "Bad Request", "message": "invalid token"}), 400
 
     # lets check if the token was issued for us
@@ -91,7 +93,7 @@ def see_sess():
             ),
             200,
         )
-    except Exception as e:
+    except Exception:
         return (
             jsonify(
                 {
@@ -105,5 +107,7 @@ def see_sess():
 
 @auth.route("/logout", methods=["GET", "POST"])
 def logout_user():
+    """_summary_
+        """
     session.pop("user", None)
     return jsonify({"message": "success"}), 200
