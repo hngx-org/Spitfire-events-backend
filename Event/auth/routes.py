@@ -51,7 +51,7 @@ def register_or_login():
             id=id_info["sub"],
             name=id_info["name"],
             email=id_info["email"],
-            avatar=id_info["picture"],
+            avatar=id_info["picture"]
         )
         user.insert()
 
@@ -64,7 +64,7 @@ def register_or_login():
                 "message": "success",
                 "email": user.email,
                 "name": user.name,
-                "avatar": user.avatar,
+                "avatar": user.avatar
             }
         ),
         200,
@@ -86,7 +86,7 @@ def see_sess():
                     "message": "Success",
                     "email": user.email,
                     "name": user.name,
-                    "avatar": user.avatar,
+                    "avatar": user.avatar
                 }
             ),
             200,
@@ -96,7 +96,7 @@ def see_sess():
             jsonify(
                 {
                     "error": "Internal server error",
-                    "message": "It's not you it's us",
+                    "message": "It's not you it's us"
                 }
             ),
             500,

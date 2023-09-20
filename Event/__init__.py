@@ -17,8 +17,6 @@ db = SQLAlchemy()
 
 sess = Session()
 
-sess = Session()
-
 # pylint: disable=unused-argument
 def create_app(config_class=App_Config):
     """

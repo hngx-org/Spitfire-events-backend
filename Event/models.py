@@ -88,7 +88,7 @@ class Users(db.Model):
         return {
             "name": self.name,
             "email": self.email,
-            "avatar": self.avatar,
+            "avatar": self.avatar
         }
 
 
@@ -357,7 +357,7 @@ class Comments(db.Model):
             "event_id": self.event_id,
             "user_id": self.user_id,
             "body": self.body,
-            "images": [image.format() for image in self.images],
+            "images": [image.format() for image in self.images]
         }
 
 
@@ -447,7 +447,7 @@ class Images(db.Model):
         return {
             "image_id": self.id,
             "comment_id": self.comment_id,
-            "image_url": self.image_url,
+            "image_url": self.image_url
         }
 
 
