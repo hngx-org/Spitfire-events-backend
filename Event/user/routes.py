@@ -1,4 +1,4 @@
-from Event.models import Users, UserGroups, get_uuid
+from Event.models import Users, Groups, get_uuid
 from flask import jsonify, Blueprint, request
 
 from Event.utils import query_paginate_filtered, query_one_filtered
@@ -22,31 +22,22 @@ def create_group():
 
 @users.route("/api/groups/:groupId/members/:userId", methods=['DELETE'])
 def remove_group_member(group_id, user_id):
+    """
+    Remove a user from a group.
+
+    Parameters:
+    group_id (str): The ID of the group.
+    user_id (str): The ID of the user to be removed from the group.
+
+    Returns:
+    tuple: A tuple containing response message and status code.
+    """    
+    # Retrieve the group and user from the database
     group_id = Users.query.get(group_id)
     user_id = Groups.query.get(user_id)
     
+    # Check if the group and user exist
+    # Check if the user is a member of the group
+    # Remove the user from the group
+    
     return jsonify({"message": "User remove from group successfully"}), 200
-
-@users.route("/")
-def get_active_signals():
-    return
-
-
-@users.route("/api/groups/:groupId/members/:userId", methods=['DELETE'])
-def remove_group_member(group_id, user_id):
-    """
-    """
-    # Check if passed params exist
-    user_group = UserGroups.query.filter_by(group_id=group_id, user_id=user_id).first()
-    # Return error if user not found
-    if not user_group:
-        response = {
-                'error': 'Not found',
-                'message': 'User not found in the group'
-                }
-        return jsonify(response)
-
-    # Delete user from group and commit to database
-    user_group.delete()
-    # Return success message
-    return jsonify({"message": "User removed from group successfully"}), 200
