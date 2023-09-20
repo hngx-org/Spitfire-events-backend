@@ -2,12 +2,13 @@
 Module for removing user from a group.
 """
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from Event.models import Users, Groups
 from Event import db
 
 
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
+
 
 @groups.route("/<int:group_id>", methods=["PUT"])
 def update_group(group_id):
@@ -30,22 +31,26 @@ def update_group(group_id):
     """
     try:
         data = request.get_json()
-        if 'title' not in data:
+        if "title" not in data:
             return jsonify({"error": "Missing 'title' in request"}), 400
-        
+
         group = Groups.query.get(group_id)
 
         if not group:
             return jsonify({"error": f"Group with ID {group_id} not found"}), 404
 
-        group.title = data['title']
+        group.title = data["title"]
 
         group.update()
 
-        return jsonify({"message": "Group updated successfully", "group": group.format()}), 201
+        return (
+            jsonify({"message": "Group updated successfully", "group": group.format()}),
+            201,
+        )
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    except Exception as error:  # pylint: disable=broad-except
+        return jsonify({"error": str(error)}), 500
+
 
 @groups.route("/")
 def get_active_signals():
@@ -57,7 +62,8 @@ def get_active_signals():
     """
     return
 
-@groups.route("/api/groups/<group_id>/members/<user_id>", methods=['DELETE'])
+
+@groups.route("/api/groups/<group_id>/members/<user_id>", methods=["DELETE"])
 def remove_group_member(group_id, user_id):
     """
     Remove a user from a group.
@@ -86,4 +92,3 @@ def remove_group_member(group_id, user_id):
     db.session.commit()
 
     return jsonify({"message": "User removed from group successfully"}), 200
-
