@@ -1,5 +1,39 @@
 # API Documentation
 
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Authentication](#authentication)
+   - 2.1 [Authenticate User](#authenticate-user)
+3. [User Management](#user-management)
+   - 3.1 [Get User Profile](#get-user-profile)
+   - 3.2 [Update User Profile](#update-user-profile)
+4. [Event Management](#event-management)
+   - 4.1 [Create a New Event](#create-a-new-event)
+   - 4.2 [Get a List of Events](#get-a-list-of-events)
+   - 4.3 [Get Event Details](#get-event-details)
+   - 4.4 [Update Event Details](#update-event-details)
+   - 4.5 [Delete an Event](#delete-an-event)
+   - 4.6 [Add a Comment to an Event](#add-a-comment-to-an-event)
+   - 4.7 [Get Comments for an Event](#get-comments-for-an-event)
+   - 4.8 [Add an Image to a Comment](#add-an-image-to-a-comment)
+   - 4.9 [Get Images for a Comment](#get-images-for-a-comment)
+5. [User Interactions](#user-interactions)
+   - 5.1 [Express Interest in an Event](#express-interest-in-an-event)
+   - 5.2 [Remove Interest in an Event](#remove-interest-in-an-event)
+   - 5.3 [Create a New Group](#create-a-new-group)
+   - 5.4 [Get Group Details](#get-group-details)
+   - 5.5 [Update Group Details](#update-group-details)
+   - 5.6 [Delete a Group](#delete-a-group)
+   - 5.7 [Add a User to a Group](#add-a-user-to-a-group)
+   - 5.8 [Remove a User from a Group](#remove-a-user-from-a-group)
+6. [Models](#models)
+   - 6.1 [Users Model](#users-model)
+   - 6.2 [Images Model](#images-model)
+   - 6.3 [UserGroups Model](#usergroups-model)
+7. [Conclusion](#conclusion)
+
+
 ## Introduction
 Welcome to the API documentation for our user and event management system. This API documentation provides detailed information about the endpoints and models for a user and event management system. It includes information on how to use each endpoint, expected input data, success responses, and HTTP status codes.
 
