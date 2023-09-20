@@ -25,7 +25,7 @@ IOS_CLIENT_ID = os.environ.get("IOS_CLIENT_ID")
 
 @auth.route("/gauth", methods=["POST"])
 def register_or_login():
-    """_summary_
+    """Register and Login route for google authentication
         """
     data = request.get_json()
 
@@ -41,7 +41,9 @@ def register_or_login():
         )
     except GoogleAuthError as error:
         print(error)
-        return jsonify({"error": "Bad Request", "message": "invalid token"}), 400
+        raise CustomError("Bad Request", 400,"invalid token" )
+    except ValueError:
+        raise CustomError("Bad Request", 400,"invalid token" )
 
     # lets check if the token was issued for us
     if id_info["aud"] not in [ANDROID_CLIENT_ID, IOS_CLIENT_ID]:
@@ -57,7 +59,7 @@ def register_or_login():
         )
         user.insert()
 
-    # we have a valid user,lets create a login session
+    # # we have a valid user,lets create a login session
     session["user"] = {"id": user.id}
 
     return (

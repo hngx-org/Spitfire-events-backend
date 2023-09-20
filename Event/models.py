@@ -8,17 +8,15 @@
 # pylint: disable=C0103
 # pylint: disable=W0622
 from uuid import uuid4
-from flask_sqlalchemy import SQLAlchemy
 from Event import db
 
 
 def get_uuid():
-    """_summary_
+    """generates unique id
 
     Returns:
         _type_: _description_
     """
-    # generates unique id
     return uuid4().hex
 
 
@@ -306,9 +304,9 @@ class Comments(db.Model):
     body = db.Column(db.String(1000), nullable=False)
 
     # Add relationships to Event and User models
-    event = db.relationship('Event', backref=db.backref('comments', lazy=True))
-    user = db.relationship('User', backref=db.backref('comments', lazy=True))
-    images = db.relationship('Image', backref='comment', lazy='dynamic')
+    event = db.relationship('Events', backref=db.backref('comments', lazy=True))
+    user = db.relationship('Users', backref=db.backref('comments', lazy=True))
+    images = db.relationship('Images', backref='comments', lazy='dynamic')
 
     def __init__(self, event_id, user_id, body):
         """_summary_
@@ -402,8 +400,6 @@ class Images(db.Model):
                            nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
 
-    # Relationship
-    comment = db.relationship('Comment', back_populates='images')
 
     def __init__(self, comment_id, image_url):
         """_summary_
