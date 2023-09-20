@@ -1,5 +1,8 @@
+"""_summary_
+"""
+# pylint: disable=unused-import
 from flask import Blueprint, request, jsonify
-from Event.models import User
+from Event.models import Users
 from Event.utils import (
     query_one_filtered,
     query_paginate_filtered,
@@ -12,4 +15,6 @@ events = Blueprint("events", __name__, url_prefix="/api/events")
 
 @events.route("/", methods=["POST"])
 def add_provider():
+    """_summary_
+    """
     return

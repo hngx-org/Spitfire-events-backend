@@ -1,16 +1,26 @@
+"""_summary_
+
+    Returns:
+        _type_: _description_
+    """
+# pylint: disable=unused-import
 from flask import jsonify, Blueprint
-from Event.models import User
+from Event.models import Users
 from Event.utils import query_one_filtered
+
 
 # url_prefix includes /auth before all endpoints in blueprint
 auth = Blueprint("auth", __name__, url_prefix="/api/auth")
 
 
 # sample Endpoint gets user details from db
+# pylint: disable=broad-exception-caught
 @auth.route("/@me")
 def see_sess():
+    """_summary_
+    """
     try:
-        user = query_one_filtered(User, id=1)
+        user = query_one_filtered(Users, id=1)
         return jsonify(
             {
                 "message": "Success",
@@ -19,6 +29,8 @@ def see_sess():
                 "created_on": user.date_created
             }
         )
+        # pylint: disable=unreachable
+        # pylint: disable=pointless-string-statement
         """
         or
         return jsonify({"message:"success",
@@ -26,7 +38,7 @@ def see_sess():
                         })
         """
 
-    except Exception as e:
+    except Exception:
         return (
             jsonify(
                 {

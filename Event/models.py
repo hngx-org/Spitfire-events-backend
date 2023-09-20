@@ -1,48 +1,88 @@
-from flask_sqlalchemy import SQLAlchemy
-from Event import db
+"""_summary_
+
+    Returns:
+        _type_: _description_
+    """
 from uuid import uuid4
+from Event import db
 
 
 def get_uuid():
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
     # generates unique id
     return uuid4().hex
 
 
 class Users(db.Model):
+    """_summary_
+
+    Args:
+        db (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     __tablename__ = "users"
 
     id = db.Column(db.String(60), primary_key=True, unique=True,
                    default=get_uuid, nullable=False)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    access_token = db.Column(db.String(120), nullable=True),
+    access_token = db.Column(db.String(120), nullable=True)
     refresh_token = db.Column(db.String(120), nullable=True)
     avatar = db.Column(db.String(255), nullable=False)
 
     def __init__(self, name, email, avatar):
+        """_summary_
+
+        Args:
+            name (_type_): _description_
+            email (_type_): _description_
+            avatar (_type_): _description_
+        """
         self.name = name
         self.email = email
         self.avatar = avatar
 
     def __repr__(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return f'Name: {self.name}, Email: {self.email}'
 
     # safely add record/object to db
     def insert(self):
+        """_summary_
+        """
         db.session.add(self)
         db.session.commit()
 
     # safely update record/object in db
     def update(self):
+        """_summary_
+        """
         db.session.commit()
 
     # safely delete record/object from db
     def delete(self):
+        """_summary_
+        """
         db.session.delete(self)
         db.session.commit()
 
     # output object properties in clean dict format
     def format(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return {
             "id": self.id,
             "name": self.name,
@@ -51,9 +91,18 @@ class Users(db.Model):
         }
 
 
+# pylint: disable=too-many-instance-attributes
 class Events(db.Model):
-    __tablename__ = "events"
+    """_summary_
 
+    Args:
+        db (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    __tablename__ = "events"
+# pylint: disable=too-many-arguments
     id = db.Column(db.String(60), primary_key=True, default=get_uuid)
     title = db.Column(db.String(60), unique=True, nullable=False)
     description = db.Column(db.String(225), nullable=False)
@@ -68,6 +117,19 @@ class Events(db.Model):
 
     def __init__(self, title, description, creator, location, start_date,
                  start_time, end_date, end_time, thumbnail):
+        """_summary_
+
+        Args:
+            title (_type_): _description_
+            description (_type_): _description_
+            creator (_type_): _description_
+            location (_type_): _description_
+            start_date (_type_): _description_
+            start_time (_type_): _description_
+            end_date (_type_): _description_
+            end_time (_type_): _description_
+            thumbnail (_type_): _description_
+        """
         self.title = title
         self.description = description
         self.creator = creator
@@ -79,27 +141,43 @@ class Events(db.Model):
         self.thumbnail = thumbnail
 
     def __repr__(self):
-        return (f'Title: {self.title}, Description: {self.description},
-                Creator: {self.creator}, Location: {self.location},
-                Start Date: {self.start_date}, Start Time: {self.start_time},
-                End Date: {self.end_date},  End Time: {self.end_time}')
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
+        return (f'Title: {self.title}, Description: {self.description}, '
+                f'Creator: {self.creator}, Location: {self.location}, '
+                f'Start Date: {self.start_date}, Start Time: {self.start_time}, '
+                f'End Date: {self.end_date}, End Time: {self.end_time}')
 
     # safely add record/object to db
     def insert(self):
+        """_summary_
+        """
         db.session.add(self)
         db.session.commit()
 
     # safely update record/object to db
     def update(self):
+        """_summary_
+        """
         db.session.commit()
 
     # safely delete record/object to db
     def delete(self):
+        """_summary_
+        """
         db.session.delete(self)
         db.session.commit()
 
     # output object properties in clean dict format
     def format(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return {
             "id": self.id,
             "title": self.title,
@@ -169,26 +247,49 @@ class Comments(db.Model):
     images = db.relationship('Image', backref='comment', lazy='dynamic')
 
     def __init__(self, event_id, user_id, body):
+        """_summary_
+
+        Args:
+            event_id (_type_): _description_
+            user_id (_type_): _description_
+            body (_type_): _description_
+        """
         self.body = body
         self.event_id = event_id
         self.user_id = user_id
 
     def __repr__(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return f'event_id: {self.event_id}, user_id: {self.user_id},' \
                 'body: {self.body}'
 
     def insert(self):
+        """_summary_
+        """
         db.session.add(self)
         db.session.commit()
 
     def update(self):
+        """_summary_
+        """
         db.session.commit()
 
     def delete(self):
+        """_summary_
+        """
         db.session.delete(self)
         db.session.commit()
 
     def format(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return {
             "comment_id": self.id,
             "event_id": self.event_id,
@@ -240,24 +341,46 @@ class Images(db.Model):
     comment = db.relationship('Comment', back_populates='images')
 
     def __init__(self, comment_id, image_url):
+        """_summary_
+
+        Args:
+            comment_id (_type_): _description_
+            image_url (_type_): _description_
+        """
         self.comment_id = comment_id
         self.image_url = image_url
 
     def __repr__(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return f'comment_id: {self.comment_id}, image_url: {self.image_url}'
 
     def insert(self):
+        """_summary_
+        """
         db.session.add(self)
         db.session.commit()
 
     def update(self):
+        """_summary_
+        """
         db.session.commit()
 
     def delete(self):
+        """_summary_
+        """
         db.session.delete(self)
         db.session.commit()
 
     def format(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return {
             "image_id": self.id,
             "comment_id": self.comment_id,
@@ -301,24 +424,46 @@ class UserGroups(db.Model):
                          nullable=False)
 
     def __init__(self, user_id, group_id):
+        """_summary_
+
+        Args:
+            user_id (_type_): _description_
+            group_id (_type_): _description_
+        """
         self.user_id = user_id
         self.group_id = group_id
 
     def __repr__(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return f'user_id: {self.user_id}, group_id: {self.group_id}'
 
     def insert(self):
+        """_summary_
+        """
         db.session.add(self)
         db.session.commit()
 
     def update(self):
+        """_summary_
+        """
         db.session.commit()
 
     def delete(self):
+        """_summary_
+        """
         db.session.delete(self)
         db.session.commit()
 
     def format(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return {
             "user_id": self.user_id,
             "group_id": self.group_id

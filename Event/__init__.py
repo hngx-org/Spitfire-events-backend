@@ -1,14 +1,21 @@
-from Event.config import App_Config
+# pylint: disable=invalid-name
+# pylint: disable=redefined-outer-name
+"""_summary_
+
+Returns:
+    _type_: _description_
+"""
+import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 from flask_cors import CORS
-import os
+from Event.config import AppConfig
 
 
 db = SQLAlchemy()
 
 
-def create_app(config_class=App_Config):
+def create_app(AppConfig):
     """
     Create a new instance of the app with the given configuration.
 
@@ -18,7 +25,7 @@ def create_app(config_class=App_Config):
     # Initialize Flask-
     app = Flask(__name__)
     app.config["SESSION_SQLALCHEMY"] = db
-    app.config.from_object(App_Config)
+    app.config.from_object(AppConfig)
     if app.config["SQLALCHEMY_DATABASE_URI"] == "sqlite:///test.db":
         print("Using test Database")
     # Initialize CORS
@@ -27,6 +34,7 @@ def create_app(config_class=App_Config):
     db.init_app(app)
 
     # register endpoint(blueprints)
+    # pylint: disable=import-outside-toplevel
     from Event.user.routes import users
     from Event.auth.routes import auth
     from Event.events.routes import events
