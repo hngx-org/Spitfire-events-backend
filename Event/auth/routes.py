@@ -6,7 +6,7 @@
     """
 # pylint: disable=unused-import
 from flask import jsonify, Blueprint
-from Event.models import Users
+from Event.models.users import Users
 from Event.utils import query_one_filtered
 
 

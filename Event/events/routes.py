@@ -3,7 +3,7 @@
 """
 # pylint: disable=unused-import
 from flask import Blueprint, request, jsonify
-from Event.models import Users
+from Event.models.users import Users
 from Event.utils import (
     query_one_filtered,
     query_paginate_filtered,

@@ -3,7 +3,8 @@ Module for removing user from a group.
 """
 
 from flask import Blueprint, jsonify
-from Event.models import Users, Groups
+from Event.models.users import Users
+from Event.models.groups import Groups
 from Event import db
 
 
@@ -19,6 +20,7 @@ def get_active_signals():
         str: A placeholder return value.
     """
     return
+
 
 @groups.route("/api/groups/<group_id>/members/<user_id>", methods=['DELETE'])
 def remove_group_member(group_id, user_id):

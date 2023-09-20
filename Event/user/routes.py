@@ -3,7 +3,7 @@ Module containing user-related routes for the Events-App, Team Spitfire.
 """
 
 from flask import Blueprint, request
-from Event.models import Groups
+from Event.models.groups import Groups
 
 # from Event.utils import query_paginate_filtered, query_one_filtered
 
@@ -20,6 +20,7 @@ def get_active_signals():
         str: A placeholder return value.
     """
     return
+
 
 @users.route("/groups", methods=['POST'], strict_slashes=False)
 def create_group():
