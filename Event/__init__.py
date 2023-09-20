@@ -30,11 +30,13 @@ def create_app(config_class=App_Config):
     from Event.user.routes import users
     from Event.auth.routes import auth
     from Event.events.routes import events
+    from Event.groups.routes import groups
     from Event.errors.handlers import error
 
     app.register_blueprint(users)
     app.register_blueprint(auth)
     app.register_blueprint(events)
+    app.register_blueprint(groups)
     app.register_blueprint(error)
 
     # create db tables from models if not exists
