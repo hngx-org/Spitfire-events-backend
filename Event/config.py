@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 
 load_dotenv(".env")
 
-
-class AppConfig:
+# pylint: disable=invalid-name
+class App_Config:
     """_summary_
     """
     SECRET_KEY = os.environ.get("SECRET_KEY")

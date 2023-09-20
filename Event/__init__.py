@@ -9,13 +9,13 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 from flask_cors import CORS
-from Event.config import AppConfig
+from Event.config import App_Config
 
 
 db = SQLAlchemy()
 
-
-def create_app(AppConfig):
+# pylint: disable=unused-argument
+def create_app(config_class=App_Config):
     """
     Create a new instance of the app with the given configuration.
 
@@ -25,7 +25,7 @@ def create_app(AppConfig):
     # Initialize Flask-
     app = Flask(__name__)
     app.config["SESSION_SQLALCHEMY"] = db
-    app.config.from_object(AppConfig)
+    app.config.from_object(App_Config)
     if app.config["SQLALCHEMY_DATABASE_URI"] == "sqlite:///test.db":
         print("Using test Database")
     # Initialize CORS
