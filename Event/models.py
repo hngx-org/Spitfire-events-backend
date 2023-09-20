@@ -118,14 +118,14 @@ class Groups(db.Model):
     __tablename__ = "groups"
     
 
-    id = db.Column(db.String(36), primary_key=True, default=get_uuid, unique=True, nullable=False)
+    group_id = db.Column(db.String(36), primary_key=True, default=get_uuid, unique=True, nullable=False)
     title = db.Column(db.String(100), nullable=False)
 
     def __init__(self, title):
         self.title = title
 
     def __repr__(self):
-        return f'Group ID: {self.id}, Title: {self.title}'
+        return f'Group ID: {self.group_id}, Title: {self.title}'
     
     def insert(self):
         db.session.add(self)
@@ -141,7 +141,7 @@ class Groups(db.Model):
     def format(self):
         
         return {
-            "id": self.id,
+            "id": self.group_id,
             "title": self.title
         }
         
