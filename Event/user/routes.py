@@ -15,3 +15,12 @@ def get_active_signals():
     """_summary_
     """
     return
+
+@users.route("/groups", methods=['POST'], strict_slashes=False)
+def create_group():
+    """just testing"""
+    title = request.form.get('title')
+    new_group = Groups(title=title)
+    new_group.insert()
+
+    return 'success'
