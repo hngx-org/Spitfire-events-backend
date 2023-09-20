@@ -15,7 +15,7 @@ class Users(db.Model):
                    default=get_uuid, nullable=False)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    access_token = db.Column(db.String(120), nullable=True),
+    access_token = db.Column(db.String(120), nullable=True)
     refresh_token = db.Column(db.String(120), nullable=True)
     avatar = db.Column(db.String(255), nullable=False)
 
@@ -285,15 +285,16 @@ class UserGroups(db.Model):
     """
     __tablename__ = "usergroups"
 
+    id = db.Column(db.String(60), primary_key = True, default=get_uuid) # Primary Table Key
     user_id = db.Column(db.String(36), db.ForeignKey('users.id'),  nullable=False)
-    group_id = db.Column(db.String(36), db.ForeignKey('groups.id'),  nullable=False)
+   # group_id = db.Column(db.String(36), db.ForeignKey('groups.id'),  nullable=False)
 
     def __init__(self, user_id, group_id):
         self.user_id = user_id
         self.group_id = group_id
 
     def __repr__(self):
-        return f'user_id: {self.user_id}, group_id: {self.group_id}'
+        return f'user_id: {self.user_id}' # add "group_id: {self.group_id}" when group-id is ready
     
     def insert(self):
         db.session.add(self)
@@ -309,7 +310,7 @@ class UserGroups(db.Model):
     def format(self):
         return {
             "user_id": self.user_id,
-            "group_id": self.group_id
+           # "group_id": self.group_id
         }
 
 
