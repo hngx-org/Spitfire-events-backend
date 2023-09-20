@@ -3,11 +3,11 @@
 ## Table of Contents
 
 1. [Introduction](#introduction)
-2. [Authentication](#authentication)
-   - 2.1 [Authenticate User](#authenticate-user)
+2. [Error Handling](#user-management)
 3. [User Management](#user-management)
-   - 3.1 [Get User Profile](#get-user-profile)
-   - 3.2 [Update User Profile](#update-user-profile)
+   - 3.1 [Authenticate User](#authenticate-user)
+   - 3.2 [Get User Profile](#get-user-profile)
+   - 3.3 [Update User Profile](#update-user-profile)
 4. [Event Management](#event-management)
    - 4.1 [Create a New Event](#create-a-new-event)
    - 4.2 [Get a List of Events](#get-a-list-of-events)
@@ -98,9 +98,10 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 
 ```
 
-## User Management Endpoints
+## User Management 
 
-### POST /api/auth
+### Authenticate User
+- **Endpoint**: **POST** /api/auth
 - **Description**: Authenticate a user and obtain access token.
 - **Request Body**: 
     - **Input**: JSON with user credentials.
@@ -145,7 +146,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
         }
         ```
 
-### GET /api/users/:userId
+### Get User Profile
+- **Endpoint**: **GET** `/api/users/{id}`
 - **Description**: Get user profile by ID.
 - **Success Response**:
     - **Status Code**: 200
@@ -159,7 +161,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 }
 ```
 
-### PUT /api/users/:userId
+### Update User Profile
+- **Endpoint**: **PUT** `/api/users/{id}`
 - **Description**: Update user profile by ID.
 - **Input**: JSON with user profile data (name, email, avatar).
 ```
@@ -182,9 +185,10 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 }
 ```
 
-## Event Management Endpoints
+## Event Management 
 
-### POST /api/events
+### Create a New Event
+- **Endpoint**: **POST** `/api/events`
 - **Description**: Create a new event.
 - **Input**: JSON with event details (title, description, location, start date/time, end date/time, thumbnail).
 ```
@@ -216,7 +220,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 }
 ```
 
-### GET /api/events
+### Get a List of Events
+- **Endpoint**: **GET** `/api/events`
 - **Description**: Get a list of events.
 - **Success Response**:
     - **Status Code**: 200
@@ -249,7 +254,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 
 ```
 
-### GET /api/events/:eventId
+### Get Event Details
+- **Endpoint**: **GET** `/api/events/(id)`
 - **Description**: Get event details by ID.
 - **Success Response**:
     - **Status Code**: 200
@@ -269,7 +275,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 }
 ```
 
-### PUT /api/events/:eventId
+### Update Event Details
+- **Endpoint**: **PUT** `/api/events/{id}`
 - **Description**: Update event details by ID.
 - **Input**: JSON with event details to update (title, description, location, start date/time, end date/time, thumbnail).
 ```
@@ -302,12 +309,14 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 }
 ```
 
-### DELETE /api/events/:eventId
+### Delete an Event
+- **Endpoint**: **DELETE** `/api/events/{id}`
 - **Description**: Delete an event by ID.
 - **Success Response**:
     - **Status Code**: 204 (No Content)
 
-### POST /api/events/:eventId/comments
+### Add a Comment to an Event
+- **Endpoint**: **POST** `/api/events/{id}/comments`
 - **Description**:Add a comment to an event.
 - **Input**:JSON with comment details (body).
 ```
@@ -329,7 +338,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 }
 ```
 
-### GET /api/events/:eventId/comments
+### Get Comments for an Event
+- **Endpoint**: **GET** /api/events/{id}/comments
 - **Description**: Get comments for an event.
 - **Success Response**:
     - **Status Code**: 200
@@ -354,7 +364,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 
 ```
 
-### POST /api/comments/:commentId/images
+### Add an Image to a Comment
+- **Endpoint**: **POST** `/api/comments/{id}/images`
 - **Description**:Add an image to a comment.
 - **Input**:JSON with image details (image_url).
 ```
@@ -374,7 +385,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 }
 ```
 
-### GET /api/events/:eventId/comments
+### Get Images for a Comment
+- **Endpoint**: **GET** `/api/comments/{id}/images`
 - **Description**: Get images for a comment.
 - **Success Response**:
     - **Status Code**: 200
@@ -394,9 +406,10 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 ]
 ```
 
-## User Interactions Endpoints
+## User Interactions
 
-### POST /api/users/:userId/interests/:eventId
+### Express Interest in an Event
+- **Endpoint**: **POST** `/api/users/{id}/interests/{event_id}`
 - **Description**:  Express interest in an event.
 - **Success Response**:
     - **Status Code**: 200
@@ -407,7 +420,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 }
 ```
 
-### DELETE /api/users/:userId/interests/:eventId
+### Remove Interest in an Event
+- **Endpoint**: **PDELETE** `/api/users/{id}/interests/{event_id}`
 - **Description**:  Remove interest in an event.
 - **Success Response**:
     - **Status Code**: 200
@@ -418,9 +432,10 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 }
 ```
 
-## Group Management Endpoints
+## Group Management 
 
-### POST /api/groups
+### Create a New Group
+- **Endpoint**: **POST** `/api/groups`
 - **Description**: Create a new group.
 - **Input**: JSON with group details (name, description).
 ```
@@ -440,8 +455,22 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   "description": "Group Description"
 }
 ```
+### Get Group Details
+- **Endpoint**: **PUT** `/api/groups/{id}`
+- **Description**: Update group details by ID.
+- **Success Response**:
+    - **Status Code**: 200
+    - **Response**:
+```
+{
+  "id": "group-id",
+  "name": "Group Name",
+  "description": "Group Description"
+}
+```
 
-### PUT /api/groups/:groupId
+### Update Group Details
+- **Endpoint**: **PUT** `/api/groups/{id}`
 - **Description**: Update group details by ID.
 - **Input**: JSON with group details to update (name, description).
 ```
@@ -462,12 +491,14 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 }
 ```
 
-###  DELETE /api/groups/:groupId
+### Delete a Group
+- **Endpoint**: **DELETE** `/api/groups/{id}`
 - **Description**: Delete a group by ID.
 - **Success Response**:
     - **Status Code**: 204 (No Content)
 
-### POST /api/groups/:groupId/members/:userId
+### Add a User to a Group
+- **Endpoint**: **POST** `/api/groups/:groupId/members/{id}`
 - **Description**:  Add a user to a group.
 - **Success Response**:
     - **Status Code**: 200
@@ -478,7 +509,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 }
 ```
 
-### DELETE /api/groups/:groupId/members/:userId
+### Remove a User from a Group
+- **Endpoint**: **DELETE** /api/groups/{id}/members/{user_id)
 - **Description**:  Remove a user from a group.
 - **Success Response**:
     - **Status Code**: 200
