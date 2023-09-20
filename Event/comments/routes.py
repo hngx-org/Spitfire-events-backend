@@ -1,7 +1,7 @@
 """Comments route module"""
 from flask import jsonify, Blueprint, request
 from Event.utils import query_all_filtered
-from Event.models.images import Images
+from Event.models import Images
 
 comments = Blueprint("comments", __name__, url_prefix="/api/comments")
 
