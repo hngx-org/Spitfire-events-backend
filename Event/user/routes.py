@@ -1,8 +1,12 @@
-""" Module containing all users routes """
+"""
+Module containing user-related routes for the Events-App, Team Spitfire.
+"""
 
 from Event.models import Users, Groups
 from Event import db
 from flask import jsonify, Blueprint, request
+
+# from Event.utils import query_paginate_filtered, query_one_filtered
 
 
 users = Blueprint("users", __name__, url_prefix="/api/users")
@@ -10,19 +14,29 @@ users = Blueprint("users", __name__, url_prefix="/api/users")
 
 @users.route("/")
 def get_active_signals():
-    '''get active signals'''
+    """
+        Retrieve and return active signals.
+
+    Returns:
+        str: A placeholder return value.
+    """
     return
 
 @users.route("/groups", methods=['POST'], strict_slashes=False)
 def create_group():
-    """just testing"""
+    """
+     Create a new group.
+
+    Returns:
+        str: A success message.
+    """
     title = request.form.get('title')
     new_group = Groups(title=title)
     new_group.insert()
 
     return 'success'
 
-@users.route("/api/groups/:groupId/members/:userId", methods=['DELETE'])
+@users.route("/api/groups/<group_id>/members/<user_id>", methods=['DELETE'])
 def remove_group_member(group_id, user_id):
     """
     Remove a user from a group.
@@ -34,7 +48,7 @@ def remove_group_member(group_id, user_id):
     Returns:
     tuple: A tuple containing response message and status code.
     """
-    # Retrieve the groupid and userid from the database
+    # Retrieve the group and user from the database
     group_id = Users.query.get(group_id)
     user_id = Groups.query.get(user_id)
 
