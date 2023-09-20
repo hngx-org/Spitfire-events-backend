@@ -2,10 +2,9 @@
 Module containing user-related routes for the Events-App, Team Spitfire.
 """
 
-from Event.models.users import Users
-from Event.models.groups import Groups
-from Event import db
 from flask import jsonify, Blueprint, request
+from Event.models import Users, Groups
+from Event import db
 
 # from Event.utils import query_paginate_filtered, query_one_filtered
 
