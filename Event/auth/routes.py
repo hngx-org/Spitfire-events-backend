@@ -3,7 +3,7 @@ from Event.models import User
 from Event.utils import query_one_filtered
 
 
-auth = Blueprint("auth", __name__, url_prefix="/auth")#url_prefix includes /auth before all endpoints in blueprint
+auth = Blueprint("auth", __name__, url_prefix="/api/auth")#url_prefix includes /auth before all endpoints in blueprint
 
 
 # sample Endpoint gets user details from db
