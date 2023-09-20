@@ -1,7 +1,4 @@
-from Event.models import Users, Groups, get_uuid
-from flask import jsonify, Blueprint, request
-
-
+from flask import Blueprint
 
 users = Blueprint("users", __name__, url_prefix="/api/users")
 
@@ -11,12 +8,3 @@ def get_active_signals():
     """_summary_
     """
     return
-
-@users.route("/groups", methods=['POST'], strict_slashes=False)
-def create_group():
-    """just testing"""
-    title = request.form.get('title')
-    new_group = Groups(title=title)
-    new_group.insert()
-
-    return 'success'
