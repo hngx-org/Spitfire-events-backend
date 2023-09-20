@@ -40,7 +40,7 @@ def register_or_login():
             id_token=credential_token, request=requests.Request()
         )
     except GoogleAuthError as error:
-        print(error)
+        print(error) # remove before production after testing auth on mobile
         raise CustomError("Bad Request", 400,"invalid token" )
     except ValueError:
         raise CustomError("Bad Request", 400,"invalid token" )
@@ -109,7 +109,7 @@ def see_sess():
 
 @auth.route("/logout", methods=["GET", "POST"])
 def logout_user():
-    """_summary_
+    """Logout user by removing login session
         """
     session.pop("user", None)
-    return jsonify({"message": "success"}), 200
+    return jsonify({"message": "success"}), 204
