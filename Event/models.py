@@ -287,14 +287,14 @@ class UserGroups(db.Model):
 
     id = db.Column(db.String(60), primary_key = True, default=get_uuid) # Primary Table Key
     user_id = db.Column(db.String(36), db.ForeignKey('users.id'),  nullable=False)
-   # group_id = db.Column(db.String(36), db.ForeignKey('groups.id'),  nullable=False)
+    group_id = db.Column(db.String(36), db.ForeignKey('groups.id'),  nullable=False)
 
     def __init__(self, user_id, group_id):
         self.user_id = user_id
         self.group_id = group_id
 
     def __repr__(self):
-        return f'user_id: {self.user_id}' # add "group_id: {self.group_id}" when group-id is ready
+        return f'user_id: {self.user_id},group_id: {self.group_id}' 
     
     def insert(self):
         db.session.add(self)
@@ -310,7 +310,7 @@ class UserGroups(db.Model):
     def format(self):
         return {
             "user_id": self.user_id,
-           # "group_id": self.group_id
+            "group_id": self.group_id
         }
 
 
