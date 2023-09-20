@@ -22,7 +22,17 @@ def create_group():
 
 @users.route("/api/groups/:groupId/members/:userId", methods=['DELETE'])
 def remove_group_member(group_id, user_id):
+    """
+    Remove a user from a group.
+
+    Parameters:
+    group_id (str): The ID of the group.
+    user_id (str): The ID of the user to be removed from the group.
+
+    Returns:
+    tuple: A tuple containing response message and status code.
+    """
     group_id = Users.query.get(group_id)
     user_id = Groups.query.get(user_id)
-    
+
     return jsonify({"message": "User remove from group successfully"}), 200
