@@ -33,6 +33,8 @@ def create_app(config_class=App_Config):
     from Event.user_groups.routes import user_groups
     from Event.images.routes import images
     from Event.interested_events.routes import interested_events
+    from Event.group_events.routes import group_events
+    from Event.likes.routes import likes
     from Event.errors.handlers import error
 
     app.register_blueprint(users)
@@ -43,6 +45,8 @@ def create_app(config_class=App_Config):
     app.register_blueprint(user_groups)
     app.register_blueprint(images)
     app.register_blueprint(interested_events)
+    app.register_blueprint(group_events)
+    app.register_blueprint(likes)
 
     app.register_blueprint(error)
 
