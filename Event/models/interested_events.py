@@ -7,7 +7,15 @@ from models.base_model import BaseModel
 
 
 class InterestedEvents(BaseModel):
-    """InterestedEvents class"""
+    """
+    Model Schema for InterestedEvents.
+
+    Attributes:
+        user_id (str):
+            Foreign key for the user table.
+        event_id (str):
+            Foreign key for the event table.
+    """
     __tablename__ = "interested_events"
     user_id = (
             db.Column
@@ -27,5 +35,13 @@ class InterestedEvents(BaseModel):
         )
 
     def __init__(self, user_id, event_id):
+        """Initialize the InterestedEvents object"""
         self.user_id = user_id
         self.event_id = event_id
+
+    def format(self):
+        """Return a dictionary representation of the InterestedEvents object"""
+        return {
+            "user_id": self.user_id,
+            "event_id": self.event_id
+        }
