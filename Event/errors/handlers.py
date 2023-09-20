@@ -43,6 +43,8 @@ def clean_up(exc):
 
 @error.app_errorhandler(CustomError)
 def custom_error(error):
+    """ app error handler for custom errors
+        """
     return jsonify({"error": error.error, "message": error.message}), error.code
 
 
