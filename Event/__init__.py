@@ -37,8 +37,6 @@ def create_app():
     from Event.user.routes import users
     from Event.auth.routes import auth
     from Event.events.routes import events
-    
-    
     from Event.errors.handlers import error
     from Event.groups.routes import groups
     from Event.comments.routes import comments
