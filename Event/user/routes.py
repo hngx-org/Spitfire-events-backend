@@ -8,7 +8,7 @@ users = Blueprint("users", __name__, url_prefix="/api/users")
 
 @users.route("/")
 def get_active_signals():
-    ''''''
+    '''get active signals'''
     return
 
 @users.route("/groups", methods=['POST'], strict_slashes=False)
