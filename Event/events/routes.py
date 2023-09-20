@@ -5,8 +5,8 @@ from Event.utils import (
 )
 from Event import db
 
-# url_prefix includes /api/event before all endpoints in blueprint
-events = Blueprint("events", __name__, url_prefix="/api/event")
+# url_prefix includes /events before all endpoints in blueprint
+events = Blueprint("events", __name__, url_prefix="/api/events")
 
 
 @events.route("/<id>", methods=["DELETE"])
