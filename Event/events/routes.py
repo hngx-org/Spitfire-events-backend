@@ -6,7 +6,6 @@ from Event.utils import (
     query_paginate_filtered,
     query_paginated,
 )
-from Event import db
 
 #url_prefix includes /api/events before all endpoints in blueprint
 events = Blueprint("events", __name__, url_prefix="/api/events") 
