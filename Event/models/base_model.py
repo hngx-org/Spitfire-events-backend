@@ -40,3 +40,4 @@ class BaseModel(db.Model):
         raise NotImplementedError(
             "Subclasses must implement the 'format' method"
         )
+

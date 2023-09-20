@@ -7,7 +7,7 @@ from Event.utils import (
 )
 from Event import db
 
-# events = Blueprint("events", __name__, url_prefix="/events")#url_prefix includes /events before all endpoints in blueprint
+
 comments = Blueprint("comments", __name__) #url_prefix includes /events before all endpoints in blueprint
 
 
