@@ -1,4 +1,5 @@
 from Event.models import Users, Groups, get_uuid
+from Event import db
 from flask import jsonify, Blueprint, request
 
 from Event.utils import query_paginate_filtered, query_one_filtered
@@ -37,15 +38,15 @@ def remove_group_member(group_id, user_id):
     user_id = Groups.query.get(user_id)
     
     # Check if the group and user exist
-    if group is None or user is None:
+    if group_id is None or user_id is None:
         return jsonify({"error": "Group or user not found"}), 404
 
     # Check if the user is a member of the group
-    if user not in group.members:
+    if user_id not in group_id.members:
         return jsonify({"error": "User is not a member of the group"}), 400
 
     # Remove the user from the group
-    group.members.remove(user_id)
+    group_id.members.remove(user_id)
     db.session.commit()
     
     return jsonify({"message": "User remove from group successfully"}), 200
