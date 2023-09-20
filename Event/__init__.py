@@ -31,6 +31,7 @@ def create_app(config_class=App_Config):
     from Event.auth.routes import auth
     from Event.events.routes import events
     from Event.events.routes import groups
+    
     from Event.errors.handlers import error
 
     app.register_blueprint(users)

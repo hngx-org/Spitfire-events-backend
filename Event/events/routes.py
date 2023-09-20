@@ -18,10 +18,20 @@ def add_provider():
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
 @groups.route("/<string:groupId>", methods=["GET"])
 def get_group_by_id(groupId):
+    """
+    Get details of a group ny its group ID
+
+    Args:
+        groupId (str): The ID of the group to get
+
+    Returns:
+        dict: A JSON response with group details
+    """
     try:
         group = Groups.query.filter_by(group_id=groupId).first()
         
         if group:
+            # Create a dictionary with group details
             group_details = {
                 "group_id": group.group_id,
                 "title": group.title
