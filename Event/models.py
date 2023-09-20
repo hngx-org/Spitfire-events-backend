@@ -313,3 +313,43 @@ class UserGroups(db.Model):
         }
 
 
+class Likes(db.Model):
+     """Model schema for the likes
+
+        Attributes:
+            comment_id (str):
+                Foreign key for the comments table
+            user_id (str):
+                Foreign key for the users table
+
+        Methods:
+            __init__(self, comment_id, user_id):
+              Constructor for the Likes class.
+
+            insert(self): Inserts a like object into the database.
+            delete(self): Deletes an existing Like object from the database.
+            format(self): Returns a dictionary representation
+    """
+    __tablename__ = "likes"
+
+    comment_id = db.Column(db.String(60), db.ForeignKey("comments.id"), primary_key=True, nullable=False)
+    user_id = db.Column(db.String(60), db.ForeignKey("users.id"), primary_key=True, nullable=False)
+
+
+    def __init__(self, comment_id, user_id):
+        self.comment_id = comment_id
+        self.user_id = user_id
+    
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            "comment_id": self.comment_id,
+            "user_id": self.user_id
+        }
