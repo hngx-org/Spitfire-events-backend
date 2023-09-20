@@ -2,7 +2,7 @@
 """Template for the Images Class"""
 
 from Event import db
-from models.base_model import BaseModel
+from Event.models.base_model import BaseModel
 
 
 class Images(BaseModel):

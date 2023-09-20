@@ -2,7 +2,7 @@
 """Template for the Comment Class"""
 
 from Event import db
-from models.base_model import BaseModel
+from Event.models.base_model import BaseModel
 
 
 class Comments(BaseModel):

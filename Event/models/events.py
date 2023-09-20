@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Base Template for the events class"""
 from Event import db
-from models.base_model import BaseModel
+from Event.models.base_model import BaseModel
 
 
 class Events(BaseModel):

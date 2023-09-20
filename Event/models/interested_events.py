@@ -3,7 +3,7 @@
 This the base template for all IntresedeEvents object instances.
 """
 from Event import db
-from models.base_model import BaseModel
+from Event.models.base_model import BaseModel
 
 
 class InterestedEvents(BaseModel):

@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint
-from Event.models import User
+from Event.models.users import Users
 from Event.utils import query_one_filtered
 
 
@@ -10,7 +10,7 @@ auth = Blueprint("auth", __name__, url_prefix="/auth")#url_prefix includes /auth
 @auth.route("/@me")
 def see_sess():
     try:
-        user = query_one_filtered(User, id=1)
+        user = query_one_filtered(Users, id=1)
         return jsonify(
             {
                 "message": "Success",

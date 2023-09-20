@@ -2,7 +2,8 @@
 """Template for the Groups Class"""
 
 from Event import db
-from models.base_model import BaseModel
+from Event.models.base_model import BaseModel
+
 
 class Groups(BaseModel):
     """
@@ -31,7 +32,7 @@ class Groups(BaseModel):
 
     def __repr__(self):
         """Representation of the Groups class."""
-        return f'title: {self.title}'
+        return 'title: {}'.format(self.title)
 
     def format(self):
         """Returns a dictionary representation of the Groups object."""
