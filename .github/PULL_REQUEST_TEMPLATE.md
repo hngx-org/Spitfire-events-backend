@@ -5,7 +5,7 @@ Explain the functionality or bug fix implemented in this pull request, including
 Provide a detailed overview of the code changes made to introduce this implemtation, along with any relevant code snippets or files.
 
 ## Related Issue:
-Link to the related issue this implementation fixes for context.
+Fixes #[ISSUE_NUMBER]
 
 ## Testing Done:
 Describe the testing you've conducted to ensure the new implementation works as expected, including any test cases, inputs, and results.
