@@ -526,8 +526,8 @@ class UserGroups(db.Model):
 
 <<<<<<< HEAD
 class Likes(db.Model):
-     """
-     Model schema for the likes
+    """
+    Model schema for the likes
 
     Attributes:
         comment_id (str):
