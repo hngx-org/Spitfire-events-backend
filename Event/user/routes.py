@@ -34,7 +34,7 @@ def remove_group_member(group_id, user_id):
     Returns:
     tuple: A tuple containing response message and status code.
     """
-    # Retrieve the group and user from the database
+    # Retrieve the groupid and userid from the database
     group_id = Users.query.get(group_id)
     user_id = Groups.query.get(user_id)
 
