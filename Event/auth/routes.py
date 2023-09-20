@@ -23,7 +23,7 @@ ANDROID_CLIENT_ID = os.environ.get("ANDROID_CLIENT_ID")
 IOS_CLIENT_ID = os.environ.get("IOS_CLIENT_ID")
 
 
-@auth.route("/gauth", methods=["POST"])
+@auth.route("/", methods=["POST"])
 def register_or_login():
     """Register and Login route for google authentication
         """
