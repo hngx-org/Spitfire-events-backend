@@ -2,8 +2,8 @@
 """_summary_
     """
 # pylint: disable=unused-import
-from flask import jsonify, Blueprint
-from Event.models import Users
+from flask import jsonify, Blueprint, request
+from Event.models import Users, Groups
 from Event.utils import query_paginate_filtered, query_one_filtered
 
 

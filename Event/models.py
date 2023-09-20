@@ -4,10 +4,10 @@
         _type_: _description_
     """
 
+# pylint: disable=unused-import
+from uuid import uuid4
 from flask_sqlalchemy import SQLAlchemy
 from Event import db
-
-from uuid import uuid4
 
 
 def get_uuid():
@@ -196,6 +196,14 @@ class Events(db.Model):
 
 
 class Groups(db.Model):
+    """_summary_
+
+    Args:
+        db (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     __tablename__ = "groups"
 
 
@@ -204,23 +212,44 @@ class Groups(db.Model):
     title = db.Column(db.String(100), nullable=False)
 
     def __init__(self, title):
+        """_summary_
+
+        Args:
+            title (_type_): _description_
+        """
         self.title = title
 
     def __repr__(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return f'Group ID: {self.group_id}, Title: {self.title}'
 
     def insert(self):
+        """_summary_
+        """
         db.session.add(self)
         db.session.commit()
 
     def update(self):
+        """_summary_
+        """
         db.session.commit()
 
     def delete(self):
+        """_summary_
+        """
         db.session.delete(self)
         db.session.commit()
 
     def format(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return {
             "id": self.group_id,
             "title": self.title
@@ -492,17 +521,6 @@ class UserGroups(db.Model):
         """
         db.session.delete(self)
         db.session.commit()
-        
-    def format(self):
-        
-        return {
-            "group_id": self.group_id,
-            "title": self.title
-        }
-        
-        
-        
-
 
     def format(self):
         """_summary_
@@ -511,6 +529,6 @@ class UserGroups(db.Model):
             _type_: _description_
         """
         return {
-            "user_id": self.user_id,
-            "group_id": self.group_id
+            "group_id": self.group_id,
+            "title": self.title
         }
