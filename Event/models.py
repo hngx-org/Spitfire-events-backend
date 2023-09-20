@@ -308,6 +308,7 @@ class Comments(db.Model):
     body = db.Column(db.String(1000), nullable=False)
 
     # Add relationships to Event and User models
+
     event = db.relationship("Event", backref=db.backref("comments", lazy=True))
     user = db.relationship("User", backref=db.backref("comments", lazy=True))
     images = db.relationship("Image", backref="comment", lazy="dynamic")
