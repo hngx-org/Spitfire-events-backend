@@ -21,41 +21,41 @@ def add_provider():
     return
 
 
-groups = Blueprint("groups", __name__, url_prefix="/api/groups")
-@groups.route("/<string:groupId>", methods=["GET"])
-def get_group_by_id(groupId):
-    """
-    Get details of a group ny its group ID
+# groups = Blueprint("groups", __name__, url_prefix="/api/groups")
+# @groups.route("/<string:groupId>", methods=["GET"])
+# def get_group_by_id(groupId):
+#     """
+#     Get details of a group ny its group ID
 
-    Args:
-        groupId (str): The ID of the group to get
+#     Args:
+#         groupId (str): The ID of the group to get
 
-    Returns:
-        dict: A JSON response with group details
-    """
-    try:
-        group = Groups.query.filter_by(group_id=groupId).first()
+#     Returns:
+#         dict: A JSON response with group details
+#     """
+#     try:
+#         group = Groups.query.filter_by(group_id=groupId).first()
         
-        if group:
-            # Create a dictionary with group details
-            group_details = {
-                "group_id": group.group_id,
-                "title": group.title
-            }
-            return jsonify({
-                "status": "success",
-                "message":"Group details successfully fetched",
-                "data": group_details
-            })
-        else:
-            return jsonify({
-                "status": "failed",
-                "message": f"Group with groupId {groupId} not found"
-            }),404
-    except Exception as e:
-        print(f'{type(e).__name__}: {e}')
-        return jsonify({
-            'status': 'failed',
-            'message': 'An error occurred while fetching group details'
-        }), 500
+#         if group:
+#             # Create a dictionary with group details
+#             group_details = {
+#                 "group_id": group.group_id,
+#                 "title": group.title
+#             }
+#             return jsonify({
+#                 "status": "success",
+#                 "message":"Group details successfully fetched",
+#                 "data": group_details
+#             })
+#         else:
+#             return jsonify({
+#                 "status": "failed",
+#                 "message": f"Group with groupId {groupId} not found"
+#             }),404
+#     except Exception as e:
+#         print(f'{type(e).__name__}: {e}')
+#         return jsonify({
+#             'status': 'failed',
+#             'message': 'An error occurred while fetching group details'
+#         }), 500
     
