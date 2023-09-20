@@ -56,7 +56,27 @@ Change to the repository directory on your computer:
 ```
 cd spitfire-events/Backend
 ```
+Create virtual environment
 
+```
+python -m venv venv
+```
+Activate your virtual environment. For Windows command prompt
+
+```
+venv\Script\activate
+```
+
+Install the packages
+
+```
+pip install -r requirements.txt
+```
+To run the application in development
+
+```
+python run.py
+```
 #### For Mobile
 
 ```
