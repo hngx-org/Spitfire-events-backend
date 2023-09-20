@@ -49,3 +49,24 @@ def remove_group_member(group_id, user_id):
     db.session.commit()
 
     return jsonify({"message": "User removed from group successfully"}), 200
+
+
+@groups.route("/api/groups/<int:groupId>", methods=["DELETE"])
+def delete_group(groupId):
+    try:
+        # Find the group by its ID
+        group_to_delete = Group.query.get(groupId)
+
+        if not group_to_delete:
+            return jsonify({"error": "Group not found"}), 404
+
+        # Delete the group from the database
+        db.session.delete(group_to_delete)
+        db.session.commit()
+
+        return jsonify({"message": "Group deleted successfully"}), 200
+
+    except Exception as e:
+        # Handle any exceptions that may occur (e.g., database errors)
+        return jsonify({"error": str(e)}), 500
+
