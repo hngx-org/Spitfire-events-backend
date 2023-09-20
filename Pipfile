@@ -26,6 +26,8 @@ pytest = "==7.4.2"
 python-dotenv = "==1.0.0"
 requests = "==2.31.0"
 sqlalchemy = "==2.0.21"
+flask-session = "*"
+google-auth = "==1.27.0"
 
 [dev-packages]
 

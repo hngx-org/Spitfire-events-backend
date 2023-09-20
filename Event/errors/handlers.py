@@ -4,12 +4,24 @@ from Event import db
 error = Blueprint("error", __name__)
 
 
+class CustomError(Exception):
+    def __init__(self, error, code, message):
+        self.error = error
+        self.code = code
+        self.message = message
+
+
 @error.teardown_app_request
 def clean_up(exc):
     try:
         db.session.remove()
     except:
         pass
+
+
+@error.app_errorhandler(CustomError)
+def custom_error(error):
+    return jsonify({"error": error.error, "message": error.message}), error.code
 
 
 @error.app_errorhandler(400)

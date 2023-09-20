@@ -1,4 +1,5 @@
 import os
+import datetime
 from dotenv import load_dotenv
 
 
@@ -13,3 +14,10 @@ class App_Config:
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
+
+    SESSION_TYPE = "sqlalchemy"
+    SESSION_USE_SIGNER = True
+    SESSION_COOKIE_SECURE = False
+    SESSION_COOKIE_SAMESITE = "None"
+    SESSION_COOKIE_HTTPONLY = False
+    PERMANENT_SESSION_LIFETIME = datetime.timedelta(days=30)

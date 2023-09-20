@@ -80,6 +80,9 @@ Make sure to set the following environment variables:
 
     SECRET_KEY: [Your Secret Key]
     SQLALCHEMY_DATABASE_URI: [Your Database URI]
+    OAUTHLIB_INSECURE_TRANSPORT: 1
+    ANDROID_CLIENT_ID: 
+    IOS_CLIENT_ID: 
 
 ### Run the Server
 

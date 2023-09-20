@@ -1,11 +1,14 @@
 from Event.config import App_Config
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask
+from flask_session import Session
+from flask import Flask, session
 from flask_cors import CORS
 import os
 
 
 db = SQLAlchemy()
+
+sess = Session()
 
 
 def create_app(config_class=App_Config):
@@ -25,6 +28,8 @@ def create_app(config_class=App_Config):
     CORS(app, supports_credentials=True)
     # Initialize SQLAlchemy
     db.init_app(app)
+    # initialize Flask-Session
+    sess.init_app(app)
 
     # register endpoint(blueprints)
     from Event.user.routes import users

@@ -11,22 +11,19 @@ def get_uuid():
 class Users(db.Model):
     __tablename__ = "users"
 
-    id = db.Column(
-        db.String(60), primary_key=True, unique=True, default=get_uuid, nullable=False
-    )
+    id = db.Column(db.String(60), primary_key=True, unique=True, nullable=False)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    access_token = db.Column(db.String(120), nullable=True)
-    refresh_token = db.Column(db.String(120), nullable=True)
     avatar = db.Column(db.String(255), nullable=False)
 
-    def __init__(self, name, email, avatar):
+    def __init__(self, id, name, email, avatar):
+        self.id = id
         self.name = name
         self.email = email
         self.avatar = avatar
 
     def __repr__(self):
-        return f"Name: {self.name}, Email: {self.email}"
+        return f"Id: {self.id}, Name: {self.name}, Email: {self.email}"
 
     # safely add record/object to db
     def insert(self):
@@ -45,7 +42,6 @@ class Users(db.Model):
     # output object properties in clean dict format
     def format(self):
         return {
-            "id": self.id,
             "name": self.name,
             "email": self.email,
             "avatar": self.avatar,
