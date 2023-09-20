@@ -27,26 +27,23 @@ def create_app(config_class=App_Config):
     # register endpoint(blueprints)
     from Event.user.routes import users
     from Event.auth.routes import auth
-    from Event.group.routes import groups  
+    from Event.group.routes import groups
     from Event.events.routes import events
     from Event.comments.routes import comments
     from Event.user_groups.routes import user_groups
     from Event.images.routes import images
     from Event.interested_events.routes import interested_events
-    
-    
     from Event.errors.handlers import error
-    
 
     app.register_blueprint(users)
     app.register_blueprint(auth)
-    app.register_blueprint(groups)   
+    app.register_blueprint(groups)
     app.register_blueprint(events)
     app.register_blueprint(comments)
     app.register_blueprint(user_groups)
     app.register_blueprint(images)
     app.register_blueprint(interested_events)
-    
+
     app.register_blueprint(error)
 
     # create db tables from models if not exists
