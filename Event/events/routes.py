@@ -52,7 +52,7 @@ def add_comments(event_id):
             return jsonify({
                 'status': 'failed',
                 'message': 'Comment data could not be saved, an error occured',
-            }), 500
+            }), 400
     
     # GET comments
     try:
@@ -67,7 +67,7 @@ def add_comments(event_id):
         return jsonify({
             'status': 'failed',
             'message': 'An error occured while fetching all comments'
-        }), 500
+        }), 400
 
 
 # """
@@ -98,7 +98,7 @@ def add_comments(event_id):
 #             return jsonify({
 #                 'status': 'failed',
 #                 'message': 'image data could not be saved, an error occured',
-#             }), 500
+#             }), 400
     
 #     # GET images
 #     try:
@@ -113,4 +113,4 @@ def add_comments(event_id):
 #         return jsonify({
 #             'status': 'failed',
 #             'message': 'An error occured while fetching all images'
-#         }), 500
+#         }), 400
