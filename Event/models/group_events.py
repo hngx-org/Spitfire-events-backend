@@ -1,13 +1,21 @@
 #!/usr/bin/env python3
 """
-This the base template for all IntresedeEvents object instances.
+This the base template for GrouopEvents object instances.
 """
 from Event import db
 from models.base_model import BaseModel
 
 
 class GroupEvents(BaseModel):
-    """InterestedEvents class"""
+    """
+    Model Schema for GrproupEvents.
+
+    Attributes:
+        group_id (str):
+            Foreign key for the group table.
+        event_id (str):
+            Foreign key for the event table.
+    """
     __tablename__ = "group_events"
     group_id = (
             db.Column
@@ -29,3 +37,10 @@ class GroupEvents(BaseModel):
     def __init__(self, group_id, event_id):
         self.group_id = group_id
         self.event_id = event_id
+
+    def format(self):
+        """Return a dictionary representation of the Group object"""
+        return {
+            "group_id": self.group_id,
+            "event_id": self.event_id
+        }
