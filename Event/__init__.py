@@ -8,7 +8,7 @@ import os
 db = SQLAlchemy()
 
 
-def create_app():
+def create_app(config_class=App_Config):
     """
     Create a new instance of the app with the given configuration.
 
