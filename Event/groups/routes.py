@@ -48,4 +48,4 @@ def remove_group_member(group_id, user_id):
     group_id.members.remove(user_id)
     db.session.commit()
 
-    return jsonify({"message": "User remove from group successfully"}), 200
+    return jsonify({"message": "User removed from group successfully"}), 200
