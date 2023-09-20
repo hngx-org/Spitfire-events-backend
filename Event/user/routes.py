@@ -37,7 +37,15 @@ def remove_group_member(group_id, user_id):
     user_id = Groups.query.get(user_id)
     
     # Check if the group and user exist
+    if group is None or user is None:
+        return jsonify({"error": "Group or user not found"}), 404
+
     # Check if the user is a member of the group
+    if user not in group.members:
+        return jsonify({"error": "User is not a member of the group"}), 400
+
     # Remove the user from the group
+    group.members.remove(user_id)
+    db.session.commit()
     
     return jsonify({"message": "User remove from group successfully"}), 200
