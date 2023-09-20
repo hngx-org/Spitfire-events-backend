@@ -2,7 +2,7 @@
 """_summary_
 """
 # pylint: disable=unused-import
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from Event.models import Users
 from Event.utils import (
     query_one_filtered,
