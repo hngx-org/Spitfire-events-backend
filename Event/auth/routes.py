@@ -1,3 +1,10 @@
+# pylint: disable=cyclic-import
+"""_summary_
+
+    Returns:
+        _type_: _description_
+    """
+# pylint: disable=unused-import
 import os
 import requests
 from Event.models import Users
@@ -64,6 +71,7 @@ def register_or_login():
     )
 
 
+# pylint: disable=broad-exception-caught
 @auth.route("/@me")
 def see_sess():
     """
