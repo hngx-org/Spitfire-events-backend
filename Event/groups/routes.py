@@ -89,19 +89,19 @@ def remove_group_member(group_id, user_id):
     tuple: A tuple containing response message and status code.
     """
     # Retrieve the group and user from the database
-    group_id = Users.query.get(group_id)
-    user_id = Groups.query.get(user_id)
+    group = Groups.query.get(group_id)
+    user = Users.query.get(user_id)
 
     # Check if the group and user exist
-    if group_id is None or user_id is None:
+    if group is None or user is None:
         return jsonify({"error": "Group or user not found"}), 404
 
     # Check if the user is a member of the group
-    if user_id not in group_id.members:
+    if user not in group.members:
         return jsonify({"error": "User is not a member of the group"}), 400
 
     # Remove the user from the group
-    group_id.members.remove(user_id)
+    group.members.remove(user)
     db.session.commit()
 
     return jsonify({"message": "User removed from group successfully"}), 200
