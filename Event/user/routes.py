@@ -35,6 +35,9 @@ def get_user_info(user_id: str):
     """
     try:
         user = query_one_filtered(Users, user_id=user_id)
+        # Check if the user is a member of the group
+        if user is None:
+            return jsonify({"error": "User not found"}), 404
         user_details = user.format()
         return jsonify({
             "status": "success",
@@ -65,6 +68,8 @@ def update_user(user_id: str):
     try:
         data = request.get_json()
         user = query_one_filtered(Users, user_id=user_id)
+        if user is None:
+            return jsonify({"error": "User not found"}), 404
         for key, value in data.items():
             setattr(user, key, value)
         user.update()
