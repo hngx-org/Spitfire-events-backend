@@ -5,24 +5,160 @@
 from flask import Blueprint, request, jsonify
 from Event.models.images import Images
 from Event.models.comments import Comments
-from Event.utils import query_all_filtered
+from Event.models.events import Events
+from Event.utils import query_all_filtered, query_all, query_one_filtered
+from datetime import datetime
+
 
 # url_prefix includes /api/events before all endpoints in blueprint
 events = Blueprint("events", __name__, url_prefix="/api/events")
 
 
-# POST /api/events/<str:event_id>/comments: Add a comment to an event
-# GET /api/events/<str:event_id>/comments: Get comments for an event
-@events.route("/<string:event_id>/comments", methods=["GET", "POST"])
-def add_comments(event_id):
-    """Add a comment to an event discussion
+# POST /api/events: Create a new event
+@events.route("/", methods=["POST"])
+def create_event():
+    """
+    Create a new event.
+
+    This function handles a POST request to create a new event. It extracts the necessary data from the request's JSON payload, converts the date and time strings to datetime objects, creates an instance of the `Events` model with the extracted data, inserts the event into the database, and returns a JSON response with the created event.
+
+    :return: A JSON response with the following fields:
+             - `msg` (string): A message indicating the success of the event creation.
+             - `event` (string): A string representation of the created event.
+    """
+    title = request.json['title']
+    description = request.json['description']
+    location = request.json['location']
+    start_date = request.json['start_date']
+    start_time = request.json['start_time']
+    end_date = request.json['end_date']
+    end_time = request.json['end_time']
+    thumbnail = request.json['thumbnail']
+    creator = request.json['creator']
+
+    start_date = datetime.strptime(start_date, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date, '%Y-%m-%d')
+
+    start_time = datetime.strptime(start_time,'%H:%M')
+    end_time = datetime.strptime(end_time,'%H:%M')
+
+    event = Events(title=title,description=description,location=location,start_date=start_date,start_time=start_time,  end_date=end_date,end_time=end_time,thumbnail=thumbnail,creator=creator)
+
+    result = format(event)            
+    try:
+        event.insert()
+    except:
+        return {"message": "An error occurred creating the event."}, 400
+    return jsonify({
+        'msg': "Event Created",
+        'event': result }), 201
+
+
+# DELETE /api/events/:eventId: Delete an event
+@events.route("/<id>", methods=["DELETE"])
+def delete_event(id):
+    """
+    Delete an event.
+
     Args:
-        event_id (str): The id of the event causing the discussion
+        id (str): The id of the event to be deleted.
 
     Returns:
-        str: the id of the newly created comment for POST
+        If the event is successfully deleted, a success response with status code 204 and a JSON body indicating the event was deleted.
+        If the event does not exist, a not found error response with status code 404 and a JSON body indicating the event was not found.
+    """
 
-        list: a list of all comments attached to an event
+    try:
+        del_event = query_one_filtered(table=Events, id=id)
+
+        if del_event:
+            del_event.delete()
+            return jsonify(response={"success": "Event deleted"}), 204
+    except Exception as error:
+        return jsonify(error={"Not Found": "Event not found"}), 404
+
+
+# GET /api/events: Get a list of events
+@events.route("/", methods=["GET"])
+def all_events():
+    """
+    Retrieves all events from the database and returns them as a JSON response.
+
+    Returns:
+        json: A JSON response containing all events created.
+    """
+    all_events = query_all(Events)
+    return jsonify(all_events.format()), 200
+
+        
+# Get events based on event id
+@events.route("/<event_id>", methods=["GET"])
+def get_event(event_id):
+    """
+    Get event based on its ID.
+
+    Args:
+        event_id (str): The ID of the event to retrieve.
+
+    Returns:
+        tuple: A tuple with the response message and status code.
+
+    Example Usage:
+        GET /events/123
+
+    This code snippet demonstrates how to make a GET request to retrieve the event with ID 123.
+    The expected output is a JSON response containing the event details if it exists, or an error message if the event is not found.
+    """
+    try:
+        event = query_one_filtered(table=Events, id=event_id)
+        if event:
+            return jsonify(event.format()), 200
+
+    except Exception as error:
+        return jsonify({"error": "Event not found"}), 404
+
+
+# PUT /api/events/:eventId: Update event details
+@events.route("/<event_id>", methods=["PUT"])
+def update_event(event_id: str) -> tuple:
+    """
+    Updates an event in the database based on the provided event ID and request data.
+
+    Args:
+        event_id (str): The ID of the event to be updated.
+
+    Returns:
+        tuple: A JSON response with a message and a status code.
+
+    Raises:
+        Exception: If an error occurs during the update process.
+    """
+    try:
+        req = request.get_json()
+        db_data = query_all_filtered(Events, id=event_id)
+        if not db_data:
+            return jsonify({"message": "Event not Found"}), 404
+        for k, v in req.items():
+            setattr(db_data, k, v)
+        Events.update()
+        return jsonify({"message": "item updated"}), 201
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 400
+
+
+@events.route("/<string:event_id>/comments", methods=["GET", "POST"])
+def add_comments(event_id):
+    """
+    Add a comment to an event discussion or fetch all comments for an event.
+
+    Args:
+        event_id (str): The ID of the event causing the discussion.
+
+    Returns:
+        For POST requests:
+            dict: A JSON response with the status, message, and data containing the newly created comment ID and body.
+        For GET requests:
+            dict: A JSON response with the status, message, and data containing a list of all comments associated with the event.
     """
     if request.method == "POST":
         try:
@@ -83,7 +219,7 @@ def add_comments(event_id):
             }
         )
     except Exception as error:
-        print(f"{type(error).__name__}: {error}")
+        # print(f"{type(error).__name__}: {error}")
         return (
             jsonify(
                 {
