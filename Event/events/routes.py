@@ -7,6 +7,7 @@ from Event.models.images import Images
 from Event.models.comments import Comments
 from Event.models import Events
 from Event.utils import query_all_filtered, query_all
+from datetime import datetime
 
 # url_prefix includes /api/events before all endpoints in blueprint
 events = Blueprint("events", __name__, url_prefix="/api/events")
