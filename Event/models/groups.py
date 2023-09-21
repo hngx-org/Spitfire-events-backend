@@ -3,6 +3,7 @@
 
 from Event import db
 from Event.models.base_model import BaseModel
+from datetime import datetime
 
 
 class Groups(BaseModel):
@@ -25,6 +26,8 @@ class Groups(BaseModel):
     __tablename__ = "groups"
 
     title = db.Column(db.String(60), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime(60), unique=True, nullable=False, default=datetime.utc().isoformat())
+    updated_at = db.Column(db.DateTime(60), unique=True, nullable=False, default=datetime.utc().isoformat())
 
     def __init__(self, title):
         """Constructor for the Groups class."""
@@ -36,4 +39,7 @@ class Groups(BaseModel):
 
     def format(self):
         """Returns a dictionary representation of the Groups object."""
-        return {"group_id": self.id, "title": self.title}
+        return {"group_id": self.id,
+                 "title": self.title,
+                 "created_at": self.created_at,
+                 "updated": self.updated_at}

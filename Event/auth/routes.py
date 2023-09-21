@@ -80,7 +80,8 @@ def see_sess():
     """
     get the details of current logged in user
     """
-    user_id = is_logged_in(session)
+    # lets get the user id of the currently loggedin user using is_logged_in helper
+    user_id = is_logged_in(session) 
     try:
         user = query_one_filtered(Users, id=user_id)
         return (
