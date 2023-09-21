@@ -6,6 +6,7 @@ from flask import Blueprint, jsonify, request
 from Event.models.users import Users
 from Event.models.groups import Groups
 from Event.models.user_groups import UserGroups
+from Event.models.interested_events import InterestedEvent 
 from Event import db
 
 
@@ -209,3 +210,21 @@ def get_group_details(group_id):
         # Handle exceptions and return an error response if any occur
         return jsonify({"error": str(error)}), 500
 
+@groups.route('/api/groups/<int:group_id>', methods=['DELETE'])
+def delete_group(group_id):
+    group = Groups.query.get(group_id)
+    if not group:
+        return jsonify({'message': 'Group not found'}), 404
+    
+    # Delete the group
+    group.delete()
+    return jsonify({'message': 'Group deleted'}), 200
+
+@groups.route('/api/users/<int:user_id>/interests/<int:event_id>', methods=['DELETE'])
+def remove_interest(user_id, event_id):
+    user_interest = InterestedEvent.query.filter_by(user_id=user_id, event_id=event_id).first()
+    if not user_interest:
+        return jsonify({'message': 'Interest not found'}), 404
+    
+    user_interest.delete()
+    return jsonify({'message': 'Interest removed'}), 200
