@@ -30,7 +30,7 @@ def create_event():
     end_date = datetime.strptime(end_date, '%Y-%m-%d')
 
     start_time = datetime.strptime(start_time,'%H:%M')
-    end_time = datetime.strptime(end_time,'%H:%M:')
+    end_time = datetime.strptime(end_time,'%H:%M')
     
     event = Events(title=title,description=description,location=location,start_date=start_date,start_time=start_time,  end_date=end_date,end_time=end_time,thumbnail=thumbnail,creator=creator)
 
