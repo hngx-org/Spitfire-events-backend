@@ -3,6 +3,8 @@ summary
 """
 from Event import db
 from Event.errors.handlers import CustomError
+from datetime import datetime
+
 
 
 # db helpers
@@ -129,3 +131,16 @@ def is_logged_in(session):
         raise CustomError("Unauthorized", 401, "You are not logged in")
 
     return user.get("id")
+
+
+def format_date(date):
+    """Formats date to readable string"""
+    return datetime.strptime(date, '%Y-%m-%d')
+
+
+def format_time(time):
+    """Formats date to readable string"""
+
+    return datetime.strptime(time,'%H:%M')
+
+
