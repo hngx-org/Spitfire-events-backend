@@ -5,10 +5,23 @@
 from flask import Blueprint, request, jsonify
 from Event.models.images import Images
 from Event.models.comments import Comments
-from Event.utils import query_all_filtered
+from Event.models import Events
+from Event.utils import query_all_filtered, query_all
 
 # url_prefix includes /api/events before all endpoints in blueprint
 events = Blueprint("events", __name__, url_prefix="/api/events")
+
+# GET /api/events: Get a list of events
+@events.route("/", methods=["GET"])
+def all_events():
+    """Get all events
+    
+    Returns:
+        json: all events created
+    """
+
+    all_events = query_all(Events)
+    return jsonify(all_events.format()), 200
 
 
 # POST /api/events/<str:event_id>/comments: Add a comment to an event
