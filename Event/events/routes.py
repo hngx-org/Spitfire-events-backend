@@ -7,10 +7,43 @@ from Event.models.images import Images
 from Event.models.comments import Comments
 from Event.models import Events
 from Event.utils import query_all_filtered, query_all, query_one_filtered
+from datetime import datetime
 
 
 # url_prefix includes /api/events before all endpoints in blueprint
 events = Blueprint("events", __name__, url_prefix="/api/events")
+
+
+# POST /api/events: Create a new event
+@events.route("/", methods=["POST"])
+def create_event():
+    title = request.json['title']
+    description = request.json['description']
+    location = request.json['location']
+    start_date = request.json['start_date']
+    start_time = request.json['start_time']
+    end_date = request.json['end_date']
+    end_time = request.json['end_time']
+    thumbnail = request.json['thumbnail']
+    creator = request.json['creator']
+
+    start_date = datetime.strptime(start_date, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date, '%Y-%m-%d')
+
+    start_time = datetime.strptime(start_time,'%H:%M')
+    end_time = datetime.strptime(end_time,'%H:%M')
+
+    event = Events(title=title,description=description,location=location,start_date=start_date,start_time=start_time,  end_date=end_date,end_time=end_time,thumbnail=thumbnail,creator=creator)
+
+    result = format(event)            
+    try:
+        event.insert()
+    except:
+        return {"message": "An error occurred creating the event."}, 400
+    return jsonify({
+        'msg': "Event Created",
+        'event': result }), 201  
+
 
 # DELETE /api/events/:eventId: Delete an event
 @events.route("/<id>", methods=["DELETE"])
