@@ -62,6 +62,19 @@ def delete_event(id):
     except Exception as error:
         return jsonify(error={"Not Found": "Event not found"}), 404
 
+
+# GET /api/events: Get a list of events
+@events.route("/", methods=["GET"])
+def all_events():
+    """Get all events
+    
+    Returns:
+        json: all events created
+    """
+
+    all_events = query_all(Events)
+    return jsonify(all_events.format()), 200
+
         
 # Get events based on event id
 @events.route("/<event_id>", methods=["GET"])
