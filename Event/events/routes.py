@@ -6,22 +6,106 @@ from flask import Blueprint, request, jsonify
 from Event.models.images import Images
 from Event.models.comments import Comments
 from Event.models import Events
-from Event.utils import query_all_filtered, query_all
+from Event.utils import query_all_filtered, query_all, query_one_filtered
+from datetime import datetime
+
 
 # url_prefix includes /api/events before all endpoints in blueprint
 events = Blueprint("events", __name__, url_prefix="/api/events")
 
-# GET /api/events: Get a list of events
-@events.route("/", methods=["GET"])
-def all_events():
-    """Get all events
-    
-    Returns:
-        json: all events created
+
+# POST /api/events: Create a new event
+@events.route("/", methods=["POST"])
+def create_event():
+    title = request.json['title']
+    description = request.json['description']
+    location = request.json['location']
+    start_date = request.json['start_date']
+    start_time = request.json['start_time']
+    end_date = request.json['end_date']
+    end_time = request.json['end_time']
+    thumbnail = request.json['thumbnail']
+    creator = request.json['creator']
+
+    start_date = datetime.strptime(start_date, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date, '%Y-%m-%d')
+
+    start_time = datetime.strptime(start_time,'%H:%M')
+    end_time = datetime.strptime(end_time,'%H:%M')
+
+    event = Events(title=title,description=description,location=location,start_date=start_date,start_time=start_time,  end_date=end_date,end_time=end_time,thumbnail=thumbnail,creator=creator)
+
+    result = format(event)            
+    try:
+        event.insert()
+    except:
+        return {"message": "An error occurred creating the event."}, 400
+    return jsonify({
+        'msg': "Event Created",
+        'event': result }), 201  
+
+
+# DELETE /api/events/:eventId: Delete an event
+@events.route("/<id>", methods=["DELETE"])
+def delete_event(id):
+    """Delete an event
+    Args:
+        id (str): The id of the event
     """
 
-    all_events = query_all(Events)
-    return jsonify(all_events.format()), 200
+    try:
+        del_event = query_one_filtered(table=Events, id=id)
+
+        if del_event:
+            del_event.delete()
+            return jsonify(response={"success": "Event deleted"}), 204
+    except Exception as error:
+        return jsonify(error={"Not Found": "Event not found"}), 404
+
+        
+# Get events based on event id
+@events.route("/<event_id>", methods=["GET"])
+def get_event(event_id):
+    """
+        Get event using event_id
+        Args:
+            event_id: Id of event to get
+        Returns:
+            a tuple with response message and status code
+    """
+    try:
+        event = query_one_filtered(table=Events, id=event_id)  
+        if event:
+            return jsonify(event.format()), 200
+    
+    except Exception as error:
+        return jsonify({"error": "Event not found"}), 404
+
+
+# PUT /api/events/:eventId: Update event details
+events.route("/<event_id>", methods=["PUT"])
+def update_event(event_id: str) -> tuple:
+    """
+    Updates an event in the database based on the provided event ID and request data.
+    Args:
+        event_id (str): The ID of the event to be updated.
+    Returns:
+        tuple: A JSON response with a message and a status code.
+    Raises:
+        Exception: If an error occurs during the update process.
+    """
+    try:
+        req = request.get_json()
+        db_data = query_one_filtered(Events, id=event_id)
+        
+        if not db_data:
+            return jsonify({"message": "Event not Found"}), 404
+        for k, v in req.items():
+            setattr(db_data, k, v)
+        Events.update()
+        return jsonify({"message": "item updated"}), 201
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 400
 
 
 # POST /api/events/<str:event_id>/comments: Add a comment to an event
