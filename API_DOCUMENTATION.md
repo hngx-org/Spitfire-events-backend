@@ -137,7 +137,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Attributes**:
         - `avatar` (string): mage url to users avatar.
 
--**Error Responses**:
+- **Error Responses**:
     - **400 Bad Request**:
         - **Status Code**: 400
         - **Response Body**:
@@ -164,17 +164,18 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Status Code**: 200 (OK)
     - **Response**:
     ```JSON
+    {
 
       "message": "success",
       "name": "user display name",
       "email": "user email",
-      "avatar": "user image url
+      "avatar": "user image url"
     }
     ```
     - **Attributes**:
         - `avatar` (string): mage url to users avatar.
 
--**Error Responses**:
+- **Error Responses**:
     - **401 Unauthorised**:
         - **Status Code**: 400
         - **Response Body**:
@@ -215,7 +216,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   }
 }
 ```
--**Error Responses**:
+- **Error Responses**:
     - **400 Bad Request**:
         - **Status Code**: 400
         - **Response Body**:
@@ -272,7 +273,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   }
 }
 ```
--**Error Responses**:
+- **Error Responses**:
     - **400 Bad Request**:
         - **Status Code**: 400
         - **Response Body**:
@@ -339,7 +340,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   }
 }
 ```
--**Error Responses**:
+- **Error Responses**:
     - **400 Bad Request**:
         - **Status Code**: 400
         - **Response Body**:
@@ -404,7 +405,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   "thumbnail": "thumbnail-url"
 }
 ```
--**Error Responses**:
+- **Error Responses**:
     - **400 Not Found**:
         - **Status Code**: 404
         - **Response Body**:
@@ -463,7 +464,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
        "success": "Event ID {id} deleted"
     }
   ```
--**Error Responses**:
+- **Error Responses**:
     - **404 Not Found**:
         - **Status Code**: 404
         - **Response Body**:
@@ -497,7 +498,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   }
 }
 ```
--**Error Responses**:
+- **Error Responses**:
     - **400 Bad Request**:
         - **Status Code**: 400
         - **Response Body**:
@@ -506,7 +507,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   "status": "failed",
   "message": "Comment data could not be saved",
   "error": "Bad Request"
-}
+   }
 
   ```
 
@@ -609,8 +610,9 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   "error":  "Bad Request"
   }
   ```
+## Likes
 
-### Like Comment
+### Like A Comment
 - **Endpoint** : `/like_comment/{comment_id}`
 - **Description**: Like a particular comment.
 - **Input Parameters**:`comment_id` (string, required): The ID of the comment to be liked.
@@ -639,7 +641,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   }
 
   ```
-  -**Error Responses**:
+  - **Error Responses**:
     - **404 Not Found**:
     - **Status Code**: 404
     - **Response Body**:
@@ -718,7 +720,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   }
 }
 ```
--**Error Responses**:
+- **Error Responses**:
     - **400 Bad Request**:
         - **Status Code**: 400
         - **Response Body**:
@@ -746,7 +748,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   }
 }
 ```
--**Error Responses**:
+- **Error Responses**:
     - **400 Bad Request**:
         - **Status Code**: 400
         - **Response Body**:
@@ -780,7 +782,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   "description": "Updated Group Description"
 }
 ```
--**Error Responses**:
+- **Error Responses**:
     - **400 Bad Request**:
         - **Status Code**: 400
         - **Response Body**:
@@ -812,7 +814,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     "message": "Group ID {group_id} deleted successfully"
   }
 ```
--**Error Responses**:
+- **Error Responses**:
     - **400 Bad Request**:
         - **Status Code**: 400
         - **Response Body**:
@@ -852,7 +854,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 
 }
 ```
--**Error Responses**:
+- **Error Responses**:
   - **404 Not Found**:
         - **Status Code**: 404
         - **Response Body**:
@@ -881,7 +883,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   "message": "User ID {user_id} removed from the group ID {group_id} successfully."
 }
 ```
--**Error Responses**:
+- **Error Responses**:
     - **400 Bad Request**:
       - **Status Code**: 400
       - **Response Body**:
