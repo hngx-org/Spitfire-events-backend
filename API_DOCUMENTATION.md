@@ -6,10 +6,10 @@
 2. [Error Handling](#error-handling)
 3. [User Management](#user-management)
    - 3.1 [Authentication](#authentication)
-    - 3.1.1 [Authenticate User](#authenticate-user)
-    - 3.1.2 [Get Logged in User](#get-currently-logged-in-user)
-    - 3.1.3 [logout user](#logout)
-   - 3.2 [Get a Users Profile](#get-user-profile)
+     - 3.1.1 [Authenticate User](#authenticate-user)
+     - 3.1.2 [Get Logged in User](#get-currently-logged-in-user)
+     - 3.1.3 [Logout User](#logout)
+   - 3.2 [Get a User's Profile](#get-user-profile)
    - 3.3 [Update User Profile](#update-user-profile)
 4. [Event Management](#event-management)
    - 4.1 [Create a New Event](#create-a-new-event)
@@ -21,6 +21,9 @@
    - 4.7 [Get Comments for an Event](#get-comments-for-an-event)
    - 4.8 [Add an Image to a Comment](#add-an-image-to-a-comment)
    - 4.9 [Get Images for a Comment](#get-images-for-a-comment)
+   - 4.10 [Likes](#likes)  
+     - 4.10.1 [Like a Comment](#like-a-comment)
+     - 4.10.2 [Get Total Likes for a Comment](#get-total-likes-for-a-comment)
 5. [User Interactions](#user-interactions)
    - 5.1 [Express Interest in an Event](#express-interest-in-an-event)
    - 5.2 [Remove Interest in an Event](#remove-interest-in-an-event)
@@ -37,6 +40,7 @@
 7. [Conclusion](#conclusion)
 
 
+
 ## Introduction
 Welcome to the API documentation for our user and event management system. This API documentation provides detailed information about the endpoints and models for a user and event management system. It includes information on how to use each endpoint, expected input data, success responses, and HTTP status codes.
 
@@ -47,7 +51,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Status Code**: 400
 - **Response**:
 
-```
+```JSON
 {
   "error": "Bad Request",
   "message": "Invalid input data."
@@ -58,7 +62,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Status Code**: 405
 - **Response**:
 
-```
+```JSON
 {
   "error": "Method Not Allowed",
   "message": "The HTTP method used is not allowed for this endpoint."
@@ -70,7 +74,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Status Code**: 422
 - **Response**:
 
-```
+```JSON
 {
   "error": "Unprocessable Entity",
   "message": "The server cannot process the request due to invalid data."
@@ -81,7 +85,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Status Code**: 429
 - **Response**:
 
-```
+```JSON
 {
   "error": "Too Many Requests",
   "message": "Rate limit exceeded. Please try again later."
@@ -93,7 +97,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Status Code**: 500
 - **Response**:
 
-```
+```JSON
 {
   "error": "Internal Server Error",
   "message": "It's not you, it's us. We encountered an internal server error."
@@ -146,12 +150,12 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **500 Internal Server Error**:
         - **Status Code**: 500
         - **Response Body**:
-        ```JSON
-        {
-          "error": "Internal Server Error",
-          "message": "It's not you, it's us. We encountered an internal server error."
-        }
-        ```
+  ```JSON
+  {
+    "error": "Internal Server Error",
+    "message": "It's not you, it's us. We encountered an internal server error."
+  }
+  ```
 
 ### Get Currently Logged In User
 - **Endpoint**: **GET** /api/auth/@me
@@ -160,7 +164,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Status Code**: 200 (OK)
     - **Response**:
     ```JSON
-    {
+
       "message": "success",
       "name": "user display name",
       "email": "user email",
@@ -212,6 +216,25 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 }
 ```
 -**Error Responses**:
+    - **400 Bad Request**:
+        - **Status Code**: 400
+        - **Response Body**:
+        ```JSON
+        {
+          "status": "failed",
+          "message": "your request could not be completed",
+          "error": "Bad Request"
+        }
+        ```
+    - **401 Unauthorized**:
+        - **Status Code**: 401
+        - **Response Body**:
+        ```JSON
+        {
+          "error": "Unauthorized",
+          "message": "You are not authorized to access this user's profile."
+        }
+        ```
     - **404 Not Found**:
         - **Status Code**: 404
         - **Response Body**:
@@ -225,7 +248,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Endpoint**: **PUT** `/api/users/{id}`
 - **Description**: Update user profile by ID.
 - **Input**: JSON with user profile data (name, email, avatar).
-```
+```JSON
 {
   "name": "Updated Name",
   "email": "updated@example.com",
@@ -236,14 +259,47 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Success Response**:
     - **Status Code**: 200
     - **Response**:
-```
+```JSON
 {
+  "status": "success",
+  "message": "user {user_id}  details updated successfully",
+  "data": {  
   "id": "user-id",
   "name": "Updated Name",
   "email": "updated@example.com",
   "avatar": "updated-avatar-url"
+
+  }
 }
 ```
+-**Error Responses**:
+    - **400 Bad Request**:
+        - **Status Code**: 400
+        - **Response Body**:
+  ```JSON
+  {
+    "status": "failed",
+    "message": "your request could not be completed",
+    "error": "Bad Request"
+  }
+  ```
+    - **401 Unauthorized**:
+        - **Status Code**: 401
+        - **Response Body**:
+  ```JSON
+  {
+    "error": "Unauthorized",
+    "message": "You are not authorized to access this user's profile."
+  }
+  ```
+    - **404 Not Found**:
+        - **Status Code**: 404
+        - **Response Body**:
+  ```JSON
+  {
+    "error": "User not found",
+  }
+  ```
 
 ## Event Management 
 
@@ -251,7 +307,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Endpoint**: **POST** `/api/events`
 - **Description**: Create a new event.
 - **Input**: JSON with event details (title, description, location, start date/time, end date/time, thumbnail).
-```
+```JSON
 {
   "title": "New Event",
   "description": "Event Description",
@@ -266,19 +322,33 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Success Response**:
     - **Status Code**: 201 (Created)
     - **Response**:
-```
-{
-  "id": "event-id",
-  "title": "New Event",
-  "description": "Event Description",
-  "location": "Event Location",
-  "start_date": "2023-09-21",
-  "start_time": "10:00:00",
-  "end_date": "2023-09-22",
-  "end_time": "12:00:00",
-  "thumbnail": "thumbnail-url"
+```JSON
+{ 
+  "status": "success",
+  "message": "Event ID {id} Created",
+  "event": {
+    "id": "event-id",
+    "title": "New Event",
+    "description": "Event Description",
+    "location": "Event Location",
+    "start_date": "2023-09-21",
+    "start_time": "10:00:00",
+    "end_date": "2023-09-22",
+    "end_time": "12:00:00",
+    "thumbnail": "thumbnail-url"
+  }
 }
 ```
+-**Error Responses**:
+    - **400 Bad Request**:
+        - **Status Code**: 400
+        - **Response Body**:
+  ```JSON
+        {
+          "error": "Bad Request",
+          "message":  "An error occurred creating the event."
+        }
+  ```
 
 ### Get a List of Events
 - **Endpoint**: **GET** `/api/events`
@@ -286,7 +356,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Success Response**:
     - **Status Code**: 200
     - **Response**:
-```
+```JSON
 [
   {
     "id": "event-id-1",
@@ -320,7 +390,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Success Response**:
     - **Status Code**: 200
     - **Response**:
-```
+```JSON
 {
   "id": "event-id",
   "title": "Event Title",
@@ -334,12 +404,21 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   "thumbnail": "thumbnail-url"
 }
 ```
+-**Error Responses**:
+    - **400 Not Found**:
+        - **Status Code**: 404
+        - **Response Body**:
+  ```JSON
+        {
+          "Not Found": "Event not found"
+        }
+  ```
 
 ### Update Event Details
 - **Endpoint**: **PUT** `/api/events/{id}`
 - **Description**: Update event details by ID.
 - **Input**: JSON with event details to update (title, description, location, start date/time, end date/time, thumbnail).
-```
+```JSON
 {
   "title": "Updated Event Title",
   "description": "Updated Event Description",
@@ -354,19 +433,23 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Success Response**:
     - **Status Code**: 200
     - **Response**:
-```
+```JSON
 {
-  "id": "event-id",
-  "title": "Updated Event Title",
-  "description": "Updated Event Description",
-  "creator_id": "creator-id",
-  "location": "Updated Location",
-  "start_date": "2023-09-23",
-  "start_time": "14:00:00",
-  "end_date": "2023-09-24",
-  "end_time": "16:00:00",
-  "thumbnail": "updated-thumbnail-url"
+  "message": "Event updated successfully",
+  "data": {
+    "id": "event-id",
+    "title": "Updated Event Title",
+    "description": "Updated Event Description",
+    "location": "Updated Location",
+    "start_date": "2023-09-23",
+    "start_time": "14:00:00",
+    "end_date": "2023-09-24",
+    "end_time": "16:00:00",
+    "thumbnail": "updated-thumbnail-url"
+  }
 }
+
+
 ```
 
 ### Delete an Event
@@ -374,6 +457,22 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Description**: Delete an event by ID.
 - **Success Response**:
     - **Status Code**: 204 (No Content)
+    - **Response**:
+  ```JSON
+    {
+       "success": "Event ID {id} deleted"
+    }
+  ```
+-**Error Responses**:
+    - **404 Not Found**:
+        - **Status Code**: 404
+        - **Response Body**:
+  ```JSON
+        {
+          "Not Found": "Event not found"
+        }
+  ```
+  
 
 ### Add a Comment to an Event
 - **Endpoint**: **POST** `/api/events/{id}/comments`
@@ -388,15 +487,28 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Success Response**:
     - **Status Code**: 201 (Created)
     - **Response**:
-```
+```JSON
 {
-  "comment_id": "comment-id",
-  "event_id": "event-id",
-  "user_id": "user-id",
-  "body": "This is a comment",
-  "images": []
+  "status": "success",
+  "message": "Comment saved successfully",
+  "data": {
+    "id": "comment-id",
+    "body": "Comment body"
+  }
 }
 ```
+-**Error Responses**:
+    - **400 Bad Request**:
+        - **Status Code**: 400
+        - **Response Body**:
+  ```JSON
+  {
+  "status": "failed",
+  "message": "Comment data could not be saved",
+  "error": "Bad Request"
+}
+
+  ```
 
 ### Get Comments for an Event
 - **Endpoint**: **GET** `/api/events/{id}/comments``
@@ -404,31 +516,41 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Success Response**:
     - **Status Code**: 200
     - **Response**:
+```JSON
+{
+  "status": "success",
+  "message": "All comments successfully fetched",
+  "data": [
+    {
+      "id": "comment-id-1",
+      "body": "Comment body 1"
+    },
+    {
+      "id": "comment-id-2",
+      "body": "Comment body 2"
+    }
+    // Additional comments...
+  ]
+}
 ```
-[
+- **Error Responses**:
+    - **400 Bad Request**:
+        - **Status Code**: 400
+        - **Response Body**:
+  ```JSON
   {
-    "comment_id": "comment-id-1",
-    "event_id": "event-id",
-    "user_id": "user-id-1",
-    "body": "Comment 1",
-    "images": []
-  },
-  {
-    "comment_id": "comment-id-2",
-    "event_id": "event-id",
-    "user_id": "user-id-2",
-    "body": "Comment 2",
-    "images": []
+  "status": "failed",
+  "message": "An error occurred while fetching all comments",
+  "error":  "Bad Request"
   }
-]
+  ```
 
-```
 
 ### Add an Image to a Comment
 - **Endpoint**: **POST** `/api/comments/{id}/images`
 - **Description**:Add an image to a comment.
 - **Input**:JSON with image details (image_url).
-```
+```JSON
 {
   "image_url": "image-url"
 }
@@ -437,13 +559,24 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Success Response**:
     - **Status Code**: 201 (Created)
     - **Response**:
-```
+```JSON
 {
   "image_id": "image-id",
   "comment_id": "comment-id",
   "image_url": "image-url"
 }
 ```
+- **Error Responses**:
+    - **400 Bad Request**:
+        - **Status Code**: 400
+        - **Response Body**:
+  ```JSON
+  {
+  "status": "failed",
+  "message": "An error occurred adding image",
+  "error":  "Bad Request"
+  }
+  ```
 
 ### Get Images for a Comment
 - **Endpoint**: **GET** `/api/comments/{id}/images`
@@ -451,7 +584,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Success Response**:
     - **Status Code**: 200
     - **Response**:
-```
+```JSON
 [
   {
     "image_id": "image-id-1",
@@ -465,6 +598,57 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   }
 ]
 ```
+- **Error Responses**:
+    - **400 Bad Request**:
+        - **Status Code**: 400
+        - **Response Body**:
+  ```JSON
+  {
+  "status": "failed",
+  "message": "An error occurred while fetching all comments",
+  "error":  "Bad Request"
+  }
+  ```
+
+### Like Comment
+- **Endpoint** : `/like_comment/{comment_id}`
+- **Description**: Like a particular comment.
+- **Input Parameters**:`comment_id` (string, required): The ID of the comment to be liked.
+- **Success Response**:
+  - **Status Code**: 200
+    - **Response**:
+  ```JSON
+    {
+      "message": "success",
+      "comment_id": "comment-id"
+    }
+
+  ```
+
+### Get Total Likes for a Comment
+- **Endpoint** : `/likes/{comment_id}`
+- **Description**: Get the total number of likes for a particular comment.
+- **Input Parameters**:`comment_id` (string, required): The ID of the comment for which to retrieve the total likes.
+- **Success Response**:
+  - **Status Code**: 200
+    - **Response**:
+  ```JSON
+  {
+    "message": "success",
+    "total_likes": 42
+  }
+
+  ```
+  -**Error Responses**:
+    - **404 Not Found**:
+    - **Status Code**: 404
+    - **Response Body**:
+  ```JSON
+  {
+  "error": "Comment not found"
+  }
+  ```
+
 
 ## User Interactions
 
@@ -474,19 +658,35 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Success Response**:
     - **Status Code**: 200
     - **Response**:
-```
+```JSON
 {
   "message": "Interest expressed successfully."
 }
 ```
+- **Error Responses**:
+    - **400 Bad Request**:
+        - **Status Code**: 400
+        - **Response Body**:
+  ```JSON
+  {
+    "error": "User not found"
+  }
+  ```
+  **OR**
+  ```JSON
+  {
+    "error": "Event not found"
+  }
+  ```
+
 
 ### Remove Interest in an Event
-- **Endpoint**: **PDELETE** `/api/users/{id}/interests/{event_id}`
+- **Endpoint**: **DELETE** `/api/users/{id}/interests/{event_id}`
 - **Description**:  Remove interest in an event.
 - **Success Response**:
     - **Status Code**: 200
     - **Response**:
-```
+```JSON
 {
   "message": "Interest removed successfully."
 }
@@ -498,7 +698,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Endpoint**: **POST** `/api/groups`
 - **Description**: Create a new group.
 - **Input**: JSON with group details (name, description).
-```
+```JSON
 {
   "name": "Group Name",
   "description": "Group Description"
@@ -508,32 +708,62 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Success Response**:
     - **Status Code**: 201 (Created)
     - **Response**:
-```
+```JSON
 {
-  "id": "group-id",
-  "name": "Group Name",
-  "description": "Group Description"
+  "message": "Group ID {group_id} created successfully",
+  "data": {
+    "id": "group-id",
+    "name": "Group Name",
+    "description": "Group Description"
+  }
 }
 ```
+-**Error Responses**:
+    - **400 Bad Request**:
+        - **Status Code**: 400
+        - **Response Body**:
+  ```JSON
+  {
+  "error": "Bad Request",
+  "message": "Your request could not be completed."
+  }
+
+  ```
+
 ### Get Group Details
-- **Endpoint**: **PUT** `/api/groups/{id}`
-- **Description**: Update group details by ID.
+- **Endpoint**: **GET** `/api/groups/{id}`
+- **Description**: Get group details by ID.
 - **Success Response**:
     - **Status Code**: 200
     - **Response**:
-```
+```JSON
 {
-  "id": "group-id",
-  "name": "Group Name",
-  "description": "Group Description"
+  "status": "success",
+  "message": "Group details successfully fetched",
+  "data": {
+    "group_id": "group-id",
+    "title": "Group Title"
+  }
 }
 ```
+-**Error Responses**:
+    - **400 Bad Request**:
+        - **Status Code**: 400
+        - **Response Body**:
+  ```JSON
+  {
+    "status": "failed",
+    "message": "Group with groupId {group_id} not found"
+  }
+  ```
+
+
 
 ### Update Group Details
 - **Endpoint**: **PUT** `/api/groups/{id}`
 - **Description**: Update group details by ID.
 - **Input**: JSON with group details to update (name, description).
-```
+```JSON
 {
   "name": "Updated Group Name",
   "description": "Updated Group Description"
@@ -543,31 +773,102 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Success Response**:
     - **Status Code**: 200
     - **Response**:
-```
+```JSON
 {
   "id": "group-id",
   "name": "Updated Group Name",
   "description": "Updated Group Description"
 }
 ```
+-**Error Responses**:
+    - **400 Bad Request**:
+        - **Status Code**: 400
+        - **Response Body**:
+  ```JSON
+  {
+    "error": "Missing 'title' in request"
+  }
+  ```
+  - **Attributes**:
+  `error` (string): Indicates that the 'title' attribute is missing in the request body.
+  - **404 Not Found**:
+    - **Status Code**: 404
+    - **Response Body**:
+  ```JSON
+  {
+    "error": "Group with ID {group_id} not found"
+  }
+  ```
+
 
 ### Delete a Group
 - **Endpoint**: **DELETE** `/api/groups/{id}`
 - **Description**: Delete a group by ID.
 - **Success Response**:
     - **Status Code**: 204 (No Content)
+    - **Response**:
+```JSON
+  {
+    "message": "Group ID {group_id} deleted successfully"
+  }
+```
+-**Error Responses**:
+    - **400 Bad Request**:
+        - **Status Code**: 400
+        - **Response Body**:
+  ```JSON
+  {
+  "error": "Bad Request",
+  "message": "Your request could not be completed."
+  }
+
+  ```
+  - **404 Not Found**:
+        - **Status Code**: 404
+        - **Response Body**:
+  ```JSON
+  {
+    "error": "Group ID {group_id} not found"
+  }
+
+  ```
 
 ### Add a User to a Group
-- **Endpoint**: **POST** `/api/groups/:groupId/members/{id}`
+- **Endpoint**: **POST** `/api/groups/{group_id}/members/{user_id}`
 - **Description**:  Add a user to a group.
+- **Input Parameters** :
+    - `group_id` (string, required): The ID of the group to which the user will be added.
+    - `user_id` (string, required): The ID of the user to be added to the group.
 - **Success Response**:
     - **Status Code**: 200
     - **Response**:
-```
+```JSON
 {
-  "message": "User added to the group successfully."
+  {
+  "success": true,
+  "id": "user-group-id",
+  "message": "User ID {user_id} added to Group ID {group_id}"
+  }
+
 }
 ```
+-**Error Responses**:
+  - **404 Not Found**:
+        - **Status Code**: 404
+        - **Response Body**:
+  ```JSON
+  {
+    "error": "Group ID {group_id} not found"
+  }
+
+  ```
+  **OR**
+  ```JSON
+  {
+    "error": "User ID {group_id} not found"
+  }
+
+  ```
 
 ### Remove a User from a Group
 - **Endpoint**: **DELETE** `/api/groups/{id}/members/{user_id}`
@@ -575,11 +876,29 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Success Response**:
     - **Status Code**: 200
     - **Response**:
-```
+```JSON
 {
-  "message": "User removed from the group successfully."
+  "message": "User ID {user_id} removed from the group ID {group_id} successfully."
 }
 ```
+-**Error Responses**:
+    - **400 Bad Request**:
+      - **Status Code**: 400
+      - **Response Body**:
+  ```JSON
+  {
+    "error": "Group ID {group_id} or User ID {group_id} not found"
+  }
+  ```
+
+  - **404 Not Found**:
+        - **Status Code**: 404
+        - **Response Body**:
+  ```JSON
+  {
+  "error": "User ID {group_id} is not a member of the group"
+  }
+
 
 ## Models
 ### Users Model
@@ -588,7 +907,15 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - `name` (string): User's name.
     - `email` (string): User's email address.
     - `avatar` (string): URL to the user's avatar image.
-  
+
+### Comments Model
+- Represents comments data with attributes:
+  - `comment_id` (string): Unique comment ID.
+  - `event_id` (string): ID of the associated event.
+  - `user_id` (string): ID of the user who made the comment.
+  - `body` (string): Text content of the comment.
+  - `images` (list of dictionaries): List of image data associated with the comment.
+
 ### Images Model
 - Represents image data with attributes:
     - `id` (string): Unique image ID.
@@ -596,9 +923,19 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - `image_url` (string): URL to the image
 
 ### UserGroups Model
-- Represents user-group relationships with attributes:
+- - Represents user-group relationships with attributes:
     - `user_id` (string): ID of the user.
     - `group_id` (string): ID of the group.
+
+### InterestedEvents Model
+- Represents user interest in events with attributes:
+  - `user_id` (string): ID of the user who is interested in an event.
+  - `event_id` (string): ID of the event that the user is interested in.
+
+## Likes Model
+- Represents user likes for comments with attributes:
+  - comment_id (string): ID of the comment that is liked by a user.
+  - user_id (string): ID of the user who liked the comment.
 
 
 ## Conclusion
