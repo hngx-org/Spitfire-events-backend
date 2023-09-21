@@ -31,7 +31,7 @@ def add_user_to_group(groupId, userId):
         
         return jsonify({"success": True, "id": add_user.id, "message": "User added to Group"}), 201
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e)}), 400
 
 
 @groups.route("/<string:group_id>", methods=["GET"])
@@ -57,7 +57,7 @@ def get_group_by_id(group_id):
                     "message": "Group details successfully fetched",
                     "data": group_details,
                 }
-            )
+            ), 200
         else:
             return (
                 jsonify(
@@ -77,7 +77,7 @@ def get_group_by_id(group_id):
                     "message": "An error occurred while fetching group details",
                 }
             ),
-            500,
+            400,
         )
 
 
@@ -101,7 +101,7 @@ def update_group(group_id):
     Raises:
         400 Bad Request: If the 'title' parameter is missing in the request.
         404 Not Found: If the group with the provided group_id is not found.
-        500 Internal Server Error: If any server error occurs
+        400 Internal Server Error: If any server error occurs
         during the update process.
     """
     try:
@@ -132,7 +132,7 @@ def update_group(group_id):
         )
 
     except Exception as error:  # pylint: disable=broad-except
-        return jsonify({"error": str(error)}), 500
+        return jsonify({"error": str(error)}), 400
 
 
 
