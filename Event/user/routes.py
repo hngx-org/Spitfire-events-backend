@@ -60,3 +60,13 @@ def create_interest(userId, eventId):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+@users.route("/<string:userId>/interests/<string:eventId>", methods = ['DELETE'])       
+def remove_interest(userId, eventId):
+    try:
+        interest = query_one_filtered(table=InterestedEvents, user_id = userId, event_id= eventId)
+        if interest:
+            InterestedEvents.remove(interest)
+            return jsonify({'message':'interest remove successfully'}), 204
+    except Exception as error:
+        return jsonify(error={"Not Found": "Interest not found"}), 404        
