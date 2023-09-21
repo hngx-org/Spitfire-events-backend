@@ -5,10 +5,30 @@ Module for removing user from a group.
 from flask import Blueprint, jsonify, request
 from Event.models.users import Users
 from Event.models.groups import Groups
+from Event.models.user_groups import UserGroups
 from Event import db
 
 
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
+
+@groups.route("/<groupId>/members/<userId>",methods=["POST"])
+def add_user_to_group(groupId, userId):
+    if request.method=='POST':
+        # Handle POST Request here
+        group_id = groupId
+        user_id = userId
+        user = Users.query.get(user_id)
+
+        if user != None:
+            group = Groups.query.get(group_id)
+            add_user = UserGroups(user_id=user, group_id=group)
+            
+            UserGroups.insert(add_user)
+            return jsonify({"success":True, "id":add_user.id, "message":"User added to Group"}), 201
+        else:
+            return jsonify({"success": False, "message":"User not found"}), 404
+        
+    return jsonify({"success": False, "message":"Method not allowed"}), 405
 
 
 @groups.route("/<int:group_id>", methods=["PUT"])
