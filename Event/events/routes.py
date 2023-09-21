@@ -12,7 +12,6 @@ from Event.utils import query_all_filtered, query_all, query_one_filtered
 # url_prefix includes /api/events before all endpoints in blueprint
 events = Blueprint("events", __name__, url_prefix="/api/events")
 
-<<<<<<< HEAD
 # DELETE /api/events/:eventId: Delete an event
 @events.route("/<id>", methods=["DELETE"])
 def delete_event(id):
@@ -29,7 +28,8 @@ def delete_event(id):
             return jsonify(response={"success": "Event deleted"}), 204
     except Exception as error:
         return jsonify(error={"Not Found": "Event not found"}), 404
-=======
+
+        
 # Get events based on event id
 @events.route("/<event_id>", methods=["GET"])
 def get_event(event_id):
@@ -73,7 +73,6 @@ def update_event(event_id: str) -> tuple:
         return jsonify({"message": "item updated"}), 201
     except Exception as exc:
         return jsonify({"error": str(exc)}), 400
->>>>>>> origin/main
 
 
 # POST /api/events/<str:event_id>/comments: Add a comment to an event
