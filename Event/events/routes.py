@@ -46,8 +46,9 @@ def add_comments(event_id):
                             {
                                 "status": "failed",
                                 "message": "Failed to save to database",
+                                "error": str(error)
                             }
-                        )
+                        ), 400
 
             return jsonify(
                 {
@@ -62,7 +63,8 @@ def add_comments(event_id):
                 jsonify(
                     {
                         "status": "failed",
-                        "message": "Error: Comment data could not be saved",
+                        "message": "Comment data could not be saved",
+                        "error": str(error)
                     }
                 ),
                 400,
@@ -87,6 +89,7 @@ def add_comments(event_id):
                 {
                     "status": "failed",
                     "message": "An error occured while fetching all comments",
+                    "error": str(error)
                 }
             ),
             400,

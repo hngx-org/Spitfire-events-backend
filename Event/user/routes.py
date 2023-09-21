@@ -2,10 +2,9 @@
 Module containing user-related routes for the Events-App, Team Spitfire.
 """
 
-from flask import Blueprint, request
-from Event.models.groups import Groups
-
-# from Event.utils import query_paginate_filtered, query_one_filtered
+from flask import Blueprint, jsonify, request
+from Event.models.users import Users
+from Event.utils import query_one_filtered
 
 
 users = Blueprint("users", __name__, url_prefix="/api/users")
@@ -22,14 +21,62 @@ def get_active_signals():
     return
 
 
-@users.route("/groups", methods=["POST"], strict_slashes=False)
-def create_group():
-    """
-     Create a new group.
+# GET /api/users/<string:user_id>: Get user profile
+@users.route("/<string:user_id>", strict_slashes=False)
+def get_user_info(user_id: str):
+    """gets the user info for the profile page
+
+    Args:  
+        user_id (str): the id of the user
 
     Returns:
-        str: A success message.
+        str: details of the user info.
+
     """
-    title = request.form.get("title")
-    new_group = Groups(title=title)
-    new_group.insert()
+    try:
+        user = query_one_filtered(Users, user_id=user_id)
+        user_details = user.format()
+        return jsonify({
+            "status": "success",
+            "message": f"user {user_id} details fetched successfully",
+            "data": user_details
+        })
+    except Exception as error:
+        print(f"{type(error).__name__}: {error}")
+        return jsonify({
+            "status": "failed",
+            "message": "your request could not be completed",
+            "error": str(error)
+        }), 400
+
+
+# PUT /api/users/<string:user_id>: Update user profile
+@users.route("/<string:user_id>", methods=['PUT'], strict_slashes=False)
+def update_user(user_id: str):
+    """updates the user details
+
+    Args:  
+        user_id (str): the id of the user
+
+    Returns:
+        str: the new user info.
+
+    """
+    try:
+        data = request.get_json()
+        user = query_one_filtered(Users, user_id=user_id)
+        for key, value in data.items():
+            setattr(user, key, value)
+        user.update()
+        return jsonify({
+            "status": "success",
+            "message": f"user {user_id} details updated successfully",
+            "data": user.format()
+        })
+    except Exception as error:
+        print(f"{type(error).__name__}: {error}")
+        return jsonify({
+            "status": "failed",
+            "message": "your request could not be completed",
+            "error": str(error)
+        }), 400
