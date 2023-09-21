@@ -2,9 +2,11 @@
 summary
 """
 from Event import db
+from Event.errors.handlers import CustomError
 
 
 # db helpers
+
 
 # get unique item from table based on filter
 # args:table=model_class **kwargs=filters
@@ -17,8 +19,9 @@ def query_one_filtered(table, **kwargs):
     Returns:
         _type_: _description_
     """
-    return db.session.execute(db.select(table).
-                              filter_by(**kwargs)).scalar_one_or_none()
+    return db.session.execute(
+        db.select(table).filter_by(**kwargs)
+    ).scalar_one_or_none()
 
 
 # get all items from table based on filter
@@ -32,8 +35,11 @@ def query_all_filtered(table, **kwargs):
     Returns:
         _type_: _description_
     """
-    return db.session.execute(db.select(table).
-                              filter_by(**kwargs)).scalars().all()
+    return (
+        db.session.execute(db.select(table).filter_by(**kwargs))
+        .scalars()
+        .all()
+    )
 
 
 # get first one item from table no filter
@@ -93,9 +99,33 @@ def query_paginate_filtered(table, page, **kwargs):
         _type_: _description_
     """
     return db.paginate(
-        db.select(table).filter_by(**kwargs).order_by(
-                                                table.date_created.desc()),
+        db.select(table)
+        .filter_by(**kwargs)
+        .order_by(table.date_created.desc()),
         per_page=15,
         page=page,
         error_out=False,
     )
+
+
+# session helpers
+
+
+def is_logged_in(session):
+    """
+    Ensures a user is logged in returns error
+
+    Parameterss:
+        session(dict):
+            - flask session object
+
+    returns
+        id(str):
+            - logged in users id
+    """
+    user = session.get("user")
+
+    if not user:
+        raise CustomError("Unauthorized", 401, "You are not logged in")
+
+    return user.get("id")
