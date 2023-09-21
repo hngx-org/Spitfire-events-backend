@@ -52,10 +52,10 @@ class Comments(BaseModel):
     )
     body = db.Column(db.String(1000), nullable=False)
 
-    # Add relationships to Event and User models
-    event = db.relationship("Event", backref=db.backref("comments", lazy=True))
-    user = db.relationship("User", backref=db.backref("comments", lazy=True))
-    images = db.relationship("Image", backref="comment", lazy="dynamic")
+    # Add relationships to Events and Users models
+    event = db.relationship("Events", backref=db.backref("comments", lazy=True))
+    user = db.relationship("Users", backref=db.backref("comments", lazy=True))
+    images = db.relationship("Images", backref="comment", lazy="dynamic")
 
     def __init__(self, event_id, user_id, body):
         """Initialize the Comment object"""

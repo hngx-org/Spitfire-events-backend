@@ -14,3 +14,4 @@ def test_get_all_events():
     res = data.json()
     assert data.status_code == 200
     assert isinstance(res["persons"], list)
+    
