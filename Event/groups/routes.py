@@ -5,10 +5,33 @@ Module for removing user from a group.
 from flask import Blueprint, jsonify, request
 from Event.models.users import Users
 from Event.models.groups import Groups
+from Event.models.user_groups import UserGroups
 from Event import db
 
 
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
+
+@groups.route("/<groupId>/members/<userId>",methods=["POST"])
+def add_user_to_group(groupId, userId):
+    try:
+        group_id = Users.query.get(groupId)
+        user_id = Groups.query.get(userId)
+
+        # Check if the group and user exist
+        if group_id is None or user_id is None:
+            return jsonify({"error": "Group or user not found"}), 404
+
+        # Check if the user is a member of the group
+        if user_id not in group_id.members:
+            return jsonify({"error": "User is not a member of the group"}), 400
+
+
+        add_user = UserGroups(user_id=user_id, group_id=group_id)
+        UserGroups.insert(add_user)
+        
+        return jsonify({"success": True, "id": add_user.id, "message": "User added to Group"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @groups.route("/<int:group_id>", methods=["PUT"])
@@ -89,19 +112,19 @@ def remove_group_member(group_id, user_id):
     tuple: A tuple containing response message and status code.
     """
     # Retrieve the group and user from the database
-    group_id = Users.query.get(group_id)
-    user_id = Groups.query.get(user_id)
+    group = Groups.query.get(group_id)
+    user = Users.query.get(user_id)
 
     # Check if the group and user exist
-    if group_id is None or user_id is None:
+    if group is None or user is None:
         return jsonify({"error": "Group or user not found"}), 404
 
     # Check if the user is a member of the group
-    if user_id not in group_id.members:
+    if user not in group.members:
         return jsonify({"error": "User is not a member of the group"}), 400
 
     # Remove the user from the group
-    group_id.members.remove(user_id)
+    group.members.remove(user)
     db.session.commit()
 
     return jsonify({"message": "User removed from group successfully"}), 200
@@ -152,7 +175,6 @@ def create_group():
     # Handle exceptions and return an error response if any occur.
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
 @groups.route("/<int:group_id>", methods=["DELETE"])
 def delete_group(group_id):
     """
@@ -182,3 +204,34 @@ def delete_group(group_id):
         # Handle any exceptions that may occur during deletion
         return jsonify({"error": str(e)}), 500
 
+
+@groups.route("/<int:group_id>", methods=["GET"])
+def get_group_details(group_id):
+    """
+    Retrieve details of a specific group.
+
+    Args:
+        group_id (int): The unique identifier for the group to be retrieved.
+
+    Returns:
+        json: A JSON object containing the group details if found.
+        404 Not Found: If the group with the provided group_id is not found.
+        500 Internal Server Error: If any server error occurs during the retrieval process.
+    """
+    try:
+        # get group from the database using the provided group_id
+        group = Groups.query.get(group_id)
+
+        # Check if the group exists in the database
+        if not group:
+            return (
+                jsonify({"error": f"Group with ID {group_id} not found"}),
+                404,
+            )
+
+        # If the group is found, format its details and return as JSON
+        return jsonify(group.format()), 200
+
+    except Exception as error:
+        # Handle exceptions and return an error response if any occur
+        return jsonify({"error": str(error)}), 500
