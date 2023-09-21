@@ -53,9 +53,9 @@ class Comments(BaseModel):
     body = db.Column(db.String(1000), nullable=False)
 
     # Add relationships to Event and User models
-    event = db.relationship("Event", backref=db.backref("comments", lazy=True))
-    user = db.relationship("User", backref=db.backref("comments", lazy=True))
-    images = db.relationship("Image", backref="comment", lazy="dynamic")
+    event = db.relationship("Events", backref=db.backref("comments", lazy=True))
+    user = db.relationship("Users", backref=db.backref("comments", lazy=True))
+    images = db.relationship("Images", backref="comment", lazy="dynamic")
 
     def __init__(self, event_id, user_id, body):
         """Initialize the Comment object"""
@@ -65,9 +65,7 @@ class Comments(BaseModel):
 
     def __repr__(self):
         """Return a string representation of the Comment object"""
-        return "event_id: {}, user_id: {}, body: {}".format(
-            self.name, self.email, self.body
-        )
+        return f"event_id: {self.event_id}, user_id: {self.user_id}, body: {self.body}"
 
     def format(self):
         """Return a dictionary representation of the Comment object"""

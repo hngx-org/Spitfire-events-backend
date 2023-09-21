@@ -32,7 +32,7 @@ def register_or_login():
     credential_token = data.get("token")
     if not credential_token:
         raise CustomError("Bad Request", 400, "invalid token")
-
+# pylint: disable=raise-missing-from
     try:
         # we'll ask google to verify they issued this token,  give us user data
         id_info = id_token.verify_oauth2_token(

@@ -3,12 +3,6 @@ from flask import jsonify, Blueprint, request
 from Event.utils import query_all_filtered
 from Event.models.images import Images
 
-"""_summary_
-
-    Returns:
-        _type_: _description_
-    """
-
 
 comments = Blueprint("comments", __name__, url_prefix="/api/comments")
 
@@ -36,6 +30,7 @@ def add_images(comment_id):
                     },
                 }
             )
+            # pylint: disable=broad-exception-caught
         except Exception as error:
             print(f"{type(error).__name__}: {error}")
             return (
@@ -60,6 +55,7 @@ def add_images(comment_id):
                 else [],
             }
         )
+                    # pylint: disable=broad-exception-caught
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
         return (

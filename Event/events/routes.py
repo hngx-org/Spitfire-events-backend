@@ -40,6 +40,7 @@ def add_comments(event_id):
                     new_image = Images(new_comment.id, image_url)
                     try:
                         new_image.insert()
+                    # pylint: disable=broad-exception-caught
                     except Exception as error:
                         print(f"{type(error).__name__}: {error}")
                         return jsonify(
@@ -56,6 +57,7 @@ def add_comments(event_id):
                     "data": {"id": new_comment.id, "body": new_comment.body},
                 }
             )
+            # pylint: disable=broad-exception-caught
         except Exception as error:
             print(f"{type(error).__name__}: {error}")
             return (
@@ -80,6 +82,7 @@ def add_comments(event_id):
                 else [],
             }
         )
+        # pylint: disable=broad-exception-caught
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
         return (

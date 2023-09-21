@@ -4,6 +4,7 @@ from Event import db
 from Event.models.base_model import BaseModel
 
 
+# pylint: disable=broad-too-many-instance-attributes
 class Events(BaseModel):
     """_summary_
 
@@ -17,6 +18,7 @@ class Events(BaseModel):
     __tablename__ = "events"
 
     # Define columns for the Events table
+    # pylint: disable=broad-exception-caught
     title = db.Column(db.String(60), unique=True, nullable=False)
     description = db.Column(db.String(225), nullable=False)
     creator = db.Column(

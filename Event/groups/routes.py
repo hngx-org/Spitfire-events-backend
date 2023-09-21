@@ -150,5 +150,7 @@ def create_group():
         )
 
     # Handle exceptions and return an error response if any occur.
+            # pylint: disable=broad-exception-caught
+            # pylint: disable=invalid-name
     except Exception as e:
         return jsonify({"error": str(e)}), 500
