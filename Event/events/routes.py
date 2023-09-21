@@ -119,21 +119,23 @@ def get_event(event_id):
 
 
 # PUT /api/events/:eventId: Update event details
-events.route("/<event_id>", methods=["PUT"])
+@events.route("/<event_id>", methods=["PUT"])
 def update_event(event_id: str) -> tuple:
     """
     Updates an event in the database based on the provided event ID and request data.
+
     Args:
         event_id (str): The ID of the event to be updated.
+
     Returns:
         tuple: A JSON response with a message and a status code.
+
     Raises:
         Exception: If an error occurs during the update process.
     """
     try:
         req = request.get_json()
-        db_data = query_one_filtered(Events, id=event_id)
-        
+        db_data = query_all_filtered(Events, id=event_id)
         if not db_data:
             return jsonify({"message": "Event not Found"}), 404
         for k, v in req.items():
@@ -228,28 +230,3 @@ def add_comments(event_id):
             ),
             400,
         )
-@events.route("/<event_id>", methods=["PUT"])
-def update_event(event_id: str) -> tuple:
-    """
-    Updates an event in the database based on the provided event ID and request data.
-
-    Args:
-        event_id (str): The ID of the event to be updated.
-
-    Returns:
-        tuple: A JSON response with a message and a status code.
-
-    Raises:
-        Exception: If an error occurs during the update process.
-    """
-    try:
-        req = request.get_json()
-        db_data = query_all_filtered(Events, id=event_id)
-        if not db_data:
-            return jsonify({"message": "Event not Found"}), 404
-        for k, v in req.items():
-            setattr(db_data, k, v)
-        Events.update()
-        return jsonify({"message": "item updated"}), 201
-    except Exception as exc:
-        return jsonify({"error": str(exc)}), 400
