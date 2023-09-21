@@ -107,6 +107,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - Session based Authentication is used
 - A Session Cookie is sent and stored on client after athenticating with google
 - subsequent requests should come with the cookie in the request headers
+- session cookies expire after 30 days
 ### Authenticate User
 - **Endpoint**: **POST** /api/auth
 - **Description**: Authenticate a user and obtain access token.
