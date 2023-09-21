@@ -10,6 +10,7 @@ from Event import db
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
 
 
+
 @groups.route("/<int:group_id>", methods=["PUT"])
 def update_group(group_id):
     """
@@ -61,6 +62,7 @@ def get_active_signals():
         str: A placeholder return value.
     """
     return
+
 
 
 @groups.route("/api/groups/<group_id>/members/<user_id>", methods=["DELETE"])

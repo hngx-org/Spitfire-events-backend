@@ -80,6 +80,9 @@ Make sure to set the following environment variables:
 
     SECRET_KEY: [Your Secret Key]
     SQLALCHEMY_DATABASE_URI: [Your Database URI]
+    OAUTHLIB_INSECURE_TRANSPORT: 1
+    ANDROID_CLIENT_ID: 
+    IOS_CLIENT_ID: 
 
 ### Run the Server
 
@@ -107,33 +110,38 @@ $ pytest test_event.py -v
 
 ## **Authentication**
 
-The authentication mechanism used by this API is ...
+The authentication mechanism used by this API is Google oAuth2 with session cookies
+see [Authentication here](./API_DOCUMENTATION.md)
 
 ## **EndPoints**
-
+see [Api Documentation here](./API_DOCUMENTATION.md)
 ### Authentication Endpoint
 
-`GET '/auth/${id}'`
+`POST 'API/auth'`
 
 - Retrieves a person from the database using user id
-- Path Parameter: `id`- integer ID of the person to retrieve
+- **Request Body**: 
+    - **Input**: JSON with auth token.
+    ```
+    {
+      "token": "google id token",
+    }
+    ```
 - Returns: JSON response with a message and person object containing `id`, `name` and `date created`
 
 Example Response
 
 ```json
-{
-  "message": "Success",
-  "person": {
-    "id": 1,
-    "name": "name of user",
-    "date_created": "Mon, 11 Sep 2023 01:04:27 GMT"
+  {
+    "message": "success",
+    "name": "user display name",
+    "email": "user email",
+    "avatar": "user image url"
   }
-}
 ```
 
 _status code: 200_
-
+see [Api Documentation here](./API_DOCUMENTATION.md)
 ---
 
 ## Sample Usage

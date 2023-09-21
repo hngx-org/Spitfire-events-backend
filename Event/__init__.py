@@ -7,12 +7,16 @@ Returns:
 """
 import os
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask
+from flask_session import Session
+from flask import Flask, session
 from flask_cors import CORS
 from Event.config import App_Config
 
 
 db = SQLAlchemy()
+
+
+sess = Session()
 
 def create_app():
     """
@@ -31,6 +35,8 @@ def create_app():
     CORS(app, supports_credentials=True)
     # Initialize SQLAlchemy
     db.init_app(app)
+    # initialize Flask-Session
+    sess.init_app(app)
 
     # register endpoint(blueprints)
     # pylint: disable=import-outside-toplevel

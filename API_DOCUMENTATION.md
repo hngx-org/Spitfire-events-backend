@@ -5,8 +5,11 @@
 1. [Introduction](#introduction)
 2. [Error Handling](#user-management)
 3. [User Management](#user-management)
-   - 3.1 [Authenticate User](#authenticate-user)
-   - 3.2 [Get User Profile](#get-user-profile)
+   - 3.1 [Authentication](#authentication)
+    - 3.1.1 [Authenticate User](#authenticate-user)
+    - 3.1.2 [Get Logged in User](#get-currently-logged-in-user)
+    - 3.1.3 [logout user](#logout)
+   - 3.2 [Get a Users Profile](#get-user-profile)
    - 3.3 [Update User Profile](#update-user-profile)
 4. [Event Management](#event-management)
    - 4.1 [Create a New Event](#create-a-new-event)
@@ -100,51 +103,95 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 
 ## User Management 
 
+### Authentication
+- Session based Authentication is used
+- A Session Cookie is sent and stored on client after athenticating with google
+- subsequent requests should come with the cookie in the request headers
 ### Authenticate User
 - **Endpoint**: **POST** /api/auth
 - **Description**: Authenticate a user and obtain access token.
 - **Request Body**: 
-    - **Input**: JSON with user credentials.
-    ```
+    - **Input**: JSON with auth token.
+    ```JSON
     {
-      "email": "user@example.com",
-      "password": "password123"
+      "token": "google id token",
     }
     ```
     - Attributes:
-        - `email` (string, required): User's email address.
-        - `password` (string, required): User's password.
+        - `token` (string, required): Google id token.
 - **Success Response**:
     - **Status Code**: 200 (OK)
     - **Response**:
-    ```
+    ```JSON
     {
-      "access_token": "your-access-token",
-      "refresh_token": "your-refresh-token"
+      "message": "success",
+      "name": "user display name",
+      "email": "user email",
+      "avatar": "user image url"
     }
     ```
     - **Attributes**:
-        - `access_token` (string): Token for authenticating future requests.
-        - `refresh_token` (string): Token for refreshing access tokens.
+        - `avatar` (string): mage url to users avatar.
+
 -**Error Responses**:
     - **400 Bad Request**:
         - **Status Code**: 400
         - **Response Body**:
-        ```
+        ```JSON
         {
           "error": "Bad Request",
-          "message": "Invalid input data."
+          "message": "Invalid token."
         }
         ```
     - **500 Internal Server Error**:
         - **Status Code**: 500
         - **Response Body**:
-        ```
-       {
+        ```JSON
+        {
           "error": "Internal Server Error",
           "message": "It's not you, it's us. We encountered an internal server error."
         }
         ```
+
+### Get Currently Logged In User
+- **Endpoint**: **GET** /api/auth/@me
+- **Description**: Get user details of the currently logged in user
+- **Success Response**:
+    - **Status Code**: 200 (OK)
+    - **Response**:
+    ```JSON
+    {
+      "message": "success",
+      "name": "user display name",
+      "email": "user email",
+      "avatar": "user image url
+    }
+    ```
+    - **Attributes**:
+        - `avatar` (string): mage url to users avatar.
+
+-**Error Responses**:
+    - **401 Unauthorised**:
+        - **Status Code**: 400
+        - **Response Body**:
+        ```JSON
+        {
+          "error": "Unauthorised",
+          "message": "You are not logged in"
+        }
+        ```
+
+### Logout
+- **Endpoint**: **GET/POST** /api/auth/logout
+- **Description**: log out user session
+- **Success Response**:
+    - **Status Code**: 204 (OK)
+    - **Response**:
+    ```JSON
+    {
+      "message": "success",
+    }
+    ```
 
 ### Get User Profile
 - **Endpoint**: **GET** `/api/users/{id}`
