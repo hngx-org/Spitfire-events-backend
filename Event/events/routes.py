@@ -146,7 +146,7 @@ def update_event(event_id: str) -> tuple:
         return jsonify({
             "message": "item updated",
             "Event_id": event_id,
-            "Event": req}), 201
+            "body": req}), 201
     except Exception as exc:
         return jsonify({"error": str(exc)}), 400
 
