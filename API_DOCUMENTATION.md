@@ -3,7 +3,7 @@
 ## Table of Contents
 
 1. [Introduction](#introduction)
-2. [Error Handling](#user-management)
+2. [Error Handling](#error-handling)
 3. [User Management](#user-management)
    - 3.1 [Authentication](#authentication)
     - 3.1.1 [Authenticate User](#authenticate-user)
@@ -197,16 +197,29 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Endpoint**: **GET** `/api/users/{id}`
 - **Description**: Get user profile by ID.
 - **Success Response**:
-    - **Status Code**: 200
+    - **Status Code**: 200 (OK)
     - **Response**:
-```
+```JSON
 {
-  "id": "user-id",
-  "name": "John Doe",
-  "email": "johndoe@example.com",
-  "avatar": "avatar-url"
+  "status": "success",
+  "message": "user {user_id} details fetched successfully",
+  "data": {
+    "id": "user-id",
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "avatar": "avatar-url"
+  }
 }
 ```
+-**Error Responses**:
+    - **404 Not Found**:
+        - **Status Code**: 404
+        - **Response Body**:
+        ```JSON
+        {
+          "error": "User not found",
+        }
+        ```
 
 ### Update User Profile
 - **Endpoint**: **PUT** `/api/users/{id}`
@@ -386,7 +399,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 ```
 
 ### Get Comments for an Event
-- **Endpoint**: **GET** /api/events/{id}/comments
+- **Endpoint**: **GET** `/api/events/{id}/comments``
 - **Description**: Get comments for an event.
 - **Success Response**:
     - **Status Code**: 200
@@ -557,7 +570,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 ```
 
 ### Remove a User from a Group
-- **Endpoint**: **DELETE** /api/groups/{id}/members/{user_id)
+- **Endpoint**: **DELETE** `/api/groups/{id}/members/{user_id}`
 - **Description**:  Remove a user from a group.
 - **Success Response**:
     - **Status Code**: 200
