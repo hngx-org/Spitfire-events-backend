@@ -1,23 +1,15 @@
-<<<<<<< HEAD
-from Event.models import Groups
 from flask import jsonify, Blueprint
-
 from Event.utils import query_paginate_filtered, query_one_filtered
-=======
 """
 Module for removing user from a group.
 """
-
-from flask import Blueprint, jsonify
 from Event.models import Users, Groups
 from Event import db
->>>>>>> origin/main
 
 
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
 
 
-<<<<<<< HEAD
 @groups.route("/<id>", methods=["GET"])
 def get_group(id):
     try: 
@@ -29,16 +21,6 @@ def get_group(id):
     except Exception as e:
         #Handle other errors
         jsonify({"error" : e}), 400
-=======
-@groups.route("/")
-def get_active_signals():
-    """
-        Retrieve and return active signals.
-
-    Returns:
-        str: A placeholder return value.
-    """
-    return
 
 @groups.route("/api/groups/<group_id>/members/<user_id>", methods=['DELETE'])
 def remove_group_member(group_id, user_id):
@@ -69,4 +51,3 @@ def remove_group_member(group_id, user_id):
     db.session.commit()
 
     return jsonify({"message": "User removed from group successfully"}), 200
->>>>>>> origin/main
