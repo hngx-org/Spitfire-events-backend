@@ -121,7 +121,7 @@ def get_event(event_id):
 
 
 # PUT /api/events/:eventId: Update event details
-@events.route("/<event_id>", methods=["PUT"])
+@events.route("/<string:event_id>", methods=["PUT"])
 def update_event(event_id: str) -> tuple:
     """
     Updates an event in the database based on the provided event ID and request data.
@@ -142,7 +142,7 @@ def update_event(event_id: str) -> tuple:
             return jsonify({"message": "Event not Found"}), 404
         for k, v in req.items():
             setattr(db_data, k, v)
-        Events.update()
+        db_data.update()
         return jsonify({
             "message": "item updated",
             "Event_id": event_id,
@@ -152,7 +152,7 @@ def update_event(event_id: str) -> tuple:
 
 
 @events.route("/<string:event_id>/comments", methods=["GET", "POST"])
-def add_comments(event_id):
+def add_comments(event_id: str):
     """
     Add a comment to an event discussion or fetch all comments for an event.
 
@@ -178,7 +178,7 @@ def add_comments(event_id):
             # save images if they exist
             if image_url_list is not None:
                 for image_url in image_url_list:
-                    new_image = Images(new_comment.id, image_url)
+                    new_image = Images(comment_id=new_comment.id, url=image_url)
                     try:
                         new_image.insert()
                     except Exception as error:

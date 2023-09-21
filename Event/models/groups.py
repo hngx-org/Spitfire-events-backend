@@ -26,8 +26,8 @@ class Groups(BaseModel):
     __tablename__ = "groups"
 
     title = db.Column(db.String(60), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime(60), unique=True, nullable=False, default=datetime.utc().isoformat())
-    updated_at = db.Column(db.DateTime(60), unique=True, nullable=False, default=datetime.utc().isoformat())
+    created_at = db.Column(db.DateTime(60), unique=True, nullable=False, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime(60), unique=True, nullable=False, default=datetime.utcnow)
 
     def __init__(self, title):
         """Constructor for the Groups class."""
