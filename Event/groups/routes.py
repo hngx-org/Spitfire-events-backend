@@ -147,10 +147,6 @@ def remove_user_from_group(group_id, user_id):
     Returns:
     tuple: A tuple containing response message and status code.
     """
-    # Check if the parameters are of string type
-    if not isinstance(group_id, str) or not isinstance(user_id, str):
-        return jsonify({"error": "Invalid parameter types"}), 400
-
     try:
         # Check if the group and user exist in the database
         group = UserGroups.query.filter_by(group_id=group_id, user_id=user_id).first()
