@@ -152,3 +152,33 @@ def create_group():
     # Handle exceptions and return an error response if any occur.
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@groups.route("/<int:group_id>", methods=["DELETE"])
+def delete_group(group_id):
+    """
+    Delete a group by its ID.
+
+    Parameters:
+    group_id (int): The ID of the group to be deleted.
+
+    Returns:
+    tuple: A tuple containing response message and status code.
+    """
+    try:
+        # Retrieve the group from the database
+        group = Groups.query.get(group_id)
+
+        # Check if the group exists
+        if group is None:
+            return jsonify({"error": "Group not found"}), 404
+
+        # Delete the group from the database
+        db.session.delete(group)
+        db.session.commit()
+
+        return jsonify({"message": "Group deleted successfully"}), 200
+
+    except Exception as e:
+        # Handle any exceptions that may occur during deletion
+        return jsonify({"error": str(e)}), 500
+
