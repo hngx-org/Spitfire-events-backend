@@ -10,6 +10,24 @@ from Event.utils import query_all_filtered
 # url_prefix includes /api/events before all endpoints in blueprint
 events = Blueprint("events", __name__, url_prefix="/api/events")
 
+# Get events based on event id
+@events.route("/<event_id>", methods=["GET"])
+def get_event(event_id):
+    """
+        Get event using event_id
+        Args:
+            event_id: Id of event to get
+        Returns:
+            a tuple with response message and status code
+    """
+    try:
+        event = query_one_filtered(table=Events, id=event_id)  
+        if event:
+            return jsonify(event.format()), 200
+    
+    except Exception as error:
+        return jsonify({"error": "Event not found"}), 404
+
 
 # POST /api/events/<str:event_id>/comments: Add a comment to an event
 # GET /api/events/<str:event_id>/comments: Get comments for an event
