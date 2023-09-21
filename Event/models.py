@@ -165,7 +165,7 @@ class Events(db.Model):
             f"End Date: {self.end_date}, End Time: {self.end_time}"
         )
 
-    # safely add record/object to db
+    # safely add recogit rd/object to db
     def insert(self):
         """_summary_"""
         db.session.add(self)
@@ -524,7 +524,6 @@ class UserGroups(db.Model):
     def format(self):
         """_summary_
 
-<<<<<<< HEAD
 class Likes(db.Model):
     """
     Model schema for the likes
@@ -566,9 +565,7 @@ class Likes(db.Model):
             "comment_id": self.comment_id,
             "user_id": self.user_id
         }
-=======
         Returns:
             _type_: _description_
         """
         return {"user_id": self.user_id, "group_id": self.group_id}
->>>>>>> origin/main
