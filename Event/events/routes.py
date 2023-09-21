@@ -5,6 +5,7 @@
 from flask import Blueprint, request, jsonify
 from Event.models.images import Images
 from Event.models.comments import Comments
+from Event.models.events import Events
 from Event.utils import query_all_filtered
 
 # url_prefix includes /api/events before all endpoints in blueprint
@@ -91,3 +92,48 @@ def add_comments(event_id):
             ),
             400,
         )
+# UPDATE EVENTS
+@events.route("/<string:event_id>", methods=["PUT"])
+def update_event(event_id):
+    """
+    Update event details.
+    Args:
+        event_id (str): The id of the event to be updated.
+    Returns:
+        Response: JSON response indicating the success or failure of the update.
+    """
+    try:
+        event = Events.query.get(event_id)
+        if event is None:
+            return jsonify({'error': 'Event not found'}), 404
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'Invalid JSON data'}), 400
+        event.title = data.get('title', event.title)
+        event.description = data.get('description', event.description)
+        event.location = data.get('location', event.location)
+        event.start_date = data.get('start_date', event.start_date)
+        event.start_time = data.get('start_time', event.start_time)
+        event.end_date = data.get('end_date', event.end_date)
+        event.end_time = data.get('end_time', event.end_time)
+        event.thumbnail = data.get('thumbnail', event.thumbnail)
+        event.update()
+        return jsonify({
+            'status': 'success',
+            'message': 'Event updated successfully',
+            'data': {
+                'id': event.id,
+                'title': event.title,
+                'description': event.description,
+                'location': event.location,
+                'start_date': event.start_date,
+                'start_time': event.start_time,
+                'end_date': event.end_date,
+                'end_time': event.end_time,
+                'thumbnail': event.thumbnail
+            }
+        }), 200
+    except ValueError as ve:
+        return jsonify({'error': f'Invalid JSON data: {str(ve)}'}), 400
+    except Exception as error:
+        return jsonify({'error': f'Error updating event: {str(error)}'}), 500
