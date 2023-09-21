@@ -6,11 +6,13 @@ from flask import Blueprint, request, jsonify
 from Event.models.images import Images
 from Event.models.comments import Comments
 from Event.models import Events
-from Event.utils import query_all_filtered, query_one_filtered
+from Event.utils import query_all_filtered, query_all, query_one_filtered
+
 
 # url_prefix includes /api/events before all endpoints in blueprint
 events = Blueprint("events", __name__, url_prefix="/api/events")
 
+<<<<<<< HEAD
 # DELETE /api/events/:eventId: Delete an event
 @events.route("/<id>", methods=["DELETE"])
 def delete_event(id):
@@ -27,6 +29,51 @@ def delete_event(id):
             return jsonify(response={"success": "Event deleted"}), 204
     except Exception as error:
         return jsonify(error={"Not Found": "Event not found"}), 404
+=======
+# Get events based on event id
+@events.route("/<event_id>", methods=["GET"])
+def get_event(event_id):
+    """
+        Get event using event_id
+        Args:
+            event_id: Id of event to get
+        Returns:
+            a tuple with response message and status code
+    """
+    try:
+        event = query_one_filtered(table=Events, id=event_id)  
+        if event:
+            return jsonify(event.format()), 200
+    
+    except Exception as error:
+        return jsonify({"error": "Event not found"}), 404
+
+
+# PUT /api/events/:eventId: Update event details
+events.route("/<event_id>", methods=["PUT"])
+def update_event(event_id: str) -> tuple:
+    """
+    Updates an event in the database based on the provided event ID and request data.
+    Args:
+        event_id (str): The ID of the event to be updated.
+    Returns:
+        tuple: A JSON response with a message and a status code.
+    Raises:
+        Exception: If an error occurs during the update process.
+    """
+    try:
+        req = request.get_json()
+        db_data = query_one_filtered(Events, id=event_id)
+        
+        if not db_data:
+            return jsonify({"message": "Event not Found"}), 404
+        for k, v in req.items():
+            setattr(db_data, k, v)
+        Events.update()
+        return jsonify({"message": "item updated"}), 201
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 400
+>>>>>>> origin/main
 
 
 # POST /api/events/<str:event_id>/comments: Add a comment to an event
