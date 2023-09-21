@@ -1,7 +1,8 @@
 """
 Module for removing user from a group.
 """
-
+import unittest
+from tests.group import TestGroupEndpoints
 from flask import Blueprint, jsonify, request
 from Event.models.users import Users
 from Event.models.groups import Groups
@@ -243,3 +244,27 @@ def delete_group(group_id):
     except Exception as e:
         # Handle any exceptions that may occur during deletion
         return jsonify({"error": str(e)}), 400
+
+@groups.route('/run_tests', methods=['GET'])
+def run_tests():
+    try:
+        # Initialize the test suite and test loader
+        test_suite = unittest.TestLoader().loadTestsFromTestCase(TestGroupEndpoints)
+
+        # Initialize the test runner and run the tests
+        test_runner = unittest.TextTestRunner(verbosity=2)
+        result = test_runner.run(test_suite)
+
+        # Collect and format the test results
+        test_results = {
+            'tests_run': result.testsRun,
+            'failures': len(result.failures),
+            'errors': len(result.errors),
+            'skipped': len(result.skipped),
+            'status': 'OK' if result.wasSuccessful() else 'FAIL'
+        }
+
+        return jsonify(test_results)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
