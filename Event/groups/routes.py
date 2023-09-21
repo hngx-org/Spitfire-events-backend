@@ -11,10 +11,8 @@ from Event import db
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
 
 
-
-
-@groups.route("/<string:groupId>", methods=["GET"])
-def get_group_by_id(groupId):
+@groups.route("/<string:group_id>", methods=["GET"])
+def get_group_by_id(group_id):
     """
     Get details of a group by its group ID.
 
@@ -25,32 +23,41 @@ def get_group_by_id(groupId):
         dict: A JSON response with group details.
     """
     try:
-        group = Groups.query.filter_by(group_id=groupId).first()
-        
+        group = Groups.query.filter_by(group_id=group_id).first()
+
         if group:
             # Create a dictionary with group details
-            group_details = {
-                "group_id": group.group_id,
-                "title": group.title
-            }
-            return jsonify({
-                "status": "success",
-                "message": "Group details successfully fetched",
-                "data": group_details
-            })
+            group_details = {"group_id": group.group_id, "title": group.title}
+            return jsonify(
+                {
+                    "status": "success",
+                    "message": "Group details successfully fetched",
+                    "data": group_details,
+                }
+            )
         else:
-            return jsonify({
-                "status": "failed",
-                "message": f"Group with groupId {groupId} not found"
-            }), 404
+            return (
+                jsonify(
+                    {
+                        "status": "failed",
+                        "message": f"Group with groupId {group_id} not found",
+                    }
+                ),
+                404,
+            )
     except Exception as e:
-        print(f'{type(e).__name__}: {e}')
-        return jsonify({
-            'status': 'failed',
-            'message': 'An error occurred while fetching group details'
-        }), 500
-        
-=======
+        print(f"{type(e).__name__}: {e}")
+        return (
+            jsonify(
+                {
+                    "status": "failed",
+                    "message": "An error occurred while fetching group details",
+                }
+            ),
+            500,
+        )
+
+
 @groups.route("/<int:group_id>", methods=["PUT"])
 def update_group(group_id):
     """
@@ -147,7 +154,7 @@ def remove_group_member(group_id, user_id):
     return jsonify({"message": "User removed from group successfully"}), 200
 
 
-@groups.route("/", methods=["POST"])
+@groups.route("/create", methods=["POST"])
 def create_group():
     """
     Create a new group.
@@ -183,7 +190,7 @@ def create_group():
             jsonify(
                 {
                     "message": "Group created successfully",
-                    "group": new_group.format(),
+                    "data": new_group.format(),
                 }
             ),
             201,
@@ -191,4 +198,4 @@ def create_group():
 
     # Handle exceptions and return an error response if any occur.
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"message": "group creation failed", "error": str(e)}), 500
