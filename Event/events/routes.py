@@ -91,3 +91,181 @@ def add_comments(event_id):
             ),
             400,
         )
+
+# import Events model
+from Event.models.events import Events
+
+# POST /api/events: Create a new event
+@events.route("/", methods=["POST"])
+def create_event():
+    try:
+        data = request.get_json()
+        # Extract event data from JSON request
+        title = data.get("title")
+        description = data.get("description")
+        creator = data.get("creator")
+        location = data.get("location")
+        start_date = data.get("start_date")
+        start_time = data.get("start_time")
+        end_date = data.get("end_date")
+        end_time = data.get("end_time")
+        thumbnail = data.get("thumbnail")
+        # Create a new event object
+        new_event = Events(
+            title=title, 
+            description=description, 
+            creator=creator,
+            location=location,
+            start_date=start_date,
+            start_time=start_time,
+            end_date=end_date,
+            end_time=end_time,
+            thumbnail=thumbnail
+            )
+        new_event.insert()  # Insert the event into the database
+        return jsonify(
+            {
+                "status": "success",
+                "message": "Event created successfully",
+                "data": {"id": new_event.id},
+            }
+        ), 201  # Return HTTP status code 201 (Created)
+    except Exception as error:
+        print(f"{type(error).__name__}: {error}")
+        return jsonify(
+            {"status": "failed", "message": "Error: Event could not be created"}, 400
+        )
+
+# GET /api/events: Get a list of events
+@events.route("/", methods=["GET"])
+def get_events():
+    try:
+        all_events = query_all_filtered("events")
+        return jsonify(
+            {
+                "status": "success",
+                "message": "Events retrieved successfully",
+                "data": [event.format() for event in all_events] if all_events else [],
+            }
+        )
+    except Exception as error:
+        print(f"{type(error).__name__}: {error}")
+        return (
+            jsonify(
+                {
+                    "status": "failed",
+                    "message": "An error occurred while fetching events",
+                }
+            ),
+            400,
+        )
+
+# GET /api/events/:eventId: Get event details
+@events.route("/<string:event_id>", methods=["GET"])
+def get_event(event_id):
+    try:
+        event = Events.query.get(event_id)
+        if event:
+            return jsonify(
+                {
+                    "status": "success",
+                    "message": "Event details retrieved successfully",
+                    "data": event.format(),
+                }
+            )
+        else:
+            return (
+                jsonify(
+                    {"status": "failed", "message": "Event not found"},
+                ),
+                404,  # Return HTTP status code 404 (Not Found)
+            )
+    except Exception as error:
+        print(f"{type(error).__name__}: {error}")
+        return (
+            jsonify(
+                {
+                    "status": "failed",
+                    "message": "An error occurred while fetching event details",
+                }
+            ),
+            400,
+        )
+
+# PUT /api/events/:eventId: Update event details
+@events.route("/<string:event_id>", methods=["PUT"])
+def update_event(event_id):
+    try:
+        event = Events.query.get(event_id)
+        if event:
+            data = request.get_json()
+            # Update event data from JSON request
+            event.title = data.get("title", event.title)
+            event.description = data.get("description", event.description)
+            event.creator = data.get("creator", event.creator)
+            event.location = data.get("location", event.location)
+            event.start_date = data.get("start_date", event.start_date)
+            event.start_time = data.get("start_time", event.start_time)
+            event.end_date = data.get("end_date", event.end_date)
+            event.end_time = data.get("end_time", event.end_time)
+            event.thumbnail = data.get("thumbnail", event.thumbnail)
+
+            event.update()  # Update the event in the database
+            return jsonify(
+                {
+                    "status": "success",
+                    "message": "Event updated successfully",
+                    "data": event.format(),
+                }
+            )
+        else:
+            return (
+                jsonify(
+                    {"status": "failed", "message": "Event not found"},
+                ),
+                404,
+            )
+    except Exception as error:
+        print(f"{type(error).__name__}: {error}")
+        return (
+            jsonify(
+                {
+                    "status": "failed",
+                    "message": "An error occurred while updating event details",
+                }
+            ),
+            400,
+        )
+
+# DELETE /api/events/:eventId: Delete an event
+@events.route("/<string:event_id>", methods=["DELETE"])
+def delete_event(event_id):
+    try:
+        event = Events.query.get(event_id)
+        if event:
+            event.delete()  # Delete the event from the database
+            return jsonify(
+                {
+                    "status": "success",
+                    "message": "Event deleted successfully",
+                    "data": {"id": event.id},
+                }
+            )
+        else:
+            return (
+                jsonify(
+                    {"status": "failed", "message": "Event not found"},
+                ),
+                404,
+            )
+    except Exception as error:
+        print(f"{type(error).__name__}: {error}")
+        return (
+            jsonify(
+                {
+                    "status": "failed",
+                    "message": "An error occurred while deleting the event",
+                }
+            ),
+            400,
+        )
