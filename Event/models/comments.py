@@ -3,6 +3,7 @@
 
 from Event import db
 from Event.models.base_model import BaseModel
+from Event.models.events import Events
 
 
 class Comments(BaseModel):
