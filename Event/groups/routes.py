@@ -58,7 +58,7 @@ def get_group_by_id(group_id):
         )
 
 
-@groups.route("/<int:group_id>", methods=["PUT"])
+@groups.route("/<string:group_id>", methods=["PUT"])
 def update_group(group_id):
     """
     Update an existing group.

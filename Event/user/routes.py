@@ -20,6 +20,7 @@ def get_active_signals():
     """
     return
 
+
 # GET /api/users/<string:user_id>: Get user profile
 @users.route("/<string:user_id>", strict_slashes=False)
 def get_user_info(user_id: str):
@@ -79,4 +80,3 @@ def update_user(user_id: str):
             "message": "your request could not be completed",
             "error": str(error)
         }), 400
-
