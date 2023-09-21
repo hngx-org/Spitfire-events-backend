@@ -12,29 +12,23 @@ class Likes(BaseModel):
     """
 
     __tablename__ = "likes"
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    event_id = db.Column(
-        db.Integer, db.ForeignKey("events.id"), nullable=False
-    )
-    comment_id = db.Column(
-        db.Integer, db.ForeignKey("comments.id"), nullable=False
-    )
+    
+    comment_id = db.Column(db.String(60), db.ForeignKey("comments.id"), primary_key=True, nullable=False)
+    user_id = db.Column(db.String(60), db.ForeignKey("users.id"), primary_key=True, nullable=False)
 
-    def __init__(self, user_id, event_id, comment_id):
-        self.user_id = user_id
-        self.event_id = event_id
+    def __init__(self, comment_id, user_id):
         self.comment_id = comment_id
+        self.user_id = user_id
 
     def __repr__(self):
         """Return a string representation of the Like object"""
-        return "User: {}, Event: {}, Comment: {}".format(
-            self.user_id, self.event_id, self.comment_id
+        return "Comment: {}, User: {},".format(
+            self.comment_id, self.user_id,
         )
 
     def format(self):
         """Return a dictionary representation of the Like object"""
         return {
-            "user_id": self.user_id,
-            "event_id": self.event_id,
             "comment_id": self.comment_id,
+            "user_id": self.user_id
         }
