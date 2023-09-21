@@ -1,7 +1,8 @@
 """Comments route module"""
 from flask import jsonify, Blueprint, request
 from Event.utils import query_all_filtered
-from Event.models import Images
+from Event.models.images import Images
+
 """_summary_
 
     Returns:
@@ -29,7 +30,10 @@ def add_images(comment_id):
                 {
                     "status": "success",
                     "message": "Image saved successfully",
-                    "data": {"id": new_image.id, "image_url": new_image.image_url},
+                    "data": {
+                        "id": new_image.id,
+                        "image_url": new_image.image_url,
+                    },
                 }
             )
         except Exception as error:
@@ -38,7 +42,7 @@ def add_images(comment_id):
                 jsonify(
                     {
                         "status": "failed",
-                        "message": "image data could not be saved, an error occured",
+                        "message": "Error: image data could not be saved",
                     }
                 ),
                 400,
