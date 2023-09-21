@@ -88,18 +88,9 @@ def update_group(group_id):
         return jsonify({"error": str(error)}), 500
 
 
-@groups.route("/")
-def get_active_signals():
-    """
-        Retrieve and return active signals.
-
-    Returns:
-        str: A placeholder return value.
-    """
-    return jsonify(), 200
 
 
-@groups.route("/api/groups/<group_id>/members/<user_id>", methods=["DELETE"])
+@groups.route("/<group_id>/members/<user_id>", methods=["DELETE"])
 def remove_group_member(group_id, user_id):
     """
     Remove a user from a group.
@@ -204,34 +195,4 @@ def delete_group(group_id):
         # Handle any exceptions that may occur during deletion
         return jsonify({"error": str(e)}), 500
 
-
-@groups.route("/<int:group_id>", methods=["GET"])
-def get_group_details(group_id):
-    """
-    Retrieve details of a specific group.
-
-    Args:
-        group_id (int): The unique identifier for the group to be retrieved.
-
-    Returns:
-        json: A JSON object containing the group details if found.
-        404 Not Found: If the group with the provided group_id is not found.
-        500 Internal Server Error: If any server error occurs during the retrieval process.
-    """
-    try:
-        # get group from the database using the provided group_id
-        group = Groups.query.get(group_id)
-
-        # Check if the group exists in the database
-        if not group:
-            return (
-                jsonify({"error": f"Group with ID {group_id} not found"}),
-                404,
-            )
-
-        # If the group is found, format its details and return as JSON
-        return jsonify(group.format()), 200
-
-    except Exception as error:
-        # Handle exceptions and return an error response if any occur
-        return jsonify({"error": str(error)}), 500
+        
