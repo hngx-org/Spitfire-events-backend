@@ -51,8 +51,8 @@ def create_app():
     app.register_blueprint(users)
     app.register_blueprint(auth)
     app.register_blueprint(events)
-    app.register_blueprint(error)
     app.register_blueprint(groups)
+    app.register_blueprint(error)
     app.register_blueprint(comments)
 
     # create db tables from models if not exists
