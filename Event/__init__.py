@@ -18,6 +18,7 @@ db = SQLAlchemy()
 
 sess = Session()
 
+
 def create_app():
     """
     Create a new instance of the app with the given configuration.

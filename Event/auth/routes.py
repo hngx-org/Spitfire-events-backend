@@ -11,7 +11,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from google.auth.exceptions import GoogleAuthError
 from flask import jsonify, Blueprint, request, session
-from Event.models import Users
+from Event.models.users import Users
 from Event.errors.handlers import CustomError
 from Event.utils import query_one_filtered, is_logged_in
 
@@ -25,8 +25,7 @@ IOS_CLIENT_ID = os.environ.get("IOS_CLIENT_ID")
 
 @auth.route("/", methods=["POST"])
 def register_or_login():
-    """Register and Login route for google authentication
-        """
+    """Register and Login route for google authentication"""
     data = request.get_json()
 
     # lets collect the credential token from request body
@@ -40,10 +39,10 @@ def register_or_login():
             id_token=credential_token, request=requests.Request()
         )
     except GoogleAuthError as error:
-        print(error) # remove before production after testing auth on mobile
-        raise CustomError("Bad Request", 400,"invalid token" )
+        print(error)  # remove before production after testing auth on mobile
+        raise CustomError("Bad Request", 400, "invalid token")
     except ValueError:
-        raise CustomError("Bad Request", 400,"invalid token" )
+        raise CustomError("Bad Request", 400, "invalid token")
 
     # lets check if the token was issued for us
     if id_info["aud"] not in [ANDROID_CLIENT_ID, IOS_CLIENT_ID]:
@@ -55,7 +54,7 @@ def register_or_login():
             id=id_info["sub"],
             name=id_info["name"],
             email=id_info["email"],
-            avatar=id_info["picture"]
+            avatar=id_info["picture"],
         )
         user.insert()
 
@@ -68,7 +67,7 @@ def register_or_login():
                 "message": "success",
                 "email": user.email,
                 "name": user.name,
-                "avatar": user.avatar
+                "avatar": user.avatar,
             }
         ),
         200,
@@ -90,7 +89,7 @@ def see_sess():
                     "message": "Success",
                     "email": user.email,
                     "name": user.name,
-                    "avatar": user.avatar
+                    "avatar": user.avatar,
                 }
             ),
             200,
@@ -100,7 +99,7 @@ def see_sess():
             jsonify(
                 {
                     "error": "Internal server error",
-                    "message": "It's not you it's us"
+                    "message": "It's not you it's us",
                 }
             ),
             500,
@@ -109,7 +108,6 @@ def see_sess():
 
 @auth.route("/logout", methods=["GET", "POST"])
 def logout_user():
-    """Logout user by removing login session
-        """
+    """Logout user by removing login session"""
     session.pop("user", None)
     return jsonify({"message": "success"}), 204

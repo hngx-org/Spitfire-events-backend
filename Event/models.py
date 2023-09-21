@@ -32,12 +32,14 @@ class Users(db.Model):
 
     __tablename__ = "users"
 
-    id = db.Column(db.String(60), primary_key=True, unique=True, nullable=False)
+    id = db.Column(
+        db.String(60), primary_key=True, unique=True, nullable=False
+    )
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     avatar = db.Column(db.String(255), nullable=False)
 
-    def __init__(self,id,name, email, avatar):
+    def __init__(self, id, name, email, avatar):
         """_summary_
 
         Args:
@@ -106,7 +108,9 @@ class Events(db.Model):
     id = db.Column(db.String(60), primary_key=True, default=get_uuid)
     title = db.Column(db.String(60), unique=True, nullable=False)
     description = db.Column(db.String(225), nullable=False)
-    creator = db.Column(db.String(60), db.ForeignKey("users.id"), nullable=False)
+    creator = db.Column(
+        db.String(60), db.ForeignKey("users.id"), nullable=False
+    )
     location = db.Column(db.String(1024), nullable=False)
     start_date = db.Column(db.Date(), nullable=False)
     start_time = db.Column(db.Time(), nullable=False)
@@ -212,9 +216,13 @@ class Groups(db.Model):
 
     __tablename__ = "groups"
 
-
-    id = db.Column(db.String(36), primary_key=True, default=get_uuid, unique=True,
-                         nullable=False)
+    id = db.Column(
+        db.String(36),
+        primary_key=True,
+        default=get_uuid,
+        unique=True,
+        nullable=False,
+    )
     title = db.Column(db.String(100), nullable=False)
 
     def __init__(self, title):
@@ -231,7 +239,7 @@ class Groups(db.Model):
         Returns:
             _type_: _description_
         """
-        return f'Group ID: {self.id}, Title: {self.title}'
+        return f"Group ID: {self.id}, Title: {self.title}"
 
     def insert(self):
         """_summary_"""
@@ -253,10 +261,7 @@ class Groups(db.Model):
         Returns:
             _type_: _description_
         """
-        return {
-            "id": self.id,
-            "title": self.title
-        }
+        return {"id": self.id, "title": self.title}
 
 
 class Comments(db.Model):
@@ -303,14 +308,20 @@ class Comments(db.Model):
     __tablename__ = "comments"
 
     id = db.Column(db.String, primary_key=True, default=get_uuid)
-    event_id = db.Column(db.String(36), db.ForeignKey("events.id"), nullable=False)
-    user_id = db.Column(db.String(36), db.ForeignKey("users.id"), nullable=False)
+    event_id = db.Column(
+        db.String(36), db.ForeignKey("events.id"), nullable=False
+    )
+    user_id = db.Column(
+        db.String(36), db.ForeignKey("users.id"), nullable=False
+    )
     body = db.Column(db.String(1000), nullable=False)
 
     # Add relationships to Event and User models
-    event = db.relationship('Events', backref=db.backref('comments', lazy=True))
-    user = db.relationship('Users', backref=db.backref('comments', lazy=True))
-    images = db.relationship('Images', backref='comments', lazy='dynamic')
+    event = db.relationship(
+        "Events", backref=db.backref("comments", lazy=True)
+    )
+    user = db.relationship("Users", backref=db.backref("comments", lazy=True))
+    images = db.relationship("Images", backref="comments", lazy="dynamic")
 
     def __init__(self, event_id, user_id, body):
         """_summary_
@@ -331,7 +342,8 @@ class Comments(db.Model):
             _type_: _description_
         """
         return (
-            f"event_id: {self.event_id}, user_id: {self.user_id}," "body: {self.body}"
+            f"event_id: {self.event_id}, user_id: {self.user_id},"
+            "body: {self.body}"
         )
 
     def insert(self):
@@ -398,9 +410,10 @@ class Images(db.Model):
     __tablename__ = "images"
 
     id = db.Column(db.String, primary_key=True, default=get_uuid)
-    comment_id = db.Column(db.String(36), db.ForeignKey("comments.id"), nullable=False)
+    comment_id = db.Column(
+        db.String(36), db.ForeignKey("comments.id"), nullable=False
+    )
     image_url = db.Column(db.String(255), nullable=False)
-
 
     def __init__(self, comment_id, image_url):
         """_summary_
@@ -447,7 +460,6 @@ class Images(db.Model):
         }
 
 
-
 class UserGroups(db.Model):
     """
     Model Schema for usergroups.
@@ -481,10 +493,12 @@ class UserGroups(db.Model):
     __tablename__ = "usergroups"
 
     id = db.Column(db.String, primary_key=True, default=get_uuid)
-    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),
-                        nullable=False)
-    group_id = db.Column(db.String(36), db.ForeignKey('groups.id'),
-                         nullable=False)
+    user_id = db.Column(
+        db.String(36), db.ForeignKey("users.id"), nullable=False
+    )
+    group_id = db.Column(
+        db.String(36), db.ForeignKey("groups.id"), nullable=False
+    )
 
     def __init__(self, user_id, group_id):
         """_summary_
@@ -502,7 +516,7 @@ class UserGroups(db.Model):
         Returns:
             _type_: _description_
         """
-        return f'id: {self.id} , user_id: {self.user_id}, group_id: {self.group_id}'
+        return f"id: {self.id} , user_id: {self.user_id}, group_id: {self.group_id}"
 
     def insert(self):
         """_summary_"""
@@ -527,5 +541,5 @@ class UserGroups(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
-            "group_id": self.group_id
+            "group_id": self.group_id,
         }

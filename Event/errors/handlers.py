@@ -13,8 +13,8 @@ error = Blueprint("error", __name__)
 
 
 class CustomError(Exception):
-    """Exception class for custom errors
-        """
+    """Exception class for custom errors"""
+
     def __init__(self, error, code, message):
         """constructor for custom error class
 
@@ -26,6 +26,7 @@ class CustomError(Exception):
         self.error = error
         self.code = code
         self.message = message
+
 
 # pylint: disable=broad-exception-caught
 @error.teardown_app_request
@@ -43,9 +44,11 @@ def clean_up(exc):
 
 @error.app_errorhandler(CustomError)
 def custom_error(error):
-    """ app error handler for custom errors
-        """
-    return jsonify({"error": error.error, "message": error.message}), error.code
+    """app error handler for custom errors"""
+    return (
+        jsonify({"error": error.error, "message": error.message}),
+        error.code,
+    )
 
 
 @error.app_errorhandler(400)
