@@ -51,7 +51,7 @@ def remove_group_member(group_id, user_id):
     return jsonify({"message": "User removed from the group successfully"}), 200
 
 
-@groups.route("/<int:group_id>", methods=["DELETE"])
+@groups.route("/<group_id>/members/<user_id>", methods=["DELETE"])
 def delete_group(group_id):
     try:
         # Retrieve the group from the database
