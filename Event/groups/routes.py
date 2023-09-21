@@ -5,6 +5,7 @@ Module for removing user from a group.
 from flask import Blueprint, jsonify, request
 from Event.models.users import Users
 from Event.models.groups import Groups
+from Event.models.user_groups import UserGroups
 from Event import db
 
 
@@ -76,8 +77,9 @@ def get_active_signals():
     return jsonify(), 200
 
 
-@groups.route("/api/groups/<group_id>/members/<user_id>", methods=["DELETE"])
-def remove_group_member(group_id, user_id):
+# Define the route to remove a user from a group
+@groups.route("/api/groups/<string:group_id>/member/<string:user_id>", methods=["DELETE"])
+def remove_user_from_group(group_id, user_id):
     """
     Remove a user from a group.
 
@@ -88,24 +90,23 @@ def remove_group_member(group_id, user_id):
     Returns:
     tuple: A tuple containing response message and status code.
     """
-    # Retrieve the group and user from the database
-    group_id = Users.query.get(group_id)
-    user_id = Groups.query.get(user_id)
+    try:
+        # Check if the group and user exist in the database
+        group = UserGroups.query.filter_by(group_id=group_id, user_id=user_id).first()
+        user = Users.query.get(user_id)
 
-    # Check if the group and user exist
-    if group_id is None or user_id is None:
-        return jsonify({"error": "Group or user not found"}), 404
+        if group is None or user is None:
+            return jsonify({"message": "Group or user not found"}), 404
 
-    # Check if the user is a member of the group
-    if user_id not in group_id.members:
-        return jsonify({"error": "User is not a member of the group"}), 400
+        # Remove the user from the group
+        db.session.delete(group)
+        db.session.commit()
 
-    # Remove the user from the group
-    group_id.members.remove(user_id)
-    db.session.commit()
+        return jsonify({"message": "User removed from group successfully"}), 200
 
-    return jsonify({"message": "User removed from group successfully"}), 200
-
+    except Exception as e:
+        # Handle any potential errors
+        return jsonify({"error": str(e)}), 500
 
 @groups.route("/", methods=["POST"])
 def create_group():
