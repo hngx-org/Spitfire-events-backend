@@ -25,14 +25,6 @@ class Likes(BaseModel):
         return "Comment: {}, User: {},".format(
             self.comment_id, self.user_id,
         )
-    
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
 
     def format(self):
         """Return a dictionary representation of the Like object"""
