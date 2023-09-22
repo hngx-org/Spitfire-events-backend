@@ -13,7 +13,7 @@ from Event.utils import query_all_filtered, query_all, query_one_filtered, forma
 # url_prefix includes /api/events before all endpoints in blueprint
 events = Blueprint("events", __name__, url_prefix="/api/events")
 
-
+# checked
 # POST /api/events: Create a new event
 @events.route("/", methods=["POST"])
 def create_event():
@@ -26,29 +26,19 @@ def create_event():
              - `msg` (string): A message indicating the success of the event creation.
              - `event` (string): A string representation of the created event.
     """
-
-
-    event = Events(
-                    title=request.json['title'],
-                   description=request.json['description'],
-                   location= request.json['location'],
-                   start_date= format_date(request.json['start_date']),
-                   start_time= format_time(request.json['start_time']),  
-                   end_date= format_date(request.json['end_date']),
-                   end_time=format_time(request.json['end_time']),
-                   thumbnail=request.json['thumbnail'],
-                   creator=request.json['creator'],
-                )
+    # destructure the request dict to kwargs
+    event = Events(**request.json)
     result = format(event)            
     try:
         event.insert()
     except:
         return {"message": "An error occurred creating the event."}, 400
     return jsonify({
-        'msg': "Event Created",
-        'event': result }), 201
+        'message': "Event Created",
+        'data': result 
+    }), 201
 
-
+# to check later
 # DELETE /api/events/:eventId: Delete an event
 @events.route("/<string:id>", methods=["DELETE"])
 def delete_event(id):

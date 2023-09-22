@@ -4,13 +4,16 @@
 from Event import db
 from Event.models.base_model import BaseModel
 # from Event.models.comment_images import comment_images
+# from Event.models.images import Images
+# from Event.models.comments importsaomments
 from datetime import datetime
 import sqlalchemy as sa
 
 
-comment_images = db.Table('comment_images', db.metadata,
-    comment_id = db.Column(db.String(60), db.ForeignKey("comments.id"), primary_key=True, nullable=False),
-    image_id = db.Column(db.String(60), db.ForeignKey("images.id"), primary_key=True, nullable=False)
+# Association table between Comments and Images
+comment_images = db.Table('comment_images',
+    db.Column('comment_id', db.String(60), db.ForeignKey("comments.id"), primary_key=True,nullable=False),
+    db.Column('image_id', db.String(60), db.ForeignKey("images.id"), primary_key=True, nullable=False)
 )
 
 class Comments(BaseModel):
@@ -51,20 +54,15 @@ class Comments(BaseModel):
     __tablename__ = "comments"
 
     # Define columns for the Users table
-    event_id = db.Column(db.String(36), db.ForeignKey("events.id"), nullable=False)
-    user_id = db.Column(db.String(36), db.ForeignKey("users.id"), nullable=False)
+    event_id = db.Column(db.String(60), db.ForeignKey("events.id"), nullable=False)
+    user_id = db.Column(db.String(60), db.ForeignKey("users.id"), nullable=False)
     body = db.Column(db.String(1000), nullable=False)
     created_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
 
     # Add relationships to Events and Users models
-    # event = db.relationship("Events", backref=db.backref("comments", lazy=True), 
-    #                         cascade="all, delete-orphan")
-    # user = db.relationship("Users", backref=db.backref("comments", lazy=True), 
-    #                        cascade="all, delete-orphan")
-    # images = db.relationship("Images", backref=db.backref("comment", lazy="True"), lazy="subquery")
     images = db.relationship("Images", secondary=comment_images,
-                             backref=db.backref("comment", lazy="True"), lazy="subquery")
+                             backref=db.backref("comment", lazy=True), lazy="subquery")
 
     def __init__(self, event_id, user_id, body):
         """Initialize the Comment object"""
