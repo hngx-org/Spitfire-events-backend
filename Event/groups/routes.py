@@ -47,7 +47,7 @@ def get_group_by_id(group_id):
         dict: A JSON response with group details.
     """
     try:
-        group = Groups.query.filter_by(id=group_id).first()
+        group = Groups.query.filter_by(group_id=group_id).first()
 
         if group:
             # Create a dictionary with group details
