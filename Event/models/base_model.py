@@ -31,6 +31,7 @@ class BaseModel(db.Model):
 
     def update(self):
         """Update the current object in the database"""
+        self.updated_at = datetime.utcnow()
         db.session.commit()
 
     def delete(self):

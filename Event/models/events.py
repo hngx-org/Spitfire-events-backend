@@ -38,7 +38,7 @@ class Events(BaseModel):
     comments = db.relationship("Comments", backref=db.backref("event", lazy=True), 
                                 cascade="all, delete-orphan")
     thumbnail = db.relationship("Images", secondary=event_thumbnail,
-                             backref=db.backref("event", lazy=True), lazy="subquery")
+                                backref=db.backref("event", lazy=True), lazy="subquery")
 
 
     def __init__(

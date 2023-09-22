@@ -151,7 +151,7 @@ def update_event(event_id: str) -> tuple:
             
         for k, v in req.items():
             print(db_data)
-            if k == 'creator_id':
+            if k == 'creator_id' or k == 'created_at':
                 continue
             setattr(db_data, k, v)
         db_data.update()
