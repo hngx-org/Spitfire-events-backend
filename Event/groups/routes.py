@@ -52,9 +52,17 @@ def get_group_by_id(group_id):
 
         if group:
             # Create a dictionary with group details
+<<<<<<< HEAD
             group_details = {"group_id": group.id, "title": group.title}
             group_details = {"id":self.id if self.id else "","group_id": group.group_id, "title": group.title}
             group_details = {"id": group.id, "title": group.title}
+=======
+
+            group_details = {"group_id": group.id, "title": group.title}
+            group_details = {"id":self.id if self.id else "","group_id": group.group_id, "title": group.title}
+
+            group_details = {"id":group.id if group.id else "","group_id": group.id, "title": group.title}
+>>>>>>> 082c12d0091059542a80053f5a23cd55108b5a8e
             return jsonify(
                 {
                     "status": "success",
@@ -237,8 +245,14 @@ def delete_group(group_id):
 
         # Delete the group from the database
         group.delete()
+<<<<<<< HEAD
 
         return jsonify({"message": "Group deleted successfully"}), 200
+=======
+        
+        return jsonify({"message": "Group deleted successfully"}), 200
+
+>>>>>>> 082c12d0091059542a80053f5a23cd55108b5a8e
         return jsonify({"message": "Group deleted successfully"}),204
 
     except Exception as e:
