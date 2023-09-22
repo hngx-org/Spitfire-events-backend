@@ -5,33 +5,33 @@ Module for removing user from a group.
 from flask import Blueprint, jsonify, request
 from Event.models.users import Users
 from Event.models.groups import Groups
-from Event.models.user_groups import UserGroups
+# from Event.models.user_groups import UserGroups
 from Event import db
 
 
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
 
-@groups.route("/<groupId>/members/<userId>",methods=["POST"])
-def add_user_to_group(groupId, userId):
-    try:
-        group_id = Users.query.get(groupId)
-        user_id = Groups.query.get(userId)
+# @groups.route("/<groupId>/members/<userId>",methods=["POST"])
+# def add_user_to_group(groupId, userId):
+#     try:
+#         group_id = Users.query.get(groupId)
+#         user_id = Groups.query.get(userId)
 
-        # Check if the group and user exist
-        if group_id is None or user_id is None:
-            return jsonify({"error": "Group or user not found"}), 404
+#         # Check if the group and user exist
+#         if group_id is None or user_id is None:
+#             return jsonify({"error": "Group or user not found"}), 404
 
-        # Check if the user is a member of the group
-        if user_id not in group_id.members:
-            return jsonify({"error": "User is not a member of the group"}), 400
+#         # Check if the user is a member of the group
+#         if user_id not in group_id.members:
+#             return jsonify({"error": "User is not a member of the group"}), 400
 
 
-        add_user = UserGroups(user_id=user_id, group_id=group_id)
-        UserGroups.insert(add_user)
+#         add_user = UserGroups(user_id=user_id, group_id=group_id)
+#         UserGroups.insert(add_user)
         
-        return jsonify({"success": True, "id": add_user.id, "message": "User added to Group"}), 201
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+#         return jsonify({"success": True, "id": add_user.id, "message": "User added to Group"}), 201
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 400
 
 
 @groups.route("/<string:group_id>", methods=["GET"])
