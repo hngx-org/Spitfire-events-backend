@@ -62,7 +62,10 @@ def delete_event(id):
             return jsonify(response={"success": "Event deleted"}), 200
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
-        return jsonify(error={"Not Found": "Event not found"}), 404
+        return jsonify(error="an error has occured, couldn't complete request"), 400
+    
+    # if no event was found and no error was raised
+    return jsonify(error={"Not Found": "Event not found"}), 404
 
 # checked
 # GET /api/events: Get a list of events

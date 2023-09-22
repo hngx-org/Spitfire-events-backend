@@ -5,6 +5,12 @@ from Event import db
 # from Event.models.base_model import BaseModel
 
 
+# Association table between Comments and Images
+event_thumbnails = db.Table('event_thumbnails',
+    db.Column('image_id', db.String(60), db.ForeignKey("images.id"), primary_key=True, nullable=False),
+    db.Column('event_id', db.String(60), db.ForeignKey("events.id"), primary_key=True, nullable=False)
+)
+
 class EventThumbnail(db.Model):
     """
         Model Schema for EventThumbnail.

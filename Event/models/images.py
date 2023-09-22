@@ -4,7 +4,6 @@
 from Event import db
 from Event.models.base_model import BaseModel
 from datetime import datetime
-from Event.models.comments import comment_images
 
 
 class Images(BaseModel):
