@@ -266,7 +266,7 @@ def delete_group(group_id):
         db.session.delete(group)
         db.session.commit()
 
-        return jsonify({"message": "Group deleted successfully"})
+        return jsonify({"message": "Group deleted successfully"}), 200
 
     except Exception as e:
         # Handle any exceptions that may occur during deletion
