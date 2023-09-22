@@ -27,7 +27,7 @@ def get_active_signals():
     """
     return
 
-
+# checked
 # GET /api/users/<string:user_id>: Get user profile
 @users.route("/<string:user_id>", strict_slashes=False)
 def get_user_info(user_id: str):
@@ -41,7 +41,7 @@ def get_user_info(user_id: str):
 
     """
     try:
-        user = query_one_filtered(Users, user_id=user_id)
+        user = query_one_filtered(Users, id=user_id)
         # Check if the user is a member of the group
         if user is None:
             return jsonify({"error": "User not found"}), 404
@@ -59,7 +59,7 @@ def get_user_info(user_id: str):
             "error": str(error)
         }), 400
 
-
+# checked
 # PUT /api/users/<string:user_id>: Update user profile
 @users.route("/<string:user_id>", methods=['PUT'], strict_slashes=False)
 def update_user(user_id: str):
@@ -74,10 +74,12 @@ def update_user(user_id: str):
     """
     try:
         data = request.get_json()
-        user = query_one_filtered(Users, user_id=user_id)
+        user = query_one_filtered(Users, id=user_id)
         if user is None:
             return jsonify({"error": "User not found"}), 404
         for key, value in data.items():
+            if key == 'id' or key == 'created_at':
+                continue
             setattr(user, key, value)
         user.update()
         return jsonify({

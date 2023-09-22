@@ -43,15 +43,15 @@ class Users(BaseModel):
     # one to many relationships
     comments = db.relationship("Comments", backref=db.backref("commenter", lazy=True), 
                            cascade="all, delete-orphan")
-    created_groups = db.relationship("Groups", backref=db.backref("creator", lazy=True), 
-                           cascade="all, delete-orphan")
+    # created_groups = db.relationship("Groups", backref=db.backref("creator", lazy=True), 
+    #                        cascade="all, delete-orphan")
     # many to many relationships
     user_groups = db.relationship("Groups", backref=db.backref("members", lazy=True),
-                                  secondary=user_groups, cascade="all, delete-orphan")
+                                  secondary=user_groups, cascade="delete")
     interested_events = db.relationship("Events", backref=db.backref("interested_users", lazy=True),
-                                        secondary=interested_events, cascade="all, delete-orphan")
+                                        secondary=interested_events, cascade="delete")
     likes = db.relationship("Comments", backref=db.backref("user_likes", lazy=True),
-                            secondary=likes, cascade="all, delete-orphan")
+                            secondary=likes, cascade="delete")
 
     def __init__(self, id, name, email, avatar):
         """_summary_

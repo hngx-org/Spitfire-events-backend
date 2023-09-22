@@ -26,6 +26,7 @@ class Groups(BaseModel):
     __tablename__ = "groups"
 
     title = db.Column(db.String(60), unique=True, nullable=False)
+    # creator_id = db.column(db.Strings(60), db.ForeignKey("users.id") nullable=False)
 
     def __init__(self, title):
         """Constructor for the Groups class."""
