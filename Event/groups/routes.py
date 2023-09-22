@@ -134,11 +134,9 @@ def update_group(group_id):
     except Exception as error:  # pylint: disable=broad-except
         return jsonify({"error": str(error)}), 400
 
-
-
-
+# Define the route to remove a user from a group
 @groups.route("/<group_id>/members/<user_id>", methods=["DELETE"])
-def remove_group_member(group_id, user_id):
+def remove_user_from_group(group_id, user_id):
     """
     Remove a user from a group.
 
@@ -149,24 +147,23 @@ def remove_group_member(group_id, user_id):
     Returns:
     tuple: A tuple containing response message and status code.
     """
-    # Retrieve the group and user from the database
-    group = Groups.query.get(group_id)
-    user = Users.query.get(user_id)
+    try:
+        # Check if the group and user exist in the database
+        group = UserGroups.query.filter_by(group_id=group_id, user_id=user_id).first()
+        user = Users.query.get(user_id)
 
-    # Check if the group and user exist
-    if group is None or user is None:
-        return jsonify({"error": "Group or user not found"}), 404
+        if group is None or user is None:
+            return jsonify({"message": "Group or user not found"}), 404
 
-    # Check if the user is a member of the group
-    if user not in group.members:
-        return jsonify({"error": "User is not a member of the group"}), 400
+        # Remove the user from the group
+        db.session.delete(group)
+        db.session.commit()
 
-    # Remove the user from the group
-    group.members.remove(user)
-    db.session.commit()
+        return jsonify({"message": "User removed from group successfully"}), 200
 
-    return jsonify({"message": "User removed from group successfully"}), 200
-
+    except Exception as e:
+        # Handle any potential errors
+        return jsonify({"error": str(e)}), 500
 
 @groups.route("/create", methods=["POST"])
 def create_group():
