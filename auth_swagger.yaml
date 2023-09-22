@@ -5,7 +5,7 @@ info:
   description: API documentation for All Endpoints
 basePath: #/api/auth
 schemes:
-  - http
+  - https
 paths:
   /api/auth:
     post:
@@ -22,7 +22,7 @@ paths:
                   type: string
               required:
                 - token
-      parameters:  # Define parameters here
+      parameters:  
         - name: token
           in: body
           description: String authentication token from google.
@@ -651,12 +651,16 @@ paths:
           type: string
         - name: Updated User 
           in: body
-          description: Updated name, email, avatar.
-          required: 
+          description: add only what you want to update
+          required: true
           schema:
             type: object
             properties:
               name:
+                type: string
+              email:
+                type: string
+              avatar:
                 type: string
       responses:
         200:
@@ -771,6 +775,59 @@ paths:
                     type: string
                   event:
                     type: object
+    get:
+      summary: Get all events
+      description: Retrieve all events in DB.
+      # parameters:
+      #   - name: id
+      #     in: path
+      #     description: The ID of the event to retrieve.
+      #     required: true
+      #     type: string
+      responses:
+        200:
+          description: Event retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      location:
+                        type: string
+                      start_date:
+                        type: string
+                      start_time:
+                        type: string
+                      end_date:
+                        type: string
+                      end_time:
+                        type: string
+                      thumbnail:
+                        type: string
+                      creator:
+                        type: string
+        404:
+          description: Event Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
 
   /api/events/{id}:
     delete:
@@ -816,36 +873,45 @@ paths:
           description: The ID of the event to update.
           required: true
           type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                location:
-                  type: string
-                start_date:
-                  type: string
-                  format: date
-                start_time:
-                  type: string
-                  format: time
-                end_date:
-                  type: string
-                  format: date
-                end_time:
-                  type: string
-                  format: time
-                thumbnail:
-                  type: string
-                creator:
-                  type: string
-              # Include any other properties you want to allow for update
+        - name: Event
+          in: body
+          description: Event Details (Only pass in what you want to update)
+          required: true
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              description:
+                type: string
+              location:
+                type: string
+              start_date:
+                type: string
+                format: date
+              start_time:
+                type: string
+                format: time
+              end_date:
+                type: string
+                format: date
+              end_time:
+                type: string
+                format: time
+              thumbnail:
+                type: string
+              creator:
+                type: string
+            # required:
+            #   - title
+            #   - description
+            #   - location
+            #   - start_date
+            #   - start_time
+            #   - end_date
+            #   - end_time
+            #   - thumbnail
+            #   - creator
       responses:
         200:
           description: Event updated successfully
@@ -858,6 +924,206 @@ paths:
                     type: string
                   event:
                     type: object
+
+definitions:
+  Users:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      email:
+        type: string
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+      avatar:
+        type: string
+      required:
+        - id
+        - name
+        - email
+        - access_token
+        - refresh_token
+        - avatar
+
+  Groups:
+    type: object
+    properties:
+      group_id:
+        type: string
+      title:
+        type: string
+    required:
+      - group_id
+      - title
+
+  Comments: 
+    type: object
+    properties:
+      id:
+        type: integer
+      body:
+        type: string
+      image_url_list:
+        type: array
+        items:
+          type: string
+      user_id:
+        type: string
+      event_id:
+        type: string
+      created_at:
+        type: string
+      updated_at:
+        type: string
+    required:
+      - id
+      - body
+      - user_id
+      - event_id
+      - created_at
+      - updated_at
+ 
+  CommentImages:
+    type: object
+    properties:
+      id:
+        type: string
+      comment_id:
+        type: string
+      image_id:
+        type: string
+    required:
+      - id
+      - comment_id
+      - image_id
+
+  EventThumbnail:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The unique identifier for the event thumbnail.
+      image_id:
+        type: string
+        description: The ID of the associated image.
+      event_id:
+        type: string
+        description: The ID of the associated event.
+    required:
+      - id
+      - image_id
+      - event_id
+  Event:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the event.
+        title:
+          type: string
+          description: The title of the event.
+        description:
+          type: string
+          description: The description of the event.
+        creator:
+          type: string
+          description: The ID of the creator user.
+        location:
+          type: string
+          description: The location of the event.
+        start_date:
+          type: string
+          format: date
+          description: The start date of the event.
+        start_time:
+          type: string
+          format: time
+          description: The start time of the event.
+        end_date:
+          type: string
+          format: date
+          description: The end date of the event.
+        end_time:
+          type: string
+          format: time
+          description: The end time of the event.
+        thumbnail:
+          type: string
+          description: The URL of the event's thumbnail image.
+      required:
+        - id
+        - title
+        - description
+        - creator
+        - location
+        - start_date
+        - start_time
+        - end_date
+        - end_time
+        - thumbnail
+  GroupEvent:
+        type: object
+        properties:
+          group_id:
+            type: string
+            description: The ID of the group.
+          event_id:
+            type: string
+            description: The ID of the event.
+        required:
+          - group_id
+          - event_id
+  GroupImage:
+    type: object
+    properties:
+      group_id:
+        type: string
+        description: The ID of the group.
+      image_id:
+        type: string
+        description: The ID of the image.
+    required:
+      - group_id
+      - image_id
+    
+  Likes:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The unique identifier for the like.
+      comment_id:
+        type: string
+        description: The ID of the associated comment.
+      user_id:
+        type: string
+        description: The ID of the user who liked the comment.
+    required:
+      - id
+      - comment_id
+      - user_id
+
+  intrested_events:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The unique identifier for the intrested event.
+      event_id:
+        type: string
+        description: The ID of the associated event.
+      user_id:
+        type: string
+        description: The ID of the user who is intrested in the event.
+    required:
+      - id
+      - event_id
+      - user_id
+
 # swagger: '2.0'
 # info:
 #   version: 1.0.0
@@ -1475,201 +1741,3 @@ paths:
 #                     type: string
 #                   message:
 #                     type: string
-# definitions:
-#   Users:
-#     type: object
-#     properties:
-#       id:
-#         type: string
-#       name:
-#         type: string
-#       email:
-#         type: string
-#       access_token:
-#         type: string
-#       refresh_token:
-#         type: string
-#       avatar:
-#         type: string
-#       required:
-#         - id
-#         - name
-#         - email
-#         - access_token
-#         - refresh_token
-#         - avatar
-
-#   Groups:
-#     type: object
-#     properties:
-#       group_id:
-#         type: string
-#       title:
-#         type: string
-#     required:
-#       - group_id
-#       - title
-
-#   Comments: 
-#     type: object
-#     properties:
-#       id:
-#         type: integer
-#       body:
-#         type: string
-#       image_url_list:
-#         type: array
-#         items:
-#           type: string
-#       user_id:
-#         type: string
-#       event_id:
-#         type: string
-#       created_at:
-#         type: string
-#       updated_at:
-#         type: string
-#     required:
-#       - id
-#       - body
-#       - user_id
-#       - event_id
-#       - created_at
-#       - updated_at
- 
-#   CommentImages:
-#     type: object
-#     properties:
-#       id:
-#         type: string
-#       comment_id:
-#         type: string
-#       image_id:
-#         type: string
-#     required:
-#       - id
-#       - comment_id
-#       - image_id
-
-#   EventThumbnail:
-#       type: object
-#       properties:
-#         id:
-#           type: string
-#           description: The unique identifier for the event thumbnail.
-#         image_id:
-#           type: string
-#           description: The ID of the associated image.
-#         event_id:
-#           type: string
-#           description: The ID of the associated event.
-#       required:
-#         - id
-#         - image_id
-#         - event_id
-#   Event:
-#       type: object
-#       properties:
-#         id:
-#           type: string
-#           description: The unique identifier for the event.
-#         title:
-#           type: string
-#           description: The title of the event.
-#         description:
-#           type: string
-#           description: The description of the event.
-#         creator:
-#           type: string
-#           description: The ID of the creator user.
-#         location:
-#           type: string
-#           description: The location of the event.
-#         start_date:
-#           type: string
-#           format: date
-#           description: The start date of the event.
-#         start_time:
-#           type: string
-#           format: time
-#           description: The start time of the event.
-#         end_date:
-#           type: string
-#           format: date
-#           description: The end date of the event.
-#         end_time:
-#           type: string
-#           format: time
-#           description: The end time of the event.
-#         thumbnail:
-#           type: string
-#           description: The URL of the event's thumbnail image.
-#       required:
-#         - id
-#         - title
-#         - description
-#         - creator
-#         - location
-#         - start_date
-#         - start_time
-#         - end_date
-#         - end_time
-#         - thumbnail
-#   GroupEvent:
-#         type: object
-#         properties:
-#           group_id:
-#             type: string
-#             description: The ID of the group.
-#           event_id:
-#             type: string
-#             description: The ID of the event.
-#         required:
-#           - group_id
-#           - event_id
-#     GroupImage:
-#       type: object
-#       properties:
-#         group_id:
-#           type: string
-#           description: The ID of the group.
-#         image_id:
-#           type: string
-#           description: The ID of the image.
-#       required:
-#         - group_id
-#         - image_id
-    
-#     Likes:
-#       type: object
-#       properties:
-#         id:
-#           type: string
-#           description: The unique identifier for the like.
-#         comment_id:
-#           type: string
-#           description: The ID of the associated comment.
-#         user_id:
-#           type: string
-#           description: The ID of the user who liked the comment.
-#       required:
-#         - id
-#         - comment_id
-#         - user_id
-
-#   intrested_events:
-#     type: object
-#     properties:
-#       id:
-#         type: string
-#         description: The unique identifier for the intrested event.
-#       event_id:
-#         type: string
-#         description: The ID of the associated event.
-#       user_id:
-#         type: string
-#         description: The ID of the user who is intrested in the event.
-#     required:
-#       - id
-#       - event_id
-#       - user_id
