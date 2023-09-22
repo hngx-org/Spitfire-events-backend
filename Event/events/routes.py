@@ -34,18 +34,18 @@ def create_event():
         print(f"data: {data}")
         event = Events(**data)
         event.insert()
-        result = event.format()           
+        result = event.format()
     
         new_image = Images(url=thumbnail)
         new_image.insert()
-        event.thumbnail.append(new_image)
-        event.update()
+        # event.thumbnail.append(new_image)
+        # event.update()
     except Exception as e:
         print(e)
         return {"message": "An error occurred creating the event."}, 400
     return jsonify({
         'message': "Event Created",
-        'data': result 
+        'data': result
     }), 201
 
 # to check later

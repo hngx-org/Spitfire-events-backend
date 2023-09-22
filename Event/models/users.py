@@ -81,6 +81,6 @@ class Users(BaseModel):
             "name": self.name,
             "email": self.email,
             "avatar": self.avatar,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at
+            "created_at": format(self.created_at),
+            "updated_at": format(self.updated_at)
         }
