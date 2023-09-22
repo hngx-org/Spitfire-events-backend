@@ -27,12 +27,17 @@ def create_event():
              - `event` (string): A string representation of the created event.
     """
     # destructure the request dict to kwargs
-    data = {item for item in request.json.items() if 'thumbnail' not in item}
-    print(f"data: {data}")
-    event = Events(**data)
-    result = format(event)            
     try:
+        data = {item for item in dict(request.json).items() if 'thumbnail' not in item}
+        print(f"data: {dict(data)}")
+        event = Events(**dict(data))
+        result = format(event)            
         event.insert()
+        thumbnail = request.json['thumbnail']
+        new_image = Images(url=thumbnail)
+        new_image.insert()
+        event.thumbnail.append(new_image)
+        event.update()
     except:
         return {"message": "An error occurred creating the event."}, 400
     return jsonify({

@@ -2,6 +2,7 @@
 """Base Template for the events class"""
 from Event import db
 from Event.models.base_model import BaseModel
+from datetime import datetime
 
 
 # Association table between Events and Images
@@ -34,10 +35,11 @@ class Events(BaseModel):
     start_time = db.Column(db.Time(), nullable=False)
     end_date = db.Column(db.Date(), nullable=False)
     end_time = db.Column(db.Time(), nullable=False)
-    # thumbnail = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     comments = db.relationship("Comments", backref=db.backref("event", lazy=True), 
                                 cascade="all, delete-orphan")
-    thumbnail = db.relationship("thumbnail", secondary=event_thumbnail,
+    thumbnail = db.relationship("Images", secondary=event_thumbnail,
                              backref=db.backref("event", lazy=True), lazy="subquery")
 
 
