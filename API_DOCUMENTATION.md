@@ -207,14 +207,17 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "status": "success",
-  "message": "user {user_id} details fetched successfully",
   "data": {
     "id": "user-id",
     "name": "John Doe",
     "email": "johndoe@example.com",
-    "avatar": "avatar-url"
-  }
+    "avatar": "avatar-url",
+    "created_at": "time_created in UTCNow",
+    "updated_at": "time_updated in UTCNow"
+  },
+  "status": "success",
+  "message": "user {user_id} details fetched successfully"
+
 }
 ```
 - **Error Responses**:
@@ -254,7 +257,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 {
   "name": "Updated Name",
   "email": "updated@example.com",
-  "avatar": "updated-avatar-url"
+  "avatar": "updated-avatar-url",
 }
 
 ```
@@ -263,15 +266,17 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "status": "success",
-  "message": "user {user_id}  details updated successfully",
   "data": {  
   "id": "user-id",
   "name": "Updated Name",
   "email": "updated@example.com",
-  "avatar": "updated-avatar-url"
+  "avatar": "updated-avatar-url",
+  "created_at": "time_created in UTCNow",
+  "updated_at": "time_updated in UTCNow"
 
   }
+  "status": "success",
+  "message": "user {user_id}  details updated successfully",
 }
 ```
 - **Error Responses**:
@@ -311,6 +316,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Input**: JSON with event details (title, description, location, start date/time, end date/time, thumbnail).
 ```JSON
 {
+  "creator":"user_id",
   "title": "New Event",
   "description": "Event Description",
   "location": "Event Location",
