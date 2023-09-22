@@ -9,7 +9,7 @@ from Event import db
 
 likes = Blueprint("likes", __name__, url_prefix="/api/likes")
 
-@likes.route("/<str: comment_id>",
+@likes.route("/<string:comment_id>",
              methods=["POST"],
              strict_slashes=False
              )
@@ -38,7 +38,7 @@ def like_comment(comment_id):
         like.delete()
     return jsonify({"message": "success", "comment_id": comment_id}), 200
 
-@likes.route("/<str: comment_id>", methods=["GET"], strict_slashes=False)
+@likes.route("/<string:comment_id>", methods=["GET"], strict_slashes=False)
 def get_total_likes(comment_id):
     """
     Get the total number of likes for a particular comment
