@@ -53,8 +53,6 @@ class Comments(BaseModel):
     event_id = db.Column(db.String(60), db.ForeignKey("events.id"), nullable=False)
     user_id = db.Column(db.String(60), db.ForeignKey("users.id"), nullable=False)
     body = db.Column(db.String(1000), nullable=False)
-    created_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
 
     # Add relationships to Events and Users models
 

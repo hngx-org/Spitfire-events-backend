@@ -35,8 +35,6 @@ class Events(BaseModel):
     start_time = db.Column(db.Time(), nullable=False)
     end_date = db.Column(db.Date(), nullable=False)
     end_time = db.Column(db.Time(), nullable=False)
-    created_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     comments = db.relationship("Comments", backref=db.backref("event", lazy=True), 
                                 cascade="all, delete-orphan")
     thumbnail = db.relationship("Images", secondary=event_thumbnail,
@@ -104,4 +102,6 @@ class Events(BaseModel):
             "start_time": self.start_time,
             "end_date": self.end_date,
             "end_time": self.end_time,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
         }
