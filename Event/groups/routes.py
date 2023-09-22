@@ -7,6 +7,7 @@ from Event.models.users import Users
 from Event.models.groups import Groups
 # from Event.models.user_groups import UserGroups
 from Event import db
+from Event.utils import query_one_filtered
 
 
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
@@ -46,7 +47,7 @@ def get_group_by_id(group_id):
         dict: A JSON response with group details.
     """
     try:
-        group = Groups.query.filter_by(group_id=group_id).first()
+        group = query_one_filtered(Groups,id=group_id)
 
         if group:
             # Create a dictionary with group details
@@ -109,7 +110,7 @@ def update_group(group_id):
         if "title" not in data:
             return jsonify({"error": "Missing 'title' in request"}), 400
 
-        group = Groups.query.get(group_id)
+        group = query_one_filtered(Groups,id=group_id)
 
         if not group:
             return (
@@ -135,35 +136,35 @@ def update_group(group_id):
         return jsonify({"error": str(error)}), 400
 
 # Define the route to remove a user from a group
-@groups.route("/<group_id>/members/<user_id>", methods=["DELETE"])
-def remove_user_from_group(group_id, user_id):
-    """
-    Remove a user from a group.
+# @groups.route("/<string:group_id>/members/<string:user_id>", methods=["DELETE"])
+# def remove_user_from_group(group_id, user_id):
+#     """
+#     Remove a user from a group.
 
-    Parameters:
-    group_id (str): The ID of the group.
-    user_id (str): The ID of the user to be removed from the group.
+#     Parameters:
+#     group_id (str): The ID of the group.
+#     user_id (str): The ID of the user to be removed from the group.
 
-    Returns:
-    tuple: A tuple containing response message and status code.
-    """
-    try:
-        # Check if the group and user exist in the database
-        group = UserGroups.query.filter_by(group_id=group_id, user_id=user_id).first()
-        user = Users.query.get(user_id)
+#     Returns:
+#     tuple: A tuple containing response message and status code.
+#     """
+#     try:
+#         # Check if the group and user exist in the database
+#         group = UserGroups.query.filter_by(group_id=group_id, user_id=user_id).first()
+#         user = Users.query.get(user_id)
 
-        if group is None or user is None:
-            return jsonify({"message": "Group or user not found"}), 404
+#         if group is None or user is None:
+#             return jsonify({"message": "Group or user not found"}), 404
 
-        # Remove the user from the group
-        db.session.delete(group)
-        db.session.commit()
+#         # Remove the user from the group
+#         db.session.delete(group)
+#         db.session.commit()
 
-        return jsonify({"message": "User removed from group successfully"}), 200
+#         return jsonify({"message": "User removed from group successfully"}), 200
 
-    except Exception as e:
-        # Handle any potential errors
-        return jsonify({"error": str(e)}), 500
+#     except Exception as e:
+#         # Handle any potential errors
+#         return jsonify({"error": str(e)}), 500
 
 @groups.route("/create", methods=["POST"])
 def create_group():
@@ -225,15 +226,14 @@ def delete_group(group_id):
     """
     try:
         # Retrieve the group from the database
-        group = Groups.query.get(group_id)
+        group = query_one_filtered(Groups,id=group_id)
 
         # Check if the group exists
         if group is None:
             return jsonify({"error": "Group not found"}), 404
 
         # Delete the group from the database
-        db.session.delete(group)
-        db.session.commit()
+        group.delete()
 
         return jsonify({"message": "Group deleted successfully"})
 
