@@ -1,25 +1,31 @@
 #!/usr/bin/env python3
 """Template for the User Class"""
 
+from datetime import datetime
 from Event import db
 from Event.models.base_model import BaseModel
-from datetime import datetime
 
 
 # Association table between Events and Users
 interested_events = db.Table('interested_events',
-    db.Column('user_id', db.String(60), db.ForeignKey("users.id"), primary_key=True, nullable=False),
-    db.Column('event_id', db.String(60), db.ForeignKey("events.id"), primary_key=True, nullable=False)
+    db.Column('user_id', db.String(60), db.ForeignKey("users.id"), primary_key=True,
+              nullable=False),
+    db.Column('event_id', db.String(60), db.ForeignKey("events.id"), primary_key=True,
+              nullable=False)
 )
 # Association table between Users and Groups
 user_groups = db.Table('user_groups',
-    db.Column('user_id', db.String(60), db.ForeignKey("users.id"), primary_key=True, nullable=False),
-    db.Column('group_id', db.String(60), db.ForeignKey("groups.id"), primary_key=True, nullable=False)
+    db.Column('user_id', db.String(60), db.ForeignKey("users.id"), primary_key=True,
+              nullable=False),
+    db.Column('group_id', db.String(60), db.ForeignKey("groups.id"), primary_key=True,
+              nullable=False)
 )
 # Association table between Users and Comments
 likes = db.Table('likes',
-    db.Column('user_id', db.String(60), db.ForeignKey("users.id"), primary_key=True, nullable=False),
-    db.Column('comment_id', db.String(60), db.ForeignKey("comments.id"), primary_key=True, nullable=False)
+    db.Column('user_id', db.String(60), db.ForeignKey("users.id"), primary_key=True,
+              nullable=False),
+    db.Column('comment_id', db.String(60), db.ForeignKey("comments.id"), primary_key=True,
+              nullable=False)
 )
 
 
@@ -41,9 +47,9 @@ class Users(BaseModel):
     created_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     # one to many relationships
-    comments = db.relationship("Comments", backref=db.backref("commenter", lazy=True), 
+    comments = db.relationship("Comments", backref=db.backref("commenter", lazy=True),
                            cascade="all, delete-orphan")
-    # created_groups = db.relationship("Groups", backref=db.backref("creator", lazy=True), 
+    # created_groups = db.relationship("Groups", backref=db.backref("creator", lazy=True),
     #                        cascade="all, delete-orphan")
     # many to many relationships
     user_groups = db.relationship("Groups", backref=db.backref("members", lazy=True),
@@ -53,6 +59,8 @@ class Users(BaseModel):
     likes = db.relationship("Comments", backref=db.backref("user_likes", lazy=True),
                             secondary=likes, cascade="delete")
 
+# pylint: disable=invalid-name
+# pylint: disable=redefined-builtin
     def __init__(self, id, name, email, avatar):
         """_summary_
 
@@ -69,9 +77,7 @@ class Users(BaseModel):
 
     def __repr__(self):
         """Return a string representation of the User object"""
-        return "Id: {}, Name: {}, Email: {}".format(
-            self.id, self.name, self.email
-        )
+        return "Id: {self.id}, Name: {self.name}, Email: {self.email}"
 
     # Override the format method to return event attributes as a dictionary
     def format(self):

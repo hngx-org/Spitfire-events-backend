@@ -20,7 +20,11 @@ def create_event():
     """
     Create a new event.
 
-    This function handles a POST request to create a new event. It extracts the necessary data from the request's JSON payload, converts the date and time strings to datetime objects, creates an instance of the `Events` model with the extracted data, inserts the event into the database, and returns a JSON response with the created event.
+    This function handles a POST request to create a new event.
+    It extracts the necessary data from the request's JSON payload,
+    converts the date and time strings to datetime objects, creates
+    an instance of the `Events` model with the extracted data, inserts
+    the event into the database, and returns a JSON response with the created event.
 
     :return: A JSON response with the following fields:
              - `msg` (string): A message indicating the success of the event creation.
@@ -35,13 +39,14 @@ def create_event():
         event = Events(**data)
         event.insert()
         result = event.format()
-    
+
         new_image = Images(url=thumbnail)
         new_image.insert()
         event.thumbnail.append(new_image)
         event.update()
-    except Exception as e:
-        print(e)
+    # pylint: disable=broad-exception-caught
+    except Exception as error:
+        print(str(error))
         return {"message": "An error occurred creating the event."}, 400
     return jsonify({
         'message': "Event Created",
@@ -50,6 +55,8 @@ def create_event():
 
 # to check later
 # DELETE /api/events/:eventId: Delete an event
+# pylint: disable=invalid-name
+# pylint: disable=redefined-builtin
 @events.route("/<string:id>", methods=["DELETE"])
 def delete_event(id):
     """
@@ -59,8 +66,10 @@ def delete_event(id):
         id (str): The id of the event to be deleted.
 
     Returns:
-        If the event is successfully deleted, a success response with status code 204 and a JSON body indicating the event was deleted.
-        If the event does not exist, a not found error response with status code 404 and a JSON body indicating the event was not found.
+        If the event is successfully deleted, a success response with status
+        code 204 and a JSON body indicating the event was deleted.
+        If the event does not exist, a not found error response with status
+        code 404 and a JSON body indicating the event was not found.
     """
 
     try:
@@ -70,10 +79,11 @@ def delete_event(id):
             print('in')
             del_event.delete()
             return jsonify(response={"success": "Event deleted"}), 200
+    # pylint: disable=broad-exception-caught
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
         return jsonify(error="an error has occured, couldn't complete request"), 400
-    
+
     # if no event was found and no error was raised
     return jsonify(error={"Not Found": "Event not found"}), 404
 
@@ -87,19 +97,22 @@ def all_events():
     Returns:
         json: A JSON response containing all events created.
     """
+    # pylint: disable=redefined-outer-name
     try:
         all_events = query_all(Events)
+    # pylint: disable=broad-exception-caught
     except Exception:
         return jsonify({"error": "events not found"})
-    
+
     return jsonify({
         "status": "success", 
         "message": "events returned succesfully", 
         "data": [event.format() for event in all_events] if all_events else []
     }), 200
 
-# Checked  
+# Checked
 # Get events based on event id
+# pylint: disable=inconsistent-return-statements
 @events.route("/<event_id>", methods=["GET"])
 def get_event(event_id):
     """
@@ -115,17 +128,18 @@ def get_event(event_id):
         GET /events/123
 
     This code snippet demonstrates how to make a GET request to retrieve the event with ID 123.
-    The expected output is a JSON response containing the event details if it exists, or an error message if the event is not found.
+    The expected output is a JSON response containing the event details if it exists, or an error
+    message if the event is not found.
     """
     try:
         event = query_one_filtered(table=Events, id=event_id)
         if event:
             return jsonify({
-                "status": "success", 
-                "message": "event returned succesfully", 
+                "status": "success",
+                "message": "event returned succesfully",
                 "data": event.format()
             }), 200
-
+# pylint: disable=broad-exception-caught
     except Exception as error:
         return jsonify({"error": str(error)}), 404
 
@@ -150,18 +164,18 @@ def update_event(event_id: str) -> tuple:
         db_data = query_one_filtered(Events, id=event_id)
         if not db_data:
             return jsonify({"message": "Event not Found"}), 404
-        
-            
-        for k, v in req.items():
+
+
+        for key, val in req.items():
             print(db_data)
-            if k == 'creator_id' or k == 'created_at':
-                continue
-            setattr(db_data, k, v)
+            if key not in ('creator_id', 'created_at'):
+                setattr(db_data, key, val)
         db_data.update()
         return jsonify({
             "message": "item updated",
             "Event_id": event_id,
             "data": db_data.format()}), 201
+    # pylint: disable=broad-exception-caught
     except Exception as exc:
         print(f"{type(exc).__name__}: {exc}")
         return jsonify({"error": str(exc)}), 400
@@ -177,9 +191,11 @@ def add_comments(event_id: str):
 
     Returns:
         For POST requests:
-            dict: A JSON response with the status, message, and data containing the newly created comment ID and body.
+            dict: A JSON response with the status, message, and data containing the newly
+            created comment ID and body.
         For GET requests:
-            dict: A JSON response with the status, message, and data containing a list of all comments associated with the event.
+            dict: A JSON response with the status, message, and data containing a list of
+            all comments associated with the event.
     """
     if request.method == "POST":
         try:
@@ -201,6 +217,7 @@ def add_comments(event_id: str):
                         # comment_image.insert()
                         new_comment.images.append(new_image)
                         new_comment.update()
+                    # pylint: disable=broad-exception-caught
                     except Exception as error:
                         print(f"{type(error).__name__}: {error}")
                         return jsonify(
@@ -218,6 +235,7 @@ def add_comments(event_id: str):
                     "data": {"id": new_comment.id, "body": new_comment.body},
                 }
             )
+        # pylint: disable=broad-exception-caught
         except Exception as error:
             print(f"{type(error).__name__}: {error}")
             return (
@@ -246,6 +264,7 @@ def add_comments(event_id: str):
                 else [],
             }
         )
+    # pylint: disable=broad-exception-caught
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
         return (

@@ -21,7 +21,7 @@
 #         str: A success message.
 #     """
 #     user_id = is_logged_in(session)
-    
+
 #     like = (
 #             db.session.execute(
 #                 db.select(Likes)

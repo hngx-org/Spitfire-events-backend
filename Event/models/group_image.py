@@ -26,7 +26,7 @@ class GroupImage(BaseModel):
         Returns:
             str: A string representation of the GroupImage object.
         """
-        return "id: {}, group_id: {}, image_id: {}".format(self.id, self.group_id, self.image_id)
+        return f"id: {self.id}, group_id: {self.group_id}, image_id: {self.image_id}"
 
     def format(self):
         """
@@ -40,4 +40,3 @@ class GroupImage(BaseModel):
             "group_id": self.group_id,
             "image_id": self.image_id
         }
-

@@ -3,7 +3,6 @@
 
 from Event import db
 from Event.models.base_model import BaseModel
-from datetime import datetime
 
 
 class Images(BaseModel):
@@ -32,7 +31,7 @@ class Images(BaseModel):
     __tablename__ = "images"
 
     url = db.Column(db.String(255), nullable=False)
-    
+
     def __init__(self, url):
         """_summary_
 
@@ -48,9 +47,7 @@ class Images(BaseModel):
         Returns:
             _type_: _description_
         """
-        return "url: {}, created_at: {}, updated_at: {}".format(
-            self.url, self.created_at, self.updated_at
-        )
+        return f"url: {self.url}, created_at: {self.created_at}, updated_at: {self.updated_at}"
 
     def format(self):
         """_summary_

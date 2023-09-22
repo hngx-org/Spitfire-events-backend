@@ -49,8 +49,8 @@
 #         Returns:
 #             str: A string representation of the CommentImages object.
 #         """
-#         return "id: {}, comment_id: {}, image_id: {}".format(self.id, self.comment_id, self.image_id)
-
+#         return "id: {}, comment_id: {}, image_id: {}".format(self.id, self.comment_id,
+# self.image_id)
 #     def format(self):
 #         """
 #         Return a dictionary representation of the CommentImages object.
@@ -62,8 +62,10 @@
 #             "comment_id": self.comment_id,
 #             "image_id": self.image_id
 #         }
-    
+
 # comment_images = db.Table('comment_images',
-#     comment_id = db.Column(db.String(60), db.ForeignKey("comments.id"), primary_key=True, nullable=False),
-#     image_id = db.Column(db.String(60), db.ForeignKey("images.id"), primary_key=True, nullable=False)
+#     comment_id = db.Column(db.String(60), db.ForeignKey("comments.id"), primary_key=True,
+# nullable=False),
+#     image_id = db.Column(db.String(60), db.ForeignKey("images.id"), primary_key=True,
+# nullable=False)
 # )

@@ -1,9 +1,9 @@
 """
 summary
 """
+from datetime import datetime
 from Event import db
 from Event.errors.handlers import CustomError
-from datetime import datetime
 
 
 
@@ -142,5 +142,3 @@ def format_time(time):
     """Formats date to readable string"""
 
     return datetime.strptime(time,'%H:%M')
-
-

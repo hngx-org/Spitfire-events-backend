@@ -2,16 +2,17 @@
 """Base Template for the events class"""
 from Event import db
 from Event.models.base_model import BaseModel
-from datetime import datetime
 
 
 # Association table between Events and Images
 event_thumbnail = db.Table('event_thumbnail',
-    db.Column('image_id', db.String(60), db.ForeignKey("images.id"), primary_key=True, nullable=False),
-    db.Column('event_id', db.String(60), db.ForeignKey("events.id"), primary_key=True, nullable=False)
+    db.Column('image_id', db.String(60), db.ForeignKey("images.id"), primary_key=True,
+              nullable=False),
+    db.Column('event_id', db.String(60), db.ForeignKey("events.id"), primary_key=True,
+              nullable=False)
 )
 
-
+# pylint: disable=too-many-instance-attributes
 class Events(BaseModel):
     """_summary_
 
@@ -35,12 +36,12 @@ class Events(BaseModel):
     start_time = db.Column(db.Time(), nullable=False)
     end_date = db.Column(db.Date(), nullable=False)
     end_time = db.Column(db.Time(), nullable=False)
-    comments = db.relationship("Comments", backref=db.backref("event", lazy=True), 
+    comments = db.relationship("Comments", backref=db.backref("event", lazy=True),
                                 cascade="all, delete-orphan")
     thumbnail = db.relationship("Images", secondary=event_thumbnail,
                                 backref=db.backref("event", lazy=True), lazy="subquery")
 
-
+# pylint: disable=too-many-arguments
     def __init__(
         self,
         title,
@@ -74,19 +75,10 @@ class Events(BaseModel):
 
     def __repr__(self):
         """Return a string representation of the Event object"""
-        return (
-            "Title: {}, Description: {}, Creator Id: {}, Location: {}, "
-            "Start Date: {}, Start Time: {}, "
-            "End Date: {}, End Time: {}"
-        ).format(
-            self.title,
-            self.description,
-            self.creator_id,
-            self.location,
-            self.start_date,
-            self.start_time,
-            self.end_date,
-            self.end_time,
+        return(
+        f"Title: {self.title}, Description: {self.description}, Creator Id: {self.creator_id},\
+            Location: {self.location}, Start Date: {self.start_date}, Start Time:\
+                {self.start_time}, End Date: {self.end_date}, End Time: {self.end_time}"
         )
 
     # Override the format method to return event attributes as a dictionary

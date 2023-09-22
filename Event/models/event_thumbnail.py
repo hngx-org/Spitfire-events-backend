@@ -14,8 +14,10 @@
 #     """
 #     __tablename__ = "event_thumbnails"
 
-#     image_id = db.Column(db.String(60), db.ForeignKey("images.id"), primary_key=True, nullable=False)
-#     event_id = db.Column(db.String(60), db.ForeignKey("events.id"), primary_key=True, nullable=False)
+#     image_id = db.Column(db.String(60), db.ForeignKey("images.id"), primary_key=True,
+# nullable=False)
+#     event_id = db.Column(db.String(60), db.ForeignKey("events.id"), primary_key=True,
+# nullable=False)
 
 #     def __init__(self, image_id, event_id):
 #         """_summary_

@@ -3,10 +3,8 @@ Module for removing user from a group.
 """
 
 from flask import Blueprint, jsonify, request
-from Event.models.users import Users
 from Event.models.groups import Groups
 # from Event.models.user_groups import UserGroups
-from Event import db
 from Event.utils import query_one_filtered
 
 
@@ -29,8 +27,8 @@ groups = Blueprint("groups", __name__, url_prefix="/api/groups")
 
 #         add_user = UserGroups(user_id=user_id, group_id=group_id)
 #         UserGroups.insert(add_user)
-        
-#         return jsonify({"success": True, "id": add_user.id, "message": "User added to Group"}), 201
+#         return jsonify({"success": True, "id": add_user.id, "message": "User added to Group"}),
+# 201
 #     except Exception as e:
 #         return jsonify({"error": str(e)}), 400
 
@@ -59,18 +57,18 @@ def get_group_by_id(group_id):
                     "data": group_details,
                 }
             ), 200
-        else:
-            return (
-                jsonify(
-                    {
-                        "status": "failed",
-                        "message": f"Group with groupId {group_id} not found",
-                    }
-                ),
-                404,
-            )
-    except Exception as e:
-        print(f"{type(e).__name__}: {e}")
+        return (
+            jsonify(
+                {
+                    "status": "failed",
+                    "message": f"Group with groupId {group_id} not found",
+                }
+            ),
+            404,
+        )
+    # pylint: disable=broad-exception-caught
+    except Exception as error:
+        print(f"{type(error).__name__}: {str(error)}")
         return (
             jsonify(
                 {
@@ -207,12 +205,12 @@ def create_group():
             ),
             201,
         )
-
     # Handle exceptions and return an error response if any occur.
+    # pylint: disable=broad-exception-caught
     except Exception as error:
         return jsonify({"message": "group creation failed", "error": str(error)}), 400
 
-      
+
 @groups.route("/<string:group_id>", methods=["DELETE"])
 def delete_group(group_id):
     """
@@ -236,7 +234,7 @@ def delete_group(group_id):
         group.delete()
 
         return jsonify({"message": "Group deleted successfully"}),204
-
-    except Exception as e:
+# pylint: disable=broad-exception-caught
+    except Exception as error:
         # Handle any exceptions that may occur during deletion
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"error": str(error)}), 400

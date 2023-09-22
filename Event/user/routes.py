@@ -51,6 +51,7 @@ def get_user_info(user_id: str):
             "message": f"user {user_id} details fetched successfully",
             "data": user_details
         })
+    # pylint: disable=broad-exception-caught
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
         return jsonify({
@@ -78,15 +79,15 @@ def update_user(user_id: str):
         if user is None:
             return jsonify({"error": "User not found"}), 404
         for key, value in data.items():
-            if key == 'id' or key == 'created_at':
-                continue
-            setattr(user, key, value)
+            if key not in('id', 'created_at'):
+                setattr(user, key, value)
         user.update()
         return jsonify({
             "status": "success",
             "message": f"user {user_id} details updated successfully",
             "data": user.format()
         })
+    # pylint: disable=broad-exception-caught
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
         return jsonify({
@@ -94,7 +95,7 @@ def update_user(user_id: str):
             "message": "your request could not be completed",
             "error": str(error)
         }), 400
-  
+
 
 # Checked
 # POST /api/users/<string:user_id>/interests/<string:event_id>: Show interests
@@ -116,7 +117,7 @@ def create_interest(user_id, event_id):
         user.update()
 
         return jsonify({"message": "Interest registered"}), 200
-
-    except Exception as e:
+# pylint: disable=broad-exception-caught
+    except Exception as error:
         db.session.rollback()
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(error)}), 500

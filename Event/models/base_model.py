@@ -2,9 +2,9 @@
 """
 Base template for the Event driven application
 """
-from Event import db
 from uuid import uuid4
 from datetime import datetime
+from Event import db
 
 
 def get_uuid():
