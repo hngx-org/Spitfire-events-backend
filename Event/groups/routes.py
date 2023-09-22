@@ -5,32 +5,34 @@ Module for removing user from a group.
 from flask import Blueprint, jsonify, request
 from Event.models.groups import Groups
 # from Event.models.user_groups import UserGroups
+
 from Event.utils import query_one_filtered
 
 
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
 
-# @groups.route("/<groupId>/members/<userId>",methods=["POST"])
-# def add_user_to_group(groupId, userId):
-#     try:
-#         group_id = Users.query.get(groupId)
-#         user_id = Groups.query.get(userId)
+@groups.route("/<string:groupId>/members/<string:userId>",methods=["POST"])
+def add_user_to_group(groupId, userId):
+    try:
+        group = query_one_filtered(Groups,id=groupId)
+        user = query_one_filtered(Users,id=userId)
 
-#         # Check if the group and user exist
-#         if group_id is None or user_id is None:
-#             return jsonify({"error": "Group or user not found"}), 404
+        # Check if the group and user exist
+        if group is None or user is None:
+            return jsonify({"error": "Group or user not found"}), 404
 
-#         # Check if the user is a member of the group
-#         if user_id not in group_id.members:
-#             return jsonify({"error": "User is not a member of the group"}), 400
+        newgroup=user.user_groups
+        if group.id in [group.id for group in newgroup ]:
+            return jsonify({"error":"forbidden","message":"User already in group"}),403
+        newgroup.append(group)
 
 
-#         add_user = UserGroups(user_id=user_id, group_id=group_id)
-#         UserGroups.insert(add_user)
-#         return jsonify({"success": True, "id": add_user.id, "message": "User added to Group"}),
-# 201
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 400
+        user.user_groups=newgroup
+        user.update()
+        
+        return jsonify({ "id": group.id, "message": "User added to Group"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 
 @groups.route("/<string:group_id>", methods=["GET"])
@@ -133,36 +135,44 @@ def update_group(group_id):
     except Exception as error:  # pylint: disable=broad-except
         return jsonify({"error": str(error)}), 400
 
+
 # Define the route to remove a user from a group
-# @groups.route("/<string:group_id>/members/<string:user_id>", methods=["DELETE"])
-# def remove_user_from_group(group_id, user_id):
-#     """
-#     Remove a user from a group.
+@groups.route("/<string:group_id>/members/<string:user_id>", methods=["DELETE"])
+def remove_user_from_group(group_id, user_id):
+    """
+    Remove a user from a group.
 
-#     Parameters:
-#     group_id (str): The ID of the group.
-#     user_id (str): The ID of the user to be removed from the group.
+    Parameters:
+    group_id (str): The ID of the group.
+    user_id (str): The ID of the user to be removed from the group.
 
-#     Returns:
-#     tuple: A tuple containing response message and status code.
-#     """
-#     try:
-#         # Check if the group and user exist in the database
-#         group = UserGroups.query.filter_by(group_id=group_id, user_id=user_id).first()
-#         user = Users.query.get(user_id)
+    Returns:
+    tuple: A tuple containing response message and status code.
+    """
+    try:
+        # Check if the group and user exist in the database
+        group = query_one_filtered(Groups,id=group_id)
+        user = query_one_filtered(Users,id=user_id)
 
-#         if group is None or user is None:
-#             return jsonify({"message": "Group or user not found"}), 404
+        if group is None or user is None:
+            return jsonify({"message": "Group or user not found"}), 404
 
-#         # Remove the user from the group
-#         db.session.delete(group)
-#         db.session.commit()
+        user_groups=user.user_groups
+        if group_id not in [group.id for group in user_groups ]:
+            return jsonify({"error":"forbidden","message":"User is not a member of this group"}),403
 
-#         return jsonify({"message": "User removed from group successfully"}), 200
+        for key,group in enumerate(user.user_groups):
+            if group_id==group.id:
+                user_groups.pop(key)
+        user.user_groups=user_groups
+        user.update()
 
-#     except Exception as e:
-#         # Handle any potential errors
-#         return jsonify({"error": str(e)}), 500
+        return jsonify({"message": "User removed from group successfully","group_id":group_id}), 204
+
+    except Exception as e:
+        # Handle any potential errors
+        return jsonify({"error": str(e)}), 500
+
 
 @groups.route("/create", methods=["POST"])
 def create_group():
