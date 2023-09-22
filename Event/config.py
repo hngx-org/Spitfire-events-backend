@@ -21,7 +21,7 @@ class App_Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
 
-    SESSION_TYPE = "sqlalchemy"
+    SESSION_TYPE = "filesystem" if not os.getenv('PROD', None) else "sqlalchemy"
     SESSION_USE_SIGNER = True
     SESSION_COOKIE_SECURE = False
     SESSION_COOKIE_SAMESITE = "None"
