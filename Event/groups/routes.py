@@ -128,7 +128,7 @@ def update_group(group_id):
                     "group": group.format(),
                 }
             ),
-            201,
+            200,
         )
 
     except Exception as error:  # pylint: disable=broad-except
@@ -235,7 +235,7 @@ def delete_group(group_id):
         db.session.delete(group)
         db.session.commit()
 
-        return jsonify({"message": "Group deleted successfully"})
+        return jsonify({"message": "Group deleted successfully"}), 204
 
     except Exception as e:
         # Handle any exceptions that may occur during deletion
