@@ -106,7 +106,7 @@ def query_paginate_filtered(table, page, **kwargs):
 
 def is_logged_in(session):
     """
-    Ensures a user is logged in returns error
+    Ensures a user is logged in or returns error
 
     Parameterss:
         session(dict):

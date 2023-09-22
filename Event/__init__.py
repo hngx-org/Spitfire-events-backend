@@ -50,6 +50,7 @@ def create_app(database_uri):
     from Event.errors.handlers import error
     from Event.groups.routes import groups
     from Event.comments.routes import comments
+    # from Event.likes.routes import likes
 
     app.register_blueprint(users)
     app.register_blueprint(auth)
@@ -57,6 +58,7 @@ def create_app(database_uri):
     app.register_blueprint(groups)
     app.register_blueprint(error)
     app.register_blueprint(comments)
+    # app.register_blueprint(likes)
 
     # create db tables from models if not exists
     with app.app_context():
