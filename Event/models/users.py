@@ -3,6 +3,25 @@
 
 from Event import db
 from Event.models.base_model import BaseModel
+from datetime import datetime
+
+
+# Association table between Events and Users
+interested_events = db.Table('interested_events',
+    db.Column('user_id', db.String(60), db.ForeignKey("users.id"), primary_key=True, nullable=False),
+    db.Column('event_id', db.String(60), db.ForeignKey("events.id"), primary_key=True, nullable=False)
+)
+# Association table between Users and Groups
+user_groups = db.Table('user_groups',
+    db.Column('user_id', db.String(60), db.ForeignKey("users.id"), primary_key=True, nullable=False),
+    db.Column('group_id', db.String(60), db.ForeignKey("groups.id"), primary_key=True, nullable=False)
+)
+# Association table between Users and Comments
+likes = db.Table('likes',
+    db.Column('user_id', db.String(60), db.ForeignKey("users.id"), primary_key=True, nullable=False),
+    db.Column('comment_id', db.String(60), db.ForeignKey("comments.id"), primary_key=True, nullable=False)
+)
+
 
 
 class Users(BaseModel):
@@ -18,9 +37,21 @@ class Users(BaseModel):
     # Define columns for the Users table
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    access_token = db.Column(db.String(120), nullable=False)
-    refresh_token = db.Column(db.String(120), nullable=False)
     avatar = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    # one to many relationships
+    comments = db.relationship("Comments", backref=db.backref("commenter", lazy=True), 
+                           cascade="all, delete-orphan")
+    created_groups = db.relationship("Groups", backref=db.backref("creator", lazy=True), 
+                           cascade="all, delete-orphan")
+    # many to many relationships
+    user_groups = db.relationship("Groups", backref=db.backref("members", lazy=True),
+                                  secondary=user_groups, cascade="all, delete-orphan")
+    interested_events = db.relationship("Events", backref=db.backref("interested_users", lazy=True),
+                                        secondary=interested_events, cascade="all, delete-orphan")
+    likes = db.relationship("Comments", backref=db.backref("user_likes", lazy=True),
+                            secondary=likes, cascade="all, delete-orphan")
 
     def __init__(self, id, name, email, avatar):
         """_summary_
@@ -49,4 +80,6 @@ class Users(BaseModel):
             "name": self.name,
             "email": self.email,
             "avatar": self.avatar,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
         }

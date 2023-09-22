@@ -9,7 +9,7 @@ from Event import db
 from Event.utils import query_one_filtered
 from Event.models.users import Users
 from Event.models.events import Events
-from Event.models.interested_events import InterestedEvents
+# from Event.models.interested_events import InterestedEvents
 
 # from Event.utils import query_paginate_filtered, query_one_filtered
 
@@ -94,25 +94,25 @@ def update_user(user_id: str):
         }), 400
   
 
-@users.route("/<string:userId>/interests/<string:eventId>",
-             methods=["POST"], strict_slashes=False)
-def create_interest(userId, eventId):
-    """Create interest in an event"""
-    try:
-        user = query_one_filtered(Users, id=userId)
-        event = query_one_filtered(Events, id=eventId)
+# @users.route("/<string:userId>/interests/<string:eventId>",
+#              methods=["POST"], strict_slashes=False)
+# def create_interest(userId, eventId):
+#     """Create interest in an event"""
+#     try:
+#         user = query_one_filtered(Users, id=userId)
+#         event = query_one_filtered(Events, id=eventId)
 
-        if not user:
-            return jsonify({"Error": "User not found"})
+#         if not user:
+#             return jsonify({"Error": "User not found"})
 
-        if not event:
-            return jsonify({"Error": "Event not found"})
+#         if not event:
+#             return jsonify({"Error": "Event not found"})
 
-        new_interest = InterestedEvents(user_id=user.id, event_id=event.id)
-        new_interest.insert()
+#         new_interest = InterestedEvents(user_id=user.id, event_id=event.id)
+#         new_interest.insert()
 
-        return jsonify({"success": "Interest registered"}), 200
+#         return jsonify({"success": "Interest registered"}), 200
 
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 500
+#     except Exception as e:
+#         db.session.rollback()
+#         return jsonify({"error": str(e)}), 500

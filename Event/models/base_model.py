@@ -4,6 +4,7 @@ Base template for the Event driven application
 """
 from Event import db
 from uuid import uuid4
+from datetime import datetime
 
 
 def get_uuid():
@@ -20,6 +21,8 @@ class BaseModel(db.Model):
 
     # Define a primary key column with a default value of a generated UUID
     id = db.Column(db.String(60), primary_key=True, default=get_uuid)
+    created_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
 
     def insert(self):
         """Insert the current object into the database"""
