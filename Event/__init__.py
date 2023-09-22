@@ -11,7 +11,11 @@ from flask_session import Session
 from flask import Flask, session
 from flask_cors import CORS
 from Event.config import App_Config
+from flasgger import Swagger
+import yaml
 
+# Create an instance of Swagger
+swagger = Swagger()
 
 db = SQLAlchemy()
 
@@ -38,6 +42,13 @@ def create_app():
     db.init_app(app)
     # initialize Flask-Session
     sess.init_app(app)
+
+    # Load Swagger content from the file
+    with open('auth_swagger.yaml', 'r') as file:
+        swagger_config = yaml.load(file, Loader=yaml.FullLoader)
+
+    # Initialize Flasgger with the loaded Swagger configuration
+    Swagger(app, template=swagger_config)
 
     # register endpoint(blueprints)
     # pylint: disable=import-outside-toplevel
