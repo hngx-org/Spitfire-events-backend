@@ -79,7 +79,7 @@ class Comments(BaseModel):
             "event_id": self.event_id,
             "user_id": self.user_id,
             "body": self.body,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
+            "created_at": format(self.created_at),
+            "updated_at": format(self.updated_at),
             # "images": [image.format() for image in self.images]
         }

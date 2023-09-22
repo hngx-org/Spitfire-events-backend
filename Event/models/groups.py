@@ -40,5 +40,5 @@ class Groups(BaseModel):
         """Returns a dictionary representation of the Groups object."""
         return {"id": self.id,
                  "title": self.title,
-                 "created_at": self.created_at,
-                 "updated": self.updated_at}
+                 "created_at": format(self.created_at),
+                 "updated": format(self.updated_at)}
