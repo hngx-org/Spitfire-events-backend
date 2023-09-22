@@ -273,8 +273,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   "avatar": "updated-avatar-url",
   "created_at": "time_created in UTCNow",
   "updated_at": "time_updated in UTCNow"
-
-  }
+  },
   "status": "success",
   "message": "user {user_id}  details updated successfully",
 }
@@ -316,7 +315,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Input**: JSON with event details (title, description, location, start date/time, end date/time, thumbnail).
 ```JSON
 {
-  "creator":"user_id",
+  "creator_id":"user_id",
   "title": "New Event",
   "description": "Event Description",
   "location": "Event Location",

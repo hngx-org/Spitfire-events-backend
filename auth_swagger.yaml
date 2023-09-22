@@ -751,7 +751,7 @@ paths:
                 format: time
               thumbnail:
                 type: string
-              creator:
+              creator_id:
                 type: string
             required:
               - title
@@ -762,7 +762,7 @@ paths:
               - end_date
               - end_time
               - thumbnail
-              - creator
+              - creator_id
       responses:
         201:
           description: Event created successfully
@@ -817,7 +817,7 @@ paths:
                         type: string
                       thumbnail:
                         type: string
-                      creator:
+                      creator_id:
                         type: string
         404:
           description: Event Not Found
@@ -900,7 +900,7 @@ paths:
                 format: time
               thumbnail:
                 type: string
-              creator:
+              creator_id:
                 type: string
             # required:
             #   - title
@@ -1029,7 +1029,7 @@ definitions:
         description:
           type: string
           description: The description of the event.
-        creator:
+        creator_id:
           type: string
           description: The ID of the creator user.
         location:
@@ -1058,7 +1058,7 @@ definitions:
         - id
         - title
         - description
-        - creator
+        - creator_id
         - location
         - start_date
         - start_time
