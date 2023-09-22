@@ -270,4 +270,5 @@ def delete_group(group_id):
 
     except Exception as e:
         # Handle any exceptions that may occur during deletion
+        db.session.rollback()
         return jsonify({"error": str(e)}), 400
