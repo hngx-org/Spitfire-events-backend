@@ -1,8 +1,11 @@
 """_summary_
 """
 from Event import create_app
+import os
 
-app = create_app()
+app = create_app(
+    database_uri=os.environ.get("SQLALCHEMY_DATABASE_URI", "sqlite:///test.db")
+)
 
 # @app.before_request
 # def is_logged_in(session):
@@ -26,4 +29,3 @@ app = create_app()
 
 if __name__ == "__main__":
     app.run(debug=True)
-    

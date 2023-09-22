@@ -31,9 +31,16 @@ class Images(BaseModel):
 
     __tablename__ = "images"
 
+<<<<<<< HEAD
+    comment_id = db.Column(db.String(120), db.ForeignKey("comments.id"), nullable=False)
+    image_url = db.Column(db.String(255), nullable=False)
+
+    def __init__(self, comment_id, image_url):
+=======
     url = db.Column(db.String(255), nullable=False)
     
     def __init__(self, url):
+>>>>>>> 57eac9d02887492d8a99bcc3ee6c9792a534c016
         """_summary_
 
         Args:
@@ -48,9 +55,13 @@ class Images(BaseModel):
         Returns:
             _type_: _description_
         """
+<<<<<<< HEAD
+        return "comment_id: {}, image_url: {}".format(self.comment_id, self.image_url)
+=======
         return "url: {}, created_at: {}, updated_at: {}".format(
             self.url, self.created_at, self.updated_at
         )
+>>>>>>> 57eac9d02887492d8a99bcc3ee6c9792a534c016
 
     def format(self):
         """_summary_

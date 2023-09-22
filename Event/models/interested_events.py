@@ -17,6 +17,11 @@
 #             Foreign key for the event table.
 #     """
 
+<<<<<<< HEAD
+    __tablename__ = "interested_events"
+    user_id = db.Column(db.String(120), db.ForeignKey("users.id"), nullable=False)
+    event_id = db.Column(db.String(120), db.ForeignKey("events.id"), nullable=False)
+=======
 #     __tablename__ = "interested_events"
 #     user_id = db.Column(
 #         db.String(120), db.ForeignKey("users.id"), nullable=False
@@ -24,6 +29,7 @@
 #     event_id = db.Column(
 #         db.String(120), db.ForeignKey("events.id"), nullable=False
 #     )
+>>>>>>> 57eac9d02887492d8a99bcc3ee6c9792a534c016
 
 #     def __init__(self, user_id, event_id):
 #         """Initialize the InterestedEvents object"""

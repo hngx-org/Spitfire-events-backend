@@ -23,7 +23,7 @@ db = SQLAlchemy()
 sess = Session()
 
 
-def create_app():
+def create_app(database_uri):
     """
     Create a new instance of the app with the given configuration.
 
@@ -34,8 +34,11 @@ def create_app():
     app = Flask(__name__)
     app.config["SESSION_SQLALCHEMY"] = db
     app.config.from_object(App_Config)
-    if app.config["SQLALCHEMY_DATABASE_URI"] == "sqlite:///test.db":
+    if database_uri == "sqlite:///test.db":
         print("Using test Database")
+
+    elif database_uri == "sqlite://":
+        print("Using in-memory Database")
     # Initialize CORS
     CORS(app, supports_credentials=True)
     # Initialize SQLAlchemy

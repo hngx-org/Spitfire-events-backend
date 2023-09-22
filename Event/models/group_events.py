@@ -18,12 +18,8 @@ class GroupEvents(BaseModel):
     """
 
     __tablename__ = "group_events"
-    group_id = db.Column(
-        db.String(120), db.ForeignKey("groups.id"), nullable=False
-    )
-    event_id = db.Column(
-        db.String(120), db.ForeignKey("events.id"), nullable=False
-    )
+    group_id = db.Column(db.String(120), db.ForeignKey("groups.id"), nullable=False)
+    event_id = db.Column(db.String(120), db.ForeignKey("events.id"), nullable=False)
 
     def __init__(self, group_id, event_id):
         self.group_id = group_id

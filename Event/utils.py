@@ -6,7 +6,6 @@ from Event.errors.handlers import CustomError
 from datetime import datetime
 
 
-
 # db helpers
 
 
@@ -21,9 +20,7 @@ def query_one_filtered(table, **kwargs):
     Returns:
         _type_: _description_
     """
-    return db.session.execute(
-        db.select(table).filter_by(**kwargs)
-    ).scalar_one_or_none()
+    return db.session.execute(db.select(table).filter_by(**kwargs)).scalar_one_or_none()
 
 
 # get all items from table based on filter
@@ -37,11 +34,7 @@ def query_all_filtered(table, **kwargs):
     Returns:
         _type_: _description_
     """
-    return (
-        db.session.execute(db.select(table).filter_by(**kwargs))
-        .scalars()
-        .all()
-    )
+    return db.session.execute(db.select(table).filter_by(**kwargs)).scalars().all()
 
 
 # get first one item from table no filter
@@ -101,9 +94,7 @@ def query_paginate_filtered(table, page, **kwargs):
         _type_: _description_
     """
     return db.paginate(
-        db.select(table)
-        .filter_by(**kwargs)
-        .order_by(table.date_created.desc()),
+        db.select(table).filter_by(**kwargs).order_by(table.date_created.desc()),
         per_page=15,
         page=page,
         error_out=False,
@@ -135,12 +126,10 @@ def is_logged_in(session):
 
 def format_date(date):
     """Formats date to readable string"""
-    return datetime.strptime(date, '%Y-%m-%d')
+    return datetime.strptime(date, "%Y-%m-%d")
 
 
 def format_time(time):
     """Formats date to readable string"""
 
-    return datetime.strptime(time,'%H:%M')
-
-
+    return datetime.strptime(time, "%H:%M")

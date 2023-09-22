@@ -202,13 +202,16 @@ def add_comments(event_id: str):
                         new_comment.update()
                     except Exception as error:
                         print(f"{type(error).__name__}: {error}")
-                        return jsonify(
-                            {
-                                "status": "failed",
-                                "message": "Failed to save to database",
-                                "error": str(error)
-                            }
-                        ), 400
+                        return (
+                            jsonify(
+                                {
+                                    "status": "failed",
+                                    "message": "Failed to save to database",
+                                    "error": str(error),
+                                }
+                            ),
+                            400,
+                        )
 
             return jsonify(
                 {
@@ -224,7 +227,7 @@ def add_comments(event_id: str):
                     {
                         "status": "failed",
                         "message": "Comment data could not be saved",
-                        "error": str(error)
+                        "error": str(error),
                     }
                 ),
                 400,
@@ -252,7 +255,7 @@ def add_comments(event_id: str):
                 {
                     "status": "failed",
                     "message": "An error occured while fetching all comments",
-                    "error": str(error)
+                    "error": str(error),
                 }
             ),
             400,

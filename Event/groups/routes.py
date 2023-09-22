@@ -1,7 +1,6 @@
 """
 Module for removing user from a group.
 """
-
 from flask import Blueprint, jsonify, request
 from Event.models.users import Users
 from Event.models.groups import Groups
@@ -190,6 +189,7 @@ def create_group():
     try:
         # Attempt to extract JSON data from the incoming request.
         data = request.get_json()
+        print(data)
 
         # Check if the 'title' key is present in the JSON data.
         if "title" not in data:
@@ -219,7 +219,7 @@ def create_group():
     except Exception as error:
         return jsonify({"message": "group creation failed", "error": str(error)}), 400
 
-      
+
 @groups.route("/<string:group_id>", methods=["DELETE"])
 def delete_group(group_id):
     """
@@ -247,3 +247,5 @@ def delete_group(group_id):
     except Exception as e:
         # Handle any exceptions that may occur during deletion
         return jsonify({"error": str(e)}), 400
+
+

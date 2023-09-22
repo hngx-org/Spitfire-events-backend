@@ -33,6 +33,11 @@
 #         usergroup = UserGroups(user_id=1, group_id=1f)
 #     """
 
+<<<<<<< HEAD
+    __tablename__ = "user_groups"
+    user_id = db.Column(db.String(120), db.ForeignKey("users.id"), nullable=False)
+    group_id = db.Column(db.String(120), db.ForeignKey("groups.id"), nullable=False)
+=======
 #     __tablename__ = "user_groups"
 #     user_id = db.Column(
 #         db.String(120), db.ForeignKey("users.id"), nullable=False
@@ -40,6 +45,7 @@
 #     group_id = db.Column(
 #         db.String(120), db.ForeignKey("groups.id"), nullable=False
 #     )
+>>>>>>> 57eac9d02887492d8a99bcc3ee6c9792a534c016
 
 #     def __init__(self, user_id, group_id):
 #         """_summary_
