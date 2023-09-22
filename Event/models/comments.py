@@ -3,11 +3,7 @@
 
 from Event import db
 from Event.models.base_model import BaseModel
-# from Event.models.comment_images import comment_images
-# from Event.models.images import Images
-# from Event.models.comments importsaomments
 from datetime import datetime
-import sqlalchemy as sa
 
 
 # Association table between Comments and Images

@@ -1,8 +1,8 @@
-#!/usr/bin/env python3
-"""Template for the CommentImages Class"""
+# #!/usr/bin/env python3
+# """Template for the CommentImages Class"""
 
-from Event import db
-from Event.models.base_model import BaseModel
+# from Event import db
+# from Event.models.base_model import BaseModel
 
 
 # class CommentImages(db.Model):
