@@ -96,7 +96,7 @@ class Events(BaseModel):
             "id": self.id,
             "title": self.title,
             "description": self.description,
-            "creator_id": self.creator_id,
+            "creator_id": self.creator_id if self.creator_id else "",
             "location": self.location,
             "start_date": self.start_date,
             "start_time": self.start_time,

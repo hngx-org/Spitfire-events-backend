@@ -77,6 +77,7 @@ class Users(BaseModel):
     def format(self):
         """Return a dictionary representation of the User object"""
         return {
+            "id":self.id if self.id else "",
             "name": self.name,
             "email": self.email,
             "avatar": self.avatar,
