@@ -9,7 +9,7 @@ from Event import db
 from Event.utils import query_one_filtered
 from Event.models.users import Users
 from Event.models.events import Events
-from Event.models.interested_events import InterestedEvents
+# from Event.models.interested_events import InterestedEvents
 
 # from Event.utils import query_paginate_filtered, query_one_filtered
 
@@ -96,31 +96,6 @@ def update_user(user_id: str):
         }), 400
   
 
- # DELETE /api/users/userId/interests/eventId
-@users.route("/<string:userId>/interests/<string:eventId>",
-             methods=["DELETE"], strict_slashes=False)
-def delete_user_interest(userId, eventId):
-    """
-        Delete interest in event
-
-        Args:
-            userId: The id of the user
-            eventId: the id of the event to be deleted
-
-        Returns:
-            str: success msessage
-    """
-    try:
-        interest = query_one_filtered(InterestedEvents, user_id=userId, event_id=eventId)
-
-        if interest:
-            interest.delete()
-            return jsonify(response={"success": "Interest deleted"}), 200
-
-    except Exception as error:
-        db.session.rollback()
-        return jsonify({"error": str(error)}), 500
-
 # Checked
 # POST /api/users/<string:user_id>/interests/<string:event_id>: Show interests
 @users.route("/<string:user_id>/interests/<string:event_id>",
@@ -145,4 +120,35 @@ def create_interest(user_id, event_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+    
+    
+# DELETE /api/users/userId/interests/eventId
+@users.route("/<string:userId>/interests/<string:eventId>",
+             methods=["DELETE"], strict_slashes=False)
+def delete_user_interest(userId, eventId):
+    """
+        Delete interest in event
 
+        Args:
+            userId: The id of the user
+            eventId: the id of the event to be deleted
+
+        Returns:
+            str: success msessage
+    """
+    try:
+        user = query_one_filtered(Users, id=userId)
+        event = query_one_filtered(Events, id=eventId)
+
+        if not user:
+            return jsonify({"Error": "User not found"}), 404
+
+        if not event:
+            return jsonify({"Error": "Event not found"}), 404
+        
+        user.interested_events.remove(event)
+        user.update()
+
+    except Exception as error:
+        db.session.rollback()
+        return jsonify({"error": str(error)}), 500
