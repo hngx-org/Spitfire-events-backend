@@ -21,6 +21,8 @@ class Users(BaseModel):
     access_token = db.Column(db.String(120), nullable=False)
     refresh_token = db.Column(db.String(120), nullable=False)
     avatar = db.Column(db.String(255), nullable=False)
+    comments = db.relationship("Comments", backref=db.backref("user", lazy=True), 
+                           cascade="all, delete-orphan")
 
     def __init__(self, id, name, email, avatar):
         """_summary_
