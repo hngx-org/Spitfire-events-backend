@@ -730,11 +730,10 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 ### Create a New Group
 - **Endpoint**: **POST** `/api/groups`
 - **Description**: Create a new group.
-- **Input**: JSON with group details (name, description).
+- **Input**: JSON with group title.
 ```JSON
 {
-  "name": "Group Name",
-  "description": "Group Description"
+  "title": "Group Title",
 }
 
 ```
@@ -743,12 +742,13 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "message": "Group ID {group_id} created successfully",
   "data": {
+    "created_at": "2023-09-22 09:58:43",
     "id": "group-id",
-    "name": "Group Name",
-    "description": "Group Description"
-  }
+    "title": "group-title",
+    "updated": "2023-09-22 09:58:43"
+  },
+  "message": "Group created successfully"
 }
 ```
 - **Error Responses**:
@@ -807,8 +807,13 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "id": "group-id",
-  "title": "Updated Title"
+  "group": {
+    "created_at": "2023-09-22 10:14:10",
+    "id": "group-id",
+    "title": "Updated Title",
+    "updated": "2023-09-22 10:16:12"
+  },
+  "message": "Group updated successfully"
 }
 ```
 - **Error Responses**:
@@ -837,12 +842,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Description**: Delete a group by ID.
 - **Success Response**:
     - **Status Code**: 204 (No Content)
-    - **Response**:
-```JSON
-  {
-    "message": "Group ID {group_id} deleted successfully"
-  }
-```
+
 - **Error Responses**:
     - **400 Bad Request**:
         - **Status Code**: 400
@@ -876,9 +876,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 ```JSON
 {
   {
-  "success": true,
   "id": "user-group-id",
-  "message": "User ID {user_id} added to Group ID {group_id}"
+  "message": "User added to Group"
   }
 
 }
