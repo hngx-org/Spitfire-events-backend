@@ -19,9 +19,7 @@ class Events(BaseModel):
     # Define columns for the Events table
     title = db.Column(db.String(60), unique=True, nullable=False)
     description = db.Column(db.String(225), nullable=False)
-    creator = db.Column(
-        db.String(60), db.ForeignKey("users.id"), nullable=False
-    )
+    creator = db.Column(db.String(60), db.ForeignKey("users.id"), nullable=False)
     location = db.Column(db.String(1024), nullable=False)
     start_date = db.Column(db.Date(), nullable=False)
     start_time = db.Column(db.Time(), nullable=False)

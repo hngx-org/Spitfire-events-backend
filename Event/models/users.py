@@ -11,9 +11,7 @@ class Users(BaseModel):
     __tablename__ = "users"
 
     # Override the id attribute to have a different type
-    id = db.Column(
-        db.String(60), primary_key=True, unique=True, nullable=False
-    )
+    id = db.Column(db.String(60), primary_key=True, unique=True, nullable=False)
 
     # Define columns for the Users table
     name = db.Column(db.String(120), nullable=False)
@@ -38,9 +36,7 @@ class Users(BaseModel):
 
     def __repr__(self):
         """Return a string representation of the User object"""
-        return "Id: {}, Name: {}, Email: {}".format(
-            self.id, self.name, self.email
-        )
+        return "Id: {}, Name: {}, Email: {}".format(self.id, self.name, self.email)
 
     # Override the format method to return event attributes as a dictionary
     def format(self):

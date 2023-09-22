@@ -30,9 +30,7 @@ class Images(BaseModel):
 
     __tablename__ = "images"
 
-    comment_id = db.Column(
-        db.String(120), db.ForeignKey("comments.id"), nullable=False
-    )
+    comment_id = db.Column(db.String(120), db.ForeignKey("comments.id"), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
 
     def __init__(self, comment_id, image_url):
@@ -51,9 +49,7 @@ class Images(BaseModel):
         Returns:
             _type_: _description_
         """
-        return "comment_id: {}, image_url: {}".format(
-            self.comment_id, self.image_url
-        )
+        return "comment_id: {}, image_url: {}".format(self.comment_id, self.image_url)
 
     def format(self):
         """_summary_

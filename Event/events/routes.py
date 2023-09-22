@@ -6,7 +6,13 @@ from flask import Blueprint, request, jsonify
 from Event.models.images import Images
 from Event.models.comments import Comments
 from Event.models.events import Events
-from Event.utils import query_all_filtered, query_all, query_one_filtered, format_date, format_time
+from Event.utils import (
+    query_all_filtered,
+    query_all,
+    query_one_filtered,
+    format_date,
+    format_time,
+)
 
 
 # url_prefix includes /api/events before all endpoints in blueprint
@@ -26,34 +32,25 @@ def create_event():
              - `event` (string): A string representation of the created event.
     """
 
-
     event = Events(
-                    title=request.json['title'],
-                   description=request.json['description'],
-                   location= request.json['location'],
-                   start_date= format_date(
-                                                request.json['start_date'],
-                                                ),
-                   start_time= format_time(
-                                                request.json['start_time']
-                                                ),  
-                   end_date= format_date(
-                                                request.json['end_date']
-                                                ),
-                   end_time=format_time(
-                                                request.json['end_time']
-                                                ),
-                   thumbnail=request.json['thumbnail'],
-                   creator=request.json['creator'],
-                )
-    result = format(event)            
+        title=request.json["title"],
+        description=request.json["description"],
+        location=request.json["location"],
+        start_date=format_date(
+            request.json["start_date"],
+        ),
+        start_time=format_time(request.json["start_time"]),
+        end_date=format_date(request.json["end_date"]),
+        end_time=format_time(request.json["end_time"]),
+        thumbnail=request.json["thumbnail"],
+        creator=request.json["creator"],
+    )
+    result = format(event)
     try:
         event.insert()
     except:
         return {"message": "An error occurred creating the event."}, 400
-    return jsonify({
-        'msg': "Event Created",
-        'event': result }), 201
+    return jsonify({"msg": "Event Created", "event": result}), 201
 
 
 # DELETE /api/events/:eventId: Delete an event
@@ -92,7 +89,7 @@ def all_events():
     all_events = query_all(Events)
     return jsonify(all_events.format()), 200
 
-        
+
 # Get events based on event id
 @events.route("/<event_id>", methods=["GET"])
 def get_event(event_id):
@@ -143,10 +140,10 @@ def update_event(event_id: str) -> tuple:
         for k, v in req.items():
             setattr(db_data, k, v)
         Events.update()
-        return jsonify({
-            "message": "item updated",
-            "Event_id": event_id,
-            "body": req}), 201
+        return (
+            jsonify({"message": "item updated", "Event_id": event_id, "body": req}),
+            201,
+        )
     except Exception as exc:
         return jsonify({"error": str(exc)}), 400
 
@@ -171,9 +168,7 @@ def add_comments(event_id):
             user_id = data.get("user_id")
             body = data.get("body")
             image_url_list = data.get("image_url_list", None)
-            new_comment = Comments(
-                event_id=event_id, user_id=user_id, body=body
-            )
+            new_comment = Comments(event_id=event_id, user_id=user_id, body=body)
             new_comment.insert()
             # save images if they exist
             if image_url_list is not None:
@@ -183,13 +178,16 @@ def add_comments(event_id):
                         new_image.insert()
                     except Exception as error:
                         print(f"{type(error).__name__}: {error}")
-                        return jsonify(
-                            {
-                                "status": "failed",
-                                "message": "Failed to save to database",
-                                "error": str(error)
-                            }
-                        ), 400
+                        return (
+                            jsonify(
+                                {
+                                    "status": "failed",
+                                    "message": "Failed to save to database",
+                                    "error": str(error),
+                                }
+                            ),
+                            400,
+                        )
 
             return jsonify(
                 {
@@ -205,7 +203,7 @@ def add_comments(event_id):
                     {
                         "status": "failed",
                         "message": "Comment data could not be saved",
-                        "error": str(error)
+                        "error": str(error),
                     }
                 ),
                 400,
@@ -230,7 +228,7 @@ def add_comments(event_id):
                 {
                     "status": "failed",
                     "message": "An error occured while fetching all comments",
-                    "error": str(error)
+                    "error": str(error),
                 }
             ),
             400,

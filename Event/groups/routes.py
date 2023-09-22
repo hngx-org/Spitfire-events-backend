@@ -1,8 +1,6 @@
 """
 Module for removing user from a group.
 """
-import unittest
-from tests.group import TestGroupEndpoints
 from flask import Blueprint, jsonify, request
 from Event.models.users import Users
 from Event.models.groups import Groups
@@ -12,7 +10,8 @@ from Event import db
 
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
 
-@groups.route("/<groupId>/members/<userId>",methods=["POST"])
+
+@groups.route("/<groupId>/members/<userId>", methods=["POST"])
 def add_user_to_group(groupId, userId):
     try:
         group_id = Users.query.get(groupId)
@@ -26,11 +25,15 @@ def add_user_to_group(groupId, userId):
         if user_id not in group_id.members:
             return jsonify({"error": "User is not a member of the group"}), 400
 
-
         add_user = UserGroups(user_id=user_id, group_id=group_id)
         UserGroups.insert(add_user)
-        
-        return jsonify({"success": True, "id": add_user.id, "message": "User added to Group"}), 201
+
+        return (
+            jsonify(
+                {"success": True, "id": add_user.id, "message": "User added to Group"}
+            ),
+            201,
+        )
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -136,8 +139,6 @@ def update_group(group_id):
         return jsonify({"error": str(error)}), 500
 
 
-
-
 @groups.route("/<group_id>/members/<user_id>", methods=["DELETE"])
 def remove_group_member(group_id, user_id):
     """
@@ -186,6 +187,7 @@ def create_group():
     try:
         # Attempt to extract JSON data from the incoming request.
         data = request.get_json()
+        print(data)
 
         # Check if the 'title' key is present in the JSON data.
         if "title" not in data:
@@ -215,7 +217,7 @@ def create_group():
     except Exception as error:
         return jsonify({"message": "group creation failed", "error": str(error)}), 400
 
-      
+
 @groups.route("/<string:group_id>", methods=["DELETE"])
 def delete_group(group_id):
     """
@@ -245,26 +247,4 @@ def delete_group(group_id):
         # Handle any exceptions that may occur during deletion
         return jsonify({"error": str(e)}), 400
 
-@groups.route('/run_tests', methods=['GET'])
-def run_tests():
-    try:
-        # Initialize the test suite and test loader
-        test_suite = unittest.TestLoader().loadTestsFromTestCase(TestGroupEndpoints)
 
-        # Initialize the test runner and run the tests
-        test_runner = unittest.TextTestRunner(verbosity=2)
-        result = test_runner.run(test_suite)
-
-        # Collect and format the test results
-        test_results = {
-            'tests_run': result.testsRun,
-            'failures': len(result.failures),
-            'errors': len(result.errors),
-            'skipped': len(result.skipped),
-            'status': 'OK' if result.wasSuccessful() else 'FAIL'
-        }
-
-        return jsonify(test_results)
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500

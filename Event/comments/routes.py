@@ -43,7 +43,7 @@ def add_images(comment_id):
                     {
                         "status": "failed",
                         "message": "Error: image data could not be saved",
-                        "error": str(error)
+                        "error": str(error),
                     }
                 ),
                 400,
@@ -68,7 +68,7 @@ def add_images(comment_id):
                 {
                     "status": "failed",
                     "message": "An error occured while fetching all images",
-                    "error": str(error)
+                    "error": str(error),
                 }
             ),
             400,

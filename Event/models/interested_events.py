@@ -18,12 +18,8 @@ class InterestedEvents(BaseModel):
     """
 
     __tablename__ = "interested_events"
-    user_id = db.Column(
-        db.String(120), db.ForeignKey("users.id"), nullable=False
-    )
-    event_id = db.Column(
-        db.String(120), db.ForeignKey("events.id"), nullable=False
-    )
+    user_id = db.Column(db.String(120), db.ForeignKey("users.id"), nullable=False)
+    event_id = db.Column(db.String(120), db.ForeignKey("events.id"), nullable=False)
 
     def __init__(self, user_id, event_id):
         """Initialize the InterestedEvents object"""

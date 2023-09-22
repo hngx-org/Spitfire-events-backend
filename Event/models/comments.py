@@ -44,12 +44,8 @@ class Comments(BaseModel):
     __tablename__ = "comments"
 
     # Define columns for the Users table
-    event_id = db.Column(
-        db.String(36), db.ForeignKey("events.id"), nullable=False
-    )
-    user_id = db.Column(
-        db.String(36), db.ForeignKey("users.id"), nullable=False
-    )
+    event_id = db.Column(db.String(36), db.ForeignKey("events.id"), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey("users.id"), nullable=False)
     body = db.Column(db.String(1000), nullable=False)
 
     # Add relationships to Events and Users models

@@ -34,12 +34,8 @@ class UserGroups(BaseModel):
     """
 
     __tablename__ = "user_groups"
-    user_id = db.Column(
-        db.String(120), db.ForeignKey("users.id"), nullable=False
-    )
-    group_id = db.Column(
-        db.String(120), db.ForeignKey("groups.id"), nullable=False
-    )
+    user_id = db.Column(db.String(120), db.ForeignKey("users.id"), nullable=False)
+    group_id = db.Column(db.String(120), db.ForeignKey("groups.id"), nullable=False)
 
     def __init__(self, user_id, group_id):
         """_summary_

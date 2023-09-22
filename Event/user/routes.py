@@ -33,7 +33,7 @@ def get_active_signals():
 def get_user_info(user_id: str):
     """gets the user info for the profile page
 
-    Args:  
+    Args:
         user_id (str): the id of the user
 
     Returns:
@@ -46,26 +46,33 @@ def get_user_info(user_id: str):
         if user is None:
             return jsonify({"error": "User not found"}), 404
         user_details = user.format()
-        return jsonify({
-            "status": "success",
-            "message": f"user {user_id} details fetched successfully",
-            "data": user_details
-        })
+        return jsonify(
+            {
+                "status": "success",
+                "message": f"user {user_id} details fetched successfully",
+                "data": user_details,
+            }
+        )
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
-        return jsonify({
-            "status": "failed",
-            "message": "your request could not be completed",
-            "error": str(error)
-        }), 400
+        return (
+            jsonify(
+                {
+                    "status": "failed",
+                    "message": "your request could not be completed",
+                    "error": str(error),
+                }
+            ),
+            400,
+        )
 
 
 # PUT /api/users/<string:user_id>: Update user profile
-@users.route("/<string:user_id>", methods=['PUT'], strict_slashes=False)
+@users.route("/<string:user_id>", methods=["PUT"], strict_slashes=False)
 def update_user(user_id: str):
     """updates the user details
 
-    Args:  
+    Args:
         user_id (str): the id of the user
 
     Returns:
@@ -80,22 +87,32 @@ def update_user(user_id: str):
         for key, value in data.items():
             setattr(user, key, value)
         user.update()
-        return jsonify({
-            "status": "success",
-            "message": f"user {user_id} details updated successfully",
-            "data": user.format()
-        })
+        return jsonify(
+            {
+                "status": "success",
+                "message": f"user {user_id} details updated successfully",
+                "data": user.format(),
+            }
+        )
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
-        return jsonify({
-            "status": "failed",
-            "message": "your request could not be completed",
-            "error": str(error)
-        }), 400
-  
+        return (
+            jsonify(
+                {
+                    "status": "failed",
+                    "message": "your request could not be completed",
+                    "error": str(error),
+                }
+            ),
+            400,
+        )
 
-@users.route("/<string:userId>/interests/<string:eventId>",
-             methods=["POST"], strict_slashes=False)
+
+@users.route(
+    "/<string:userId>/interests/<string:eventId>",
+    methods=["POST"],
+    strict_slashes=False,
+)
 def create_interest(userId, eventId):
     """Create interest in an event"""
     try:
