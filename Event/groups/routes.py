@@ -51,7 +51,7 @@ def get_group_by_id(group_id):
 
         if group:
             # Create a dictionary with group details
-            group_details = {"id":self.id if self.id else "","group_id": group.group_id, "title": group.title}
+            group_details = {"id": group.id, "title": group.title}
             return jsonify(
                 {
                     "status": "success",
@@ -235,7 +235,7 @@ def delete_group(group_id):
         # Delete the group from the database
         group.delete()
 
-        return jsonify({"message": "Group deleted successfully"})
+        return jsonify({"message": "Group deleted successfully"}),204
 
     except Exception as e:
         # Handle any exceptions that may occur during deletion
