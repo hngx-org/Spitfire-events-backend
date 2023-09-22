@@ -38,8 +38,8 @@ def create_event():
     
         new_image = Images(url=thumbnail)
         new_image.insert()
-        # event.thumbnail.append(new_image)
-        # event.update()
+        event.thumbnail.append(new_image)
+        event.update()
     except Exception as e:
         print(e)
         return {"message": "An error occurred creating the event."}, 400
