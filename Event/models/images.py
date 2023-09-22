@@ -32,16 +32,14 @@ class Images(BaseModel):
     __tablename__ = "images"
 
     url = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
-
-    def __init__(self, comment_id, url):
+    
+    def __init__(self, url):
         """_summary_
 
         Args:
             comment_id (str): foreign key
             url (str): source url of the saved image
         """
-        self.comment_id = comment_id
         self.url = url
 
     def __repr__(self):
@@ -50,8 +48,8 @@ class Images(BaseModel):
         Returns:
             _type_: _description_
         """
-        return "comment_id: {}, url: {}".format(
-            self.comment_id, self.url
+        return "url: {}, created_at: {}, updated_at: {}".format(
+            self.url, self.created_at, self.updated_at
         )
 
     def format(self):
@@ -61,7 +59,8 @@ class Images(BaseModel):
             _type_: _description_
         """
         return {
-            "image_id": self.id,
-            "comment_id": self.comment_id,
+            "id": self.id,
             "url": self.url,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
         }
