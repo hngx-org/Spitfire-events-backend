@@ -118,3 +118,28 @@ def update_user(user_id: str):
 #     except Exception as e:
 #         db.session.rollback()
 #         return jsonify({"error": str(e)}), 500
+
+ # DELETE /api/users/userId/interests/eventId
+@users.route("/<string:userId>/interests/<string:eventId>",
+             methods=["DELETE"], strict_slashes=False)
+def delete_user_interest(userId, eventId):
+    """
+        Delete interest in event
+
+        Args:
+            userId: The id of the user
+            eventId: the id of the event to be deleted
+
+        Returns:
+            str: success msessage
+    """
+    try:
+        interest = query_one_filtered(InterestedEvents, user_id=userId, event_id=eventId)
+
+        if interest:
+            interest.delete()
+            return jsonify(response={"success": "Interest deleted"}), 200
+
+    except Exception as error:
+        db.session.rollback()
+        return jsonify({"error": str(error)}), 500
