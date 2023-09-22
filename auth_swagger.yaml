@@ -5,7 +5,7 @@ info:
   description: API documentation for All Endpoints
 basePath: #/api/auth
 schemes:
-  - https
+  - http
 paths:
   /api/auth:
     post:
@@ -216,23 +216,40 @@ paths:
     post:
       summary: Add a comment to an event discussion
       description: Add a comment to an event discussion or fetch all comments for an event.
+      # parameters:
+      #   - name: event_id
+      #     in: path
+      #     description: The ID of the event causing the discussion.
+      #     required: true
+      #     type: string
+      #   - name: body
+      #     in: body
+      #     description: Content of Comment.
+      #     required: true
+      #     schema:
+      #       type: object
+      #       properties:
+      #         body:
+      #           type: string
+      #       required:
+      #         - body
       parameters:
         - name: event_id
           in: path
           description: The ID of the event causing the discussion.
           required: true
           type: string
-        - name: body
+        - name: Comment
           in: body
-          description: Content of Comment.
+          description: add user id and comment body
           required: true
           schema:
             type: object
             properties:
+              user_id:
+                type: string
               body:
                 type: string
-            required:
-              - body
       responses:
         201:
           description: Comment added successfully
@@ -719,6 +736,39 @@ paths:
                 properties:
                   error:
                     type: string
+    delete:
+      summary: Remove Interest in an Event
+      description: Remove an interest in an event for the provided user and event IDs.
+      parameters:
+        - name: user_id
+          in: path
+          description: The ID of the user.
+          required: true
+          type: string
+        - name: event_id
+          in: path
+          description: The ID of the event.
+          required: true
+          type: string
+      responses:
+        204:
+          description: Interest removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   /api/events:
     post:
       summary: Create a new event
@@ -751,7 +801,7 @@ paths:
                 format: time
               thumbnail:
                 type: string
-              creator:
+              creator_id:
                 type: string
             required:
               - title
@@ -762,7 +812,7 @@ paths:
               - end_date
               - end_time
               - thumbnail
-              - creator
+              - creator_id
       responses:
         201:
           description: Event created successfully
@@ -817,7 +867,7 @@ paths:
                         type: string
                       thumbnail:
                         type: string
-                      creator:
+                      creator_id:
                         type: string
         404:
           description: Event Not Found
@@ -900,7 +950,7 @@ paths:
                 format: time
               thumbnail:
                 type: string
-              creator:
+              creator_id:
                 type: string
             # required:
             #   - title
@@ -1029,7 +1079,7 @@ definitions:
         description:
           type: string
           description: The description of the event.
-        creator:
+        creator_id:
           type: string
           description: The ID of the creator user.
         location:
@@ -1058,7 +1108,7 @@ definitions:
         - id
         - title
         - description
-        - creator
+        - creator_id
         - location
         - start_date
         - start_time
