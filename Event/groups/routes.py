@@ -135,7 +135,7 @@ def update_group(group_id):
         return jsonify({"error": str(error)}), 400
 
 # Define the route to remove a user from a group
-@groups.route("/<group_id>/members/user_id>", methods=["DELETE"])
+@groups.route("/<group_id>/members/<user_id>", methods=["DELETE"])
 def remove_user_from_group(group_id, user_id):
     """
     Remove a user from a group.
