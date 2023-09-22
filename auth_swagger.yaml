@@ -5,7 +5,7 @@ info:
   description: API documentation for All Endpoints
 basePath: #/api/auth
 schemes:
-  - http
+  - https
 paths:
   /api/auth:
     post:
@@ -22,7 +22,7 @@ paths:
                   type: string
               required:
                 - token
-      parameters:  # Define parameters here
+      parameters:  
         - name: token
           in: body
           description: String authentication token from google.
