@@ -2,18 +2,18 @@
 """Template for the EventThumbnail Class"""
 
 from Event import db
-from Event.models.base_model import BaseModel
+# from Event.models.base_model import BaseModel
 
 
-class EventThumbnail(BaseModel):
+class EventThumbnail(db.Model):
     """
         Model Schema for EventThumbnail.
 
     """
     __tablename__ = "event_thumbnails"
 
-    image_id = db.Column(db.String(128), db.ForeignKey("images.id"), nullable=False)
-    event_id = db.Column(db.String(128), db.ForeignKey("events.id"), nullable=False)
+    image_id = db.Column(db.String(60), db.ForeignKey("images.id"), primary_key=True, nullable=False)
+    event_id = db.Column(db.String(60), db.ForeignKey("events.id"), primary_key=True, nullable=False)
 
     def __init__(self, image_id, event_id):
         """_summary_
@@ -24,6 +24,20 @@ class EventThumbnail(BaseModel):
         """
         self.image_id = image_id
         self.event_id = event_id
+
+    def insert(self):
+        """Insert the current object into the database"""
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        """Update the current object in the database"""
+        db.session.commit()
+
+    def delete(self):
+        """Delete the current object from the database"""
+        db.session.delete(self)
+        db.session.commit()
 
     def __repr__(self):
         """

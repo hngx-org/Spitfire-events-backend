@@ -6,6 +6,7 @@ from flask import Blueprint, request, jsonify
 from Event.models.images import Images
 from Event.models.comments import Comments
 from Event.models.events import Events
+# from Event.models.comment_images import CommentImages
 from Event.utils import query_all_filtered, query_all, query_one_filtered, format_date, format_time
 
 
@@ -31,18 +32,10 @@ def create_event():
                     title=request.json['title'],
                    description=request.json['description'],
                    location= request.json['location'],
-                   start_date= format_date(
-                                                request.json['start_date'],
-                                                ),
-                   start_time= format_time(
-                                                request.json['start_time']
-                                                ),  
-                   end_date= format_date(
-                                                request.json['end_date']
-                                                ),
-                   end_time=format_time(
-                                                request.json['end_time']
-                                                ),
+                   start_date= format_date(request.json['start_date']),
+                   start_time= format_time(request.json['start_time']),  
+                   end_date= format_date(request.json['end_date']),
+                   end_time=format_time(request.json['end_time']),
                    thumbnail=request.json['thumbnail'],
                    creator=request.json['creator'],
                 )
@@ -57,7 +50,7 @@ def create_event():
 
 
 # DELETE /api/events/:eventId: Delete an event
-@events.route("/<id>", methods=["DELETE"])
+@events.route("/<string:id>", methods=["DELETE"])
 def delete_event(id):
     """
     Delete an event.
@@ -71,15 +64,17 @@ def delete_event(id):
     """
 
     try:
-        del_event = query_one_filtered(table=Events, id=id)
-
+        del_event = query_one_filtered(Events, id=id)
+        print(del_event)
         if del_event:
+            print('in')
             del_event.delete()
-            return jsonify(response={"success": "Event deleted"}), 204
+            return jsonify(response={"success": "Event deleted"}), 200
     except Exception as error:
+        print(f"{type(error).__name__}: {error}")
         return jsonify(error={"Not Found": "Event not found"}), 404
 
-
+# checked
 # GET /api/events: Get a list of events
 @events.route("/", methods=["GET"])
 def all_events():
@@ -89,10 +84,18 @@ def all_events():
     Returns:
         json: A JSON response containing all events created.
     """
-    all_events = query_all(Events)
-    return jsonify(all_events.format()), 200
+    try:
+        all_events = query_all(Events)
+    except Exception:
+        return jsonify({"error": "events not found"})
+    
+    return jsonify({
+        "status": "success", 
+        "message": "events returned succesfully", 
+        "data": format(all_events)
+    }), 200
 
-        
+# Checked  
 # Get events based on event id
 @events.route("/<event_id>", methods=["GET"])
 def get_event(event_id):
@@ -114,12 +117,16 @@ def get_event(event_id):
     try:
         event = query_one_filtered(table=Events, id=event_id)
         if event:
-            return jsonify(event.format()), 200
+            return jsonify({
+                "status": "success", 
+                "message": "event returned succesfully", 
+                "data": format(event)
+            }), 200
 
     except Exception as error:
-        return jsonify({"error": "Event not found"}), 404
+        return jsonify({"error": str(error)}), 404
 
-
+# checked
 # PUT /api/events/:eventId: Update event details
 @events.route("/<string:event_id>", methods=["PUT"])
 def update_event(event_id: str) -> tuple:
@@ -137,20 +144,26 @@ def update_event(event_id: str) -> tuple:
     """
     try:
         req = request.get_json()
-        db_data = query_all_filtered(Events, id=event_id)
+        db_data = query_one_filtered(Events, id=event_id)
         if not db_data:
             return jsonify({"message": "Event not Found"}), 404
+        
+            
         for k, v in req.items():
+            print(db_data)
+            if k == 'creator_id':
+                continue
             setattr(db_data, k, v)
         db_data.update()
         return jsonify({
             "message": "item updated",
             "Event_id": event_id,
-            "body": req}), 201
+            "data": format(db_data)}), 201
     except Exception as exc:
+        print(f"{type(exc).__name__}: {exc}")
         return jsonify({"error": str(exc)}), 400
 
-
+# checked
 @events.route("/<string:event_id>/comments", methods=["GET", "POST"])
 def add_comments(event_id: str):
     """
@@ -171,16 +184,20 @@ def add_comments(event_id: str):
             user_id = data.get("user_id")
             body = data.get("body")
             image_url_list = data.get("image_url_list", None)
-            new_comment = Comments(
-                event_id=event_id, user_id=user_id, body=body
-            )
+            new_comment = Comments(event_id=event_id, user_id=user_id,
+                                   body=body)
             new_comment.insert()
             # save images if they exist
             if image_url_list is not None:
                 for image_url in image_url_list:
-                    new_image = Images(comment_id=new_comment.id, url=image_url)
+                    new_image = Images(url=image_url)
                     try:
                         new_image.insert()
+                        # comment_image = CommentImages(comment_id=new_comment.id,
+                        #                               image_id=new_image.id)
+                        # comment_image.insert()
+                        new_comment.images.append(new_image)
+                        new_comment.update()
                     except Exception as error:
                         print(f"{type(error).__name__}: {error}")
                         return jsonify(
@@ -213,7 +230,10 @@ def add_comments(event_id: str):
 
     # GET comments
     try:
-        all_comments = query_all_filtered("comments", event_id=event_id)
+        all_comments = query_all_filtered(Comments, event_id=event_id)
+        if all_comments is None:
+            return jsonify({"status": "failed", "message": "comments not found"}), 404
+        # if found
         return jsonify(
             {
                 "status": "success",
@@ -224,7 +244,7 @@ def add_comments(event_id: str):
             }
         )
     except Exception as error:
-        # print(f"{type(error).__name__}: {error}")
+        print(f"{type(error).__name__}: {error}")
         return (
             jsonify(
                 {
