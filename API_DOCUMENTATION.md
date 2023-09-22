@@ -719,7 +719,9 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "message": "Interest removed successfully."
+  "response": {
+    "success": "Interest deleted"
+  }
 }
 ```
 

@@ -736,39 +736,39 @@ paths:
                 properties:
                   error:
                     type: string
-      delete:
-        summary: Remove Interest in an Event
-        description: Remove an interest in an event for the provided user and event IDs.
-        parameters:
-          - name: user_id
-            in: path
-            description: The ID of the user.
-            required: true
-            type: string
-          - name: event_id
-            in: path
-            description: The ID of the event.
-            required: true
-            type: string
-        responses:
-          204:
-            description: Interest removed
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    success:
-                      type: string
-          500:
-            description: Internal Server Error
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    error:
-                      type: string
+    delete:
+      summary: Remove Interest in an Event
+      description: Remove an interest in an event for the provided user and event IDs.
+      parameters:
+        - name: user_id
+          in: path
+          description: The ID of the user.
+          required: true
+          type: string
+        - name: event_id
+          in: path
+          description: The ID of the event.
+          required: true
+          type: string
+      responses:
+        204:
+          description: Interest removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   /api/events:
     post:
       summary: Create a new event
