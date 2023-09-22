@@ -65,6 +65,7 @@ def register_or_login():
         jsonify(
             {
                 "message": "success",
+                "id":user.id,
                 "email": user.email,
                 "name": user.name,
                 "avatar": user.avatar,
@@ -88,6 +89,7 @@ def see_sess():
             jsonify(
                 {
                     "message": "Success",
+                    "id":user.id,
                     "email": user.email,
                     "name": user.name,
                     "avatar": user.avatar,
