@@ -137,32 +137,32 @@ def update_group(group_id):
 # Define the route to remove a user from a group
 # @groups.route("/<group_id>/members/<user_id>", methods=["DELETE"])
 # def remove_user_from_group(group_id, user_id):
-    """
-    Remove a user from a group.
-
-    Parameters:
-    group_id (str): The ID of the group.
-    user_id (str): The ID of the user to be removed from the group.
-
-    Returns:
-    tuple: A tuple containing response message and status code.
-    """
+#    """
+#    Remove a user from a group.
+#
+#    Parameters:
+#    group_id (str): The ID of the group.
+#    user_id (str): The ID of the user to be removed from the group.
+#
+#    Returns:
+#    tuple: A tuple containing response message and status code.
+#    """
 #    try:
 #        # Check if the group and user exist in the database
 #        group = UserGroups.query.filter_by(group_id=group_id, user_id=user_id).first()
 #        user = Users.query.get(user_id)
-
+#
 #        if group is None or user is None:
 #            return jsonify({"message": "Group or user not found"}), 404
-
-        # Remove the user from the group
+#
+#        # Remove the user from the group
 #       db.session.delete(group)
 #        db.session.commit()
-
+#
 #        return jsonify({"message": "User removed from group successfully"}), 200
-
+#
 #    except Exception as e:
-        # Handle any potential errors
+#        # Handle any potential errors
 #        return jsonify({"error": str(e)}), 500
 
 @groups.route("/<group_id>/members/<user_id>", methods=["DELETE"])
