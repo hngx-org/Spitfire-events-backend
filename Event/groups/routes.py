@@ -2,6 +2,7 @@
 Module for removing user from a group.
 """
 
+import logging
 from flask import Blueprint, jsonify, request
 from Event.models.users import Users
 from Event.models.groups import Groups
@@ -46,11 +47,11 @@ def get_group_by_id(group_id):
         dict: A JSON response with group details.
     """
     try:
-        group = Groups.query.filter_by(group_id=group_id).first()
+        group = Groups.query.filter_by(id=group_id).first()
 
         if group:
             # Create a dictionary with group details
-            group_details = {"group_id": group.group_id, "title": group.title}
+            group_details = {"group_id": group.id, "title": group.title}
             return jsonify(
                 {
                     "status": "success",
@@ -63,7 +64,7 @@ def get_group_by_id(group_id):
                 jsonify(
                     {
                         "status": "failed",
-                        "message": f"Group with groupId {group_id} not found",
+                        "message": f"Group with groupId {id} not found",
                     }
                 ),
                 404,
