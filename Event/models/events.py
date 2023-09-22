@@ -4,6 +4,13 @@ from Event import db
 from Event.models.base_model import BaseModel
 
 
+# Association table between Events and Images
+event_thumbnail = db.Table('event_thumbnail',
+    db.Column('image_id', db.String(60), db.ForeignKey("images.id"), primary_key=True, nullable=False),
+    db.Column('event_id', db.String(60), db.ForeignKey("events.id"), primary_key=True, nullable=False)
+)
+
+
 class Events(BaseModel):
     """_summary_
 
@@ -30,6 +37,8 @@ class Events(BaseModel):
     # thumbnail = db.Column(db.String(255), nullable=False)
     comments = db.relationship("Comments", backref=db.backref("event", lazy=True), 
                                 cascade="all, delete-orphan")
+    thumbnail = db.relationship("thumbnail", secondary=event_thumbnail,
+                             backref=db.backref("event", lazy=True), lazy="subquery")
 
 
     def __init__(

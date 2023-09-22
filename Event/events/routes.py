@@ -27,7 +27,9 @@ def create_event():
              - `event` (string): A string representation of the created event.
     """
     # destructure the request dict to kwargs
-    event = Events(**request.json)
+    data = {item for item in request.json.items() if 'thumbnail' not in item}
+    print(f"data: {data}")
+    event = Events(**data)
     result = format(event)            
     try:
         event.insert()
