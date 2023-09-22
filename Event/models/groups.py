@@ -38,7 +38,7 @@ class Groups(BaseModel):
 
     def format(self):
         """Returns a dictionary representation of the Groups object."""
-        return {"group_id": self.id,
+        return {"id": self.id,
                  "title": self.title,
                  "created_at": self.created_at,
                  "updated": self.updated_at}
