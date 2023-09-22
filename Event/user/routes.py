@@ -120,3 +120,35 @@ def create_interest(user_id, event_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+    
+    
+# DELETE /api/users/userId/interests/eventId
+@users.route("/<string:userId>/interests/<string:eventId>",
+             methods=["DELETE"], strict_slashes=False)
+def delete_user_interest(userId, eventId):
+    """
+        Delete interest in event
+
+        Args:
+            userId: The id of the user
+            eventId: the id of the event to be deleted
+
+        Returns:
+            str: success msessage
+    """
+    try:
+        user = query_one_filtered(Users, id=userId)
+        event = query_one_filtered(Events, id=eventId)
+
+        if not user:
+            return jsonify({"Error": "User not found"}), 404
+
+        if not event:
+            return jsonify({"Error": "Event not found"}), 404
+        
+        user.interested_events.remove(event)
+        user.update()
+
+    except Exception as error:
+        db.session.rollback()
+        return jsonify({"error": str(error)}), 500
