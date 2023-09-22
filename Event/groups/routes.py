@@ -51,7 +51,7 @@ def get_group_by_id(group_id):
 
         if group:
             # Create a dictionary with group details
-            group_details = {"id":group.id if group.id else "","group_id": group.group_id, "title": group.title}
+            group_details = {"id":group.id if group.id else "","group_id": group.id, "title": group.title}
             return jsonify(
                 {
                     "status": "success",
