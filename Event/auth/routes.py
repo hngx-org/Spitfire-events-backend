@@ -15,6 +15,7 @@ from Event.models.users import Users
 from Event.errors.handlers import CustomError
 from Event.utils import query_one_filtered, is_logged_in
 
+
 auth = Blueprint(
     "auth", __name__, url_prefix="/api/auth"
 )  # url_prefix includes /auth before all endpoints in blueprint
@@ -22,6 +23,8 @@ auth = Blueprint(
 ANDROID_CLIENT_ID = os.environ.get("ANDROID_CLIENT_ID")
 IOS_CLIENT_ID = os.environ.get("IOS_CLIENT_ID")
 
+
+# ...
 
 @auth.route("/", methods=["POST"])
 def register_or_login():
@@ -69,6 +72,7 @@ def register_or_login():
         jsonify(
             {
                 "message": "success",
+                "id":user.id,
                 "email": user.email,
                 "name": user.name,
                 "avatar": user.avatar,
@@ -92,6 +96,7 @@ def see_sess():
             jsonify(
                 {
                     "message": "Success",
+                    "id":user.id,
                     "email": user.email,
                     "name": user.name,
                     "avatar": user.avatar,

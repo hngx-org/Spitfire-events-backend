@@ -9,9 +9,7 @@ from Event import db
 from Event.utils import query_one_filtered
 from Event.models.users import Users
 from Event.models.events import Events
-# from Event.models.interested_events import InterestedEvents
 
-# from Event.utils import query_paginate_filtered, query_one_filtered
 
 
 users = Blueprint("users", __name__, url_prefix="/api/users")
@@ -30,7 +28,7 @@ def get_active_signals():
 # Checked
 # GET /api/users/<string:user_id>: Get user profile
 # Endpoint to retrieve user information based on user ID
-@users.route("/<string:user_id>", strict_slashes=False)
+@users.route("/<string:user_id>")
 def get_user_info(user_id: str):
     """gets the user info for the profile page
 
@@ -129,3 +127,26 @@ def create_interest(user_id, event_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+# DELETE /api/users/userId/interests/eventId    
+@users.route("<string:userId>/interests/<string:eventId>", methods=["DELETE"])    
+def delete_user_interest(userId,eventId):     
+    """     Delete interest in event         Args:     userId: The id of the user     eventId: the id of the event to be deleted         Returns:     str: success msessage     """ 
+    # user_id=is_logged_in(session)    
+    try:     
+        user= query_one_filtered(Users,id=userId)
+        event=query_one_filtered(Events,id=eventId)
+        if not user or not event:
+            return jsonify({"error":"Not Found","message":"id does not exist"})
+        new_interested_events=user.interested_events
+        
+        for key,interest in enumerate(user.interested_events):
+            if event.id==interest.id:
+                new_interested_events.pop(key)
+        user.interested_events=new_interested_events
+        user.update()
+
+        
+        return jsonify(response={"success": "Interest deleted"}), 200
+    except Exception as error:        
+        return jsonify({"error": str(error)}), 500

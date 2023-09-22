@@ -28,21 +28,23 @@ def create_event():
     """
     # destructure the request dict to kwargs
     try:
-        data = {item for item in dict(request.json).items() if 'thumbnail' not in item}
-        print(f"data: {dict(data)}")
-        event = Events(**dict(data))
-        result = format(event)            
+        data = request.get_json()
+        thumbnail=data.get("thumbnail")
+        data.pop("thumbnail")
+        print(f"data: {data}")
+        event = Events(**data)
         event.insert()
-        thumbnail = request.json['thumbnail']
+        result = event.format()
+    
         new_image = Images(url=thumbnail)
         new_image.insert()
         event.thumbnail.append(new_image)
         event.update()
-    except:
+    except Exception as e:
         return {"message": "An error occurred creating the event."}, 400
     return jsonify({
         'message': "Event Created",
-        'data': result 
+        'data': result
     }), 201
 
 # to check later
@@ -92,7 +94,7 @@ def all_events():
     return jsonify({
         "status": "success", 
         "message": "events returned succesfully", 
-        "data": format(all_events)
+        "data": [event.format() for event in all_events] if all_events else []
     }), 200
 
 # Checked  
@@ -120,7 +122,7 @@ def get_event(event_id):
             return jsonify({
                 "status": "success", 
                 "message": "event returned succesfully", 
-                "data": format(event)
+                "data": event.format()
             }), 200
 
     except Exception as error:
@@ -231,7 +233,7 @@ def add_comments(event_id: str):
     # GET comments
     try:
         all_comments = query_all_filtered(Comments, event_id=event_id)
-        if all_comments is None:
+        if not all_comments:
             return jsonify({"status": "failed", "message": "comments not found"}), 404
         # if found
         return jsonify(
@@ -255,3 +257,4 @@ def add_comments(event_id: str):
             ),
             400,
         )
+
