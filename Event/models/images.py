@@ -32,9 +32,7 @@ class Images(BaseModel):
     __tablename__ = "images"
 
     url = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
-
+    
     def __init__(self, url):
         """_summary_
 
