@@ -64,9 +64,10 @@ def delete_event(id):
         del_event = query_one_filtered(Events, id=id)
         print(del_event)
         if del_event:
-            print('in')
             del_event.delete()
-            return jsonify(response={"success": "Event deleted"}), 200
+            return jsonify({"success": "Event deleted"}), 200
+        else:
+            return jsonify({"error": "Event not found"}), 404
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
         return jsonify(error="an error has occured, couldn't complete request"), 400
