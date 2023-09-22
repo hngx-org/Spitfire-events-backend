@@ -36,6 +36,7 @@ class GroupImage(BaseModel):
         containing the GroupImage object's attributes.
         """
         return {
+            "id":self.id if self.id else "",
             "group_id": self.group_id,
             "image_id": self.image_id
         }
