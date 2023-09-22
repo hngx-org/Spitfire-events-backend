@@ -9,6 +9,7 @@ from Event import db
 from Event.utils import query_one_filtered
 from Event.models.users import Users
 from Event.models.events import Events
+from Event.models.interested_events import InterestedEvents
 
 # from Event.utils import query_paginate_filtered, query_one_filtered
 
