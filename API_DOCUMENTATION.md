@@ -188,7 +188,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
         ```
 
 ### Logout
-- **Endpoint**: **GET/POST** /api/auth/logout
+- **Endpoint**: **GET/POST** `/api/auth/logout`
 - **Description**: log out user session
 - **Success Response**:
     - **Status Code**: 204 (OK)
@@ -765,11 +765,10 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 ### Update Group Details
 - **Endpoint**: **PUT** `/api/groups/{id}`
 - **Description**: Update group details by ID.
-- **Input**: JSON with group details to update (name, description).
+- **Input**: JSON with group details to update (title).
 ```JSON
 {
-  "name": "Updated Group Name",
-  "description": "Updated Group Description"
+  "title": "Updated Title",
 }
 
 ```
@@ -779,8 +778,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 ```JSON
 {
   "id": "group-id",
-  "name": "Updated Group Name",
-  "description": "Updated Group Description"
+  "title": "Updated Title"
 }
 ```
 - **Error Responses**:
