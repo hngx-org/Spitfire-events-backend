@@ -137,7 +137,7 @@ paths:
             required:
               - image_url
       responses:
-        200:
+        201:
           description: Image added successfully
           content:
             application/json:
@@ -234,7 +234,7 @@ paths:
             required:
               - body
       responses:
-        200:
+        201:
           description: Comment added successfully
           content:
             application/json:
@@ -362,7 +362,7 @@ paths:
           required: true
           type: string
       responses:
-        200:
+        204:
           description: User removed from group successfully
           content:
             application/json:
@@ -472,7 +472,7 @@ paths:
           required: true
           type: string
       responses:
-        200:
+        204:
           description: Group deleted successfully
           content:
             application/json:
@@ -663,7 +663,7 @@ paths:
               avatar:
                 type: string
       responses:
-        200:
+        201:
           description: User profile updated successfully
           content:
             application/json:
@@ -701,7 +701,7 @@ paths:
           required: true
           type: string
       responses:
-        200:
+        201:
           description: Interest registered successfully
           content:
             application/json:
@@ -913,7 +913,7 @@ paths:
             #   - thumbnail
             #   - creator
       responses:
-        200:
+        201:
           description: Event updated successfully
           content:
             application/json:
