@@ -1,0 +1,1793 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Team SpitFire Events App API
+  description: API documentation for All Endpoints
+basePath: #/api/auth
+schemes:
+  - https
+paths:
+  /api/auth:
+    post:
+      summary: Register and Login
+      description: Register and login route for Google authentication.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+              required:
+                - token
+      parameters:  
+        - name: token
+          in: body
+          description: String authentication token from google.
+          required: false
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  email:
+                    type: string
+                  name:
+                    type: string
+                  avatar:
+                    type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  status:
+                    type: integer
+                  message:
+                    type: string
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  status:
+                    type: integer
+                  message:
+                    type: string
+  /api/auth/@me:
+    get:
+      summary: Get Current User Details
+      description: Get the details of the currently logged-in user.
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  email:
+                    type: string
+                  name:
+                    type: string
+                  avatar:
+                    type: string
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /api/auth/logout:
+    get:
+      summary: Logout User
+      description: Logout user by removing the login session.
+      responses:
+        204:
+          description: No Content
+          content: {}
+
+  /api/comments/{comment_id}/images:
+    post:
+      summary: Add an image to a comment
+      description: Add an image to a comment in an event discussion.
+      parameters:
+        - name: comment_id
+          in: path
+          description: The ID of the comment in the discussion.
+          required: true
+          type: string
+        - name: image_url
+          in: body
+          description: URL of the image to add to the comment.
+          required: true
+          schema:
+            type: object
+            properties:
+              image_url:
+                type: string
+            required:
+              - image_url
+      responses:
+        201:
+          description: Image added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      image_url:
+                        type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  error:
+                    type: string
+    get:
+      summary: Get images for a comment
+      description: Get images associated with a comment in an event discussion.
+      parameters:
+        - name: comment_id
+          in: path
+          description: The ID of the comment to fetch images for.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Images fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        image_url:
+                          type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  error:
+                    type: string
+
+  /api/events/{event_id}/comments:
+    post:
+      summary: Add a comment to an event discussion
+      description: Add a comment to an event discussion or fetch all comments for an event.
+      # parameters:
+      #   - name: event_id
+      #     in: path
+      #     description: The ID of the event causing the discussion.
+      #     required: true
+      #     type: string
+      #   - name: body
+      #     in: body
+      #     description: Content of Comment.
+      #     required: true
+      #     schema:
+      #       type: object
+      #       properties:
+      #         body:
+      #           type: string
+      #       required:
+      #         - body
+      parameters:
+        - name: event_id
+          in: path
+          description: The ID of the event causing the discussion.
+          required: true
+          type: string
+        - name: Comment
+          in: body
+          description: add user id and comment body
+          required: true
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: string
+              body:
+                type: string
+      responses:
+        201:
+          description: Comment added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      body:
+                        type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  error:
+                    type: string
+    get:
+      summary: Get comments for an event
+      description: Fetch all comments associated with an event.
+      parameters:
+        - name: event_id
+          in: path
+          description: The ID of the event to retrieve comments for.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Comments fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        body:
+                          type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  error:
+                    type: string
+
+  /api/groups/{group_id}/members/{user_id}:
+    post:
+      summary: Add a user to a group
+      description: Add a user to a group with the provided group and user IDs.
+      parameters:
+        - name: group_id
+          in: path
+          description: The ID of the group to add the user to.
+          required: true
+          type: string
+        - name: user_id
+          in: path
+          description: The ID of the user to be added to the group.
+          required: true
+          type: string
+      responses:
+        201:
+          description: User added to group successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: integer
+                  message:
+                    type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    delete:
+      summary: Remove a user from a group
+      description: Remove a user from a group with the provided group and user IDs.
+      parameters:
+        - name: group_id
+          in: path
+          description: The ID of the group to remove the user from.
+          required: true
+          type: string
+        - name: user_id
+          in: path
+          description: The ID of the user to be removed from the group.
+          required: true
+          type: string
+      responses:
+        204:
+          description: User removed from group successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/groups/{id}:
+    get:
+      summary: Get group details by ID
+      description: Fetch details of a group by its ID.
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the group to retrieve.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Group details fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      group_id:
+                        type: string
+                      title:
+                        type: string
+        404:
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    put:
+      summary: Update group details by ID
+      description: Update details of a group by its ID.
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the group to update.
+          required: true
+          type: string
+        - name: title
+          in: body
+          description: Updated title of the group.
+          required: title
+          schema:
+            type: object
+            properties:
+              title:
+                type: string     
+      responses:
+        201:
+          description: Group updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  group:
+                    type: object
+                    properties:
+                      group_id:
+                        type: string
+                      title:
+                        type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    delete:
+      summary: Delete a group by ID
+      description: Delete a group by its ID.
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the group to delete.
+          required: true
+          type: string
+      responses:
+        204:
+          description: Group deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /api/groups/create:
+    post:
+      summary: Create a new group
+      description: Create a new group with a title.
+      parameters:
+        - name: title
+          in: body
+          description: Title of the group.
+          required: true
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+            required:
+              - title
+      responses:
+        201:
+          description: Group created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      group_id:
+                        type: string
+                      title:
+                        type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  
+  /api/likes/{comment_id}:
+    post:
+      summary: Like or Unlike a Comment
+      description: Like or Unlike a comment with the provided comment ID.
+      parameters:
+        - name: comment_id
+          in: path
+          description: The ID of the comment to like or unlike.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Like or Unlike operation successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  comment_id:
+                    type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    get:
+      summary: Get Total Likes for a Comment
+      description: Get the total number of likes for a comment with the provided comment ID.
+      parameters:
+        - name: comment_id
+          in: path
+          description: The ID of the comment to retrieve total likes for.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Total likes retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  total_likes:
+                    type: integer
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/users:
+    get:
+      summary: Get Active Signals
+      description: Retrieve and return active signals.
+      responses:
+        200:
+          description: Active signals retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/users/{id}:
+    get:
+      summary: Get User Profile
+      description: Get user profile details for the provided user ID.
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user to retrieve.
+          required: true
+          type: string
+      responses:
+        200:
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    put:
+      summary: Update User Profile
+      description: Update user profile details for the provided user ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: "Updated Name"
+              email: "updated@example.com"
+              avatar: "updated-avatar-url"
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user to update.
+          required: true
+          type: string
+        - name: Updated User 
+          in: body
+          description: add only what you want to update
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              email:
+                type: string
+              avatar:
+                type: string
+      responses:
+        201:
+          description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/users/{user_id}/interests/{event_id}:
+    post:
+      summary: Create Interest in an Event
+      description: Create an interest in an event for the provided user and event IDs.
+      parameters:
+        - name: user_id
+          in: path
+          description: The ID of the user.
+          required: true
+          type: string
+        - name: event_id
+          in: path
+          description: The ID of the event.
+          required: true
+          type: string
+      responses:
+        201:
+          description: Interest registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    delete:
+      summary: Remove Interest in an Event
+      description: Remove an interest in an event for the provided user and event IDs.
+      parameters:
+        - name: user_id
+          in: path
+          description: The ID of the user.
+          required: true
+          type: string
+        - name: event_id
+          in: path
+          description: The ID of the event.
+          required: true
+          type: string
+      responses:
+        204:
+          description: Interest removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/events:
+    post:
+      summary: Create a new event
+      description: Create a new event.
+      parameters:
+        - name: Event
+          in: body
+          description: Event Details
+          required: true
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              description:
+                type: string
+              location:
+                type: string
+              start_date:
+                type: string
+                format: date
+              start_time:
+                type: string
+                format: time
+              end_date:
+                type: string
+                format: date
+              end_time:
+                type: string
+                format: time
+              thumbnail:
+                type: string
+              creator_id:
+                type: string
+            required:
+              - title
+              - description
+              - location
+              - start_date
+              - start_time
+              - end_date
+              - end_time
+              - thumbnail
+              - creator_id
+      responses:
+        201:
+          description: Event created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                  event:
+                    type: object
+    get:
+      summary: Get all events
+      description: Retrieve all events in DB.
+      # parameters:
+      #   - name: id
+      #     in: path
+      #     description: The ID of the event to retrieve.
+      #     required: true
+      #     type: string
+      responses:
+        200:
+          description: Event retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      location:
+                        type: string
+                      start_date:
+                        type: string
+                      start_time:
+                        type: string
+                      end_date:
+                        type: string
+                      end_time:
+                        type: string
+                      thumbnail:
+                        type: string
+                      creator_id:
+                        type: string
+        404:
+          description: Event Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /api/events/{id}:
+    delete:
+      summary: Delete an event
+      description: Delete an event by ID.
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the event to delete.
+          required: true
+          type: string
+      responses:
+        204:
+          description: Event deleted successfully
+
+    get:
+      summary: Get an event by ID
+      description: Get an event by its ID.
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the event to retrieve.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Event retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  # Define the properties you want to include in the response
+        404:
+          description: Event not found
+
+    put:
+      summary: Update event details by ID
+      description: Update details of an event by its ID.
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the event to update.
+          required: true
+          type: string
+        - name: Event
+          in: body
+          description: Event Details (Only pass in what you want to update)
+          required: true
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              description:
+                type: string
+              location:
+                type: string
+              start_date:
+                type: string
+                format: date
+              start_time:
+                type: string
+                format: time
+              end_date:
+                type: string
+                format: date
+              end_time:
+                type: string
+                format: time
+              thumbnail:
+                type: string
+              creator_id:
+                type: string
+            # required:
+            #   - title
+            #   - description
+            #   - location
+            #   - start_date
+            #   - start_time
+            #   - end_date
+            #   - end_time
+            #   - thumbnail
+            #   - creator
+      responses:
+        201:
+          description: Event updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                  event:
+                    type: object
+
+definitions:
+  Users:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      email:
+        type: string
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+      avatar:
+        type: string
+      required:
+        - id
+        - name
+        - email
+        - access_token
+        - refresh_token
+        - avatar
+
+  Groups:
+    type: object
+    properties:
+      group_id:
+        type: string
+      title:
+        type: string
+    required:
+      - group_id
+      - title
+
+  Comments: 
+    type: object
+    properties:
+      id:
+        type: integer
+      body:
+        type: string
+      image_url_list:
+        type: array
+        items:
+          type: string
+      user_id:
+        type: string
+      event_id:
+        type: string
+      created_at:
+        type: string
+      updated_at:
+        type: string
+    required:
+      - id
+      - body
+      - user_id
+      - event_id
+      - created_at
+      - updated_at
+ 
+  CommentImages:
+    type: object
+    properties:
+      id:
+        type: string
+      comment_id:
+        type: string
+      image_id:
+        type: string
+    required:
+      - id
+      - comment_id
+      - image_id
+
+  EventThumbnail:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The unique identifier for the event thumbnail.
+      image_id:
+        type: string
+        description: The ID of the associated image.
+      event_id:
+        type: string
+        description: The ID of the associated event.
+    required:
+      - id
+      - image_id
+      - event_id
+  Event:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the event.
+        title:
+          type: string
+          description: The title of the event.
+        description:
+          type: string
+          description: The description of the event.
+        creator_id:
+          type: string
+          description: The ID of the creator user.
+        location:
+          type: string
+          description: The location of the event.
+        start_date:
+          type: string
+          format: date
+          description: The start date of the event.
+        start_time:
+          type: string
+          format: time
+          description: The start time of the event.
+        end_date:
+          type: string
+          format: date
+          description: The end date of the event.
+        end_time:
+          type: string
+          format: time
+          description: The end time of the event.
+        thumbnail:
+          type: string
+          description: The URL of the event's thumbnail image.
+      required:
+        - id
+        - title
+        - description
+        - creator_id
+        - location
+        - start_date
+        - start_time
+        - end_date
+        - end_time
+        - thumbnail
+  GroupEvent:
+        type: object
+        properties:
+          group_id:
+            type: string
+            description: The ID of the group.
+          event_id:
+            type: string
+            description: The ID of the event.
+        required:
+          - group_id
+          - event_id
+  GroupImage:
+    type: object
+    properties:
+      group_id:
+        type: string
+        description: The ID of the group.
+      image_id:
+        type: string
+        description: The ID of the image.
+    required:
+      - group_id
+      - image_id
+    
+  Likes:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The unique identifier for the like.
+      comment_id:
+        type: string
+        description: The ID of the associated comment.
+      user_id:
+        type: string
+        description: The ID of the user who liked the comment.
+    required:
+      - id
+      - comment_id
+      - user_id
+
+  intrested_events:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The unique identifier for the intrested event.
+      event_id:
+        type: string
+        description: The ID of the associated event.
+      user_id:
+        type: string
+        description: The ID of the user who is intrested in the event.
+    required:
+      - id
+      - event_id
+      - user_id
+
+# swagger: '2.0'
+# info:
+#   version: 1.0.0
+#   title: Team SpitFire Events App API
+#   description: API documentation for All Endpoints
+# basePath: /api
+# schemes:
+#   - http
+# paths:
+#   /auth:
+#     post:
+#       summary: Register and Login
+#       description: Register and login route for Google authentication.
+#       requestBody:
+#         required: true
+#         content:
+#           application/json:
+#             schema:
+#               type: object
+#               properties:
+#                 token:
+#                   type: string
+#               required:
+#                 - token
+#       responses:
+#         200:
+#           description: Successful response
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   message:
+#                     type: string
+#                   email:
+#                     type: string
+#                   name:
+#                     type: string
+#                   avatar:
+#                     type: string
+#         400:
+#           description: Bad Request
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   error:
+#                     type: string
+#                   status:
+#                     type: integer
+#                   message:
+#                     type: string
+#         403:
+#           description: Forbidden
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   error:
+#                     type: string
+#                   status:
+#                     type: integer
+#                   message:
+#                     type: string
+#   /auth/@me:
+#     get:
+#       summary: Get Current User Details
+#       description: Get the details of the currently logged-in user.
+#       responses:
+#         200:
+#           description: Successful response
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   message:
+#                     type: string
+#                   email:
+#                     type: string
+#                   name:
+#                     type: string
+#                   avatar:
+#                     type: string
+#         500:
+#           description: Internal Server Error
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   error:
+#                     type: string
+#                   message:
+#                     type: string
+#   /auth/logout:
+#     get:
+#       summary: Logout User
+#       description: Logout user by removing the login session.
+#       responses:
+#         204:
+#           description: No Content
+#           content: {}
+
+#   /comments/{id}/images:
+#     post:
+#       summary: Add an image to a comment
+#       description: Add an image to a comment in an event discussion.
+#       parameters:
+#         - name: comment_id
+#           in: path
+#           description: The ID of the comment in the discussion.
+#           required: true
+#           type: string
+#       requestBody:
+#         required: true
+#         content:
+#           application/json:
+#             schema:
+#               type: object
+#               properties:
+#                 image_url:
+#                   type: string
+#               required:
+#                 - image_url
+#       responses:
+#         200:
+#           description: Image added successfully
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   status:
+#                     type: string
+#                   message:
+#                     type: string
+#                   data:
+#                     type: object
+#                     properties:
+#                       id:
+#                         type: integer
+#                       image_url:
+#                         type: string
+#         400:
+#           description: Bad Request
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   status:
+#                     type: string
+#                   message:
+#                     type: string
+#                   error:
+#                     type: string
+#     get:
+#       summary: Get images for a comment
+#       description: Get images associated with a comment in an event discussion.
+#       parameters:
+#         - name: comment_id
+#           in: path
+#           description: The ID of the comment to fetch images for.
+#           required: true
+#           type: string
+#       responses:
+#         200:
+#           description: Images fetched successfully
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   status:
+#                     type: string
+#                   message:
+#                     type: string
+#                   data:
+#                     type: array
+#                     items:
+#                       type: object
+#                       properties:
+#                         id:
+#                           type: integer
+#                         image_url:
+#                           type: string
+#         400:
+#           description: Bad Request
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   status:
+#                     type: string
+#                   message:
+#                     type: string
+#                   error:
+#                     type: string
+
+#   /events/{id}/comments:
+#     post:
+#       summary: Add a comment to an event discussion
+#       description: Add a comment to an event discussion or fetch all comments for an event.
+#       parameters:
+#         - name: event_id
+#           in: path
+#           description: The ID of the event causing the discussion.
+#           required: true
+#           type: string
+#       requestBody:
+#         required: true
+#         content:
+#           application/json:
+#             schema:
+#               type: object
+#               properties:
+#                 user_id:
+#                   type: string
+#                 body:
+#                   type: string
+#                 image_url_list:
+#                   type: array
+#                   items:
+#                     type: string
+#       responses:
+#         200:
+#           description: Comment added successfully
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   status:
+#                     type: string
+#                   message:
+#                     type: string
+#                   data:
+#                     type: object
+#                     properties:
+#                       id:
+#                         type: integer
+#                       body:
+#                         type: string
+#         400:
+#           description: Bad Request
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   status:
+#                     type: string
+#                   message:
+#                     type: string
+#                   error:
+#                     type: string
+#     get:
+#       summary: Get comments for an event
+#       description: Fetch all comments associated with an event.
+#       parameters:
+#         - name: event_id
+#           in: path
+#           description: The ID of the event to retrieve comments for.
+#           required: true
+#           type: string
+#       responses:
+#         200:
+#           description: Comments fetched successfully
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   status:
+#                     type: string
+#                   message:
+#                     type: string
+#                   data:
+#                     type: array
+#                     items:
+#                       type: object
+#                       properties:
+#                         id:
+#                           type: integer
+#                         body:
+#                           type: string
+#         400:
+#           description: Bad Request
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   status:
+#                     type: string
+#                   message:
+#                     type: string
+#                   error:
+#                     type: string
+
+#   /groups/{group_id}/members/{user_id}:
+#     post:
+#       summary: Add a user to a group
+#       description: Add a user to a group with the provided group and user IDs.
+#       parameters:
+#         - name: group_id
+#           in: path
+#           description: The ID of the group to add the user to.
+#           required: true
+#           type: string
+#         - name: user_id
+#           in: path
+#           description: The ID of the user to be added to the group.
+#           required: true
+#           type: string
+#       responses:
+#         201:
+#           description: User added to group successfully
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   success:
+#                     type: boolean
+#                   id:
+#                     type: integer
+#                   message:
+#                     type: string
+#         400:
+#           description: Bad Request
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   error:
+#                     type: string
+#     delete:
+#       summary: Remove a user from a group
+#       description: Remove a user from a group with the provided group and user IDs.
+#       parameters:
+#         - name: group_id
+#           in: path
+#           description: The ID of the group to remove the user from.
+#           required: true
+#           type: string
+#         - name: user_id
+#           in: path
+#           description: The ID of the user to be removed from the group.
+#           required: true
+#           type: string
+#       responses:
+#         200:
+#           description: User removed from group successfully
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   message:
+#                     type: string
+#         400:
+#           description: Bad Request
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   error:
+#                     type: string
+#   /groups/{group_id}:
+#     get:
+#       summary: Get group details by ID
+#       description: Fetch details of a group by its ID.
+#       parameters:
+#         - name: group_id
+#           in: path
+#           description: The ID of the group to retrieve.
+#           required: true
+#           type: string
+#       responses:
+#         200:
+#           description: Group details fetched successfully
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   status:
+#                     type: string
+#                   message:
+#                     type: string
+#                   data:
+#                     type: object
+#                     properties:
+#                       group_id:
+#                         type: string
+#                       title:
+#                         type: string
+#         404:
+#           description: Group not found
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   error:
+#                     type: string
+#     put:
+#       summary: Update group details by ID
+#       description: Update details of a group by its ID.
+#       parameters:
+#         - name: group_id
+#           in: path
+#           description: The ID of the group to update.
+#           required: true
+#           type: string
+#       requestBody:
+#         required: true
+#         content:
+#           application/json:
+#             schema:
+#               type: object
+#               properties:
+#                 title:
+#                   type: string
+#       responses:
+#         201:
+#           description: Group updated successfully
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   message:
+#                     type: string
+#                   group:
+#                     type: object
+#                     properties:
+#                       group_id:
+#                         type: string
+#                       title:
+#                         type: string
+#         400:
+#           description: Bad Request
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   error:
+#                     type: string
+#   /groups/create:
+#     post:
+#       summary: Create a new group
+#       description: Create a new group with a title.
+#       requestBody:
+#         required: true
+#         content:
+#           application/json:
+#             schema:
+#               type: object
+#               properties:
+#                 title:
+#                   type: string
+#       responses:
+#         201:
+#           description: Group created successfully
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   message:
+#                     type: string
+#                   data:
+#                     type: object
+#                     properties:
+#                       group_id:
+#                         type: string
+#                       title:
+#                         type: string
+#         400:
+#           description: Bad Request
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   error:
+#                     type: string
+#   /groups/{group_id}:
+#     delete:
+#       summary: Delete a group by ID
+#       description: Delete a group by its ID.
+#       parameters:
+#         - name: group_id
+#           in: path
+#           description: The ID of the group to delete.
+#           required: true
+#           type: string
+#       responses:
+#         200:
+#           description: Group deleted successfully
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   message:
+#                     type: string
+#   /likes/{comment_id}:
+#     post:
+#       summary: Like or Unlike a Comment
+#       description: Like or Unlike a comment with the provided comment ID.
+#       parameters:
+#         - name: comment_id
+#           in: path
+#           description: The ID of the comment to like or unlike.
+#           required: true
+#           type: string
+#       responses:
+#         200:
+#           description: Like or Unlike operation successful
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   message:
+#                     type: string
+#                   comment_id:
+#                     type: string
+#         400:
+#           description: Bad Request
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   error:
+#                     type: string
+#     get:
+#       summary: Get Total Likes for a Comment
+#       description: Get the total number of likes for a comment with the provided comment ID.
+#       parameters:
+#         - name: comment_id
+#           in: path
+#           description: The ID of the comment to retrieve total likes for.
+#           required: true
+#           type: string
+#       responses:
+#         200:
+#           description: Total likes retrieved successfully
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   message:
+#                     type: string
+#                   total_likes:
+#                     type: integer
+#         400:
+#           description: Bad Request
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   error:
+#                     type: string
+#   /users:
+#     get:
+#       summary: Get all users
+#       description: Fetch a list of all users.
+#       responses:
+#         200:
+#           description: Users fetched successfully
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   status:
+#                     type: string
+#                   message:
+#                     type: string
+#                   data:
+#                     type: array
+#                     items:
+#                       type: object
+#                       properties:
+#                         user_id:
+#                           type: string
+#                         name:
+#                           type: string
+#                         email:
+#                           type: string
+#                         avatar:
+#                           type: string
+#         500:
+#           description: Internal Server Error
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   error:
+#                     type: string
+#                   message:
+#                     type: string
