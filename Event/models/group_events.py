@@ -31,4 +31,4 @@ class GroupEvents(BaseModel):
 
     def format(self):
         """Return a dictionary representation of the Group object"""
-        return {"group_id": self.group_id, "event_id": self.event_id}
+        return {"id":self.id if self.id else "","group_id": self.group_id, "event_id": self.event_id}
