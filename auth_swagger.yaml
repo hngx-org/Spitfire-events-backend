@@ -5,7 +5,7 @@ info:
   description: API documentation for All Endpoints
 basePath: #/api/auth
 schemes:
-  - http
+  - https
 paths:
   /api/auth:
     post:
