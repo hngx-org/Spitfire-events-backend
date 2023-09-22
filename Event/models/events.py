@@ -98,10 +98,10 @@ class Events(BaseModel):
             "description": self.description,
             "creator_id": self.creator_id if self.creator_id else "",
             "location": self.location,
-            "start_date": self.start_date,
-            "start_time": self.start_time,
-            "end_date": self.end_date,
-            "end_time": self.end_time,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at
+            "start_date": format(self.start_date),
+            "start_time": format(self.start_time),
+            "end_date": format(self.end_date),
+            "end_time": format(self.end_time),
+            "created_at": format(self.created_at),
+            "updated_at": format(self.updated_at)
         }
