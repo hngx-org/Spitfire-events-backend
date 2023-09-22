@@ -160,7 +160,7 @@ def update_event(event_id: str) -> tuple:
         return jsonify({
             "message": "item updated",
             "Event_id": event_id,
-            "data": db_data.format()}), 201
+            "data": format(db_data)}), 200
     except Exception as exc:
         print(f"{type(exc).__name__}: {exc}")
         return jsonify({"error": str(exc)}), 400

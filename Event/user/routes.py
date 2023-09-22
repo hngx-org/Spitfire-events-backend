@@ -14,7 +14,7 @@ from Event.models.events import Events
 
 users = Blueprint("users", __name__, url_prefix="/api/users")
 
-
+# Placeholder function for future implementation
 @users.route("/")
 def get_active_signals():
     """
@@ -27,6 +27,7 @@ def get_active_signals():
 
 # Checked
 # GET /api/users/<string:user_id>: Get user profile
+# Endpoint to retrieve user information based on user ID
 @users.route("/<string:user_id>")
 def get_user_info(user_id: str):
     """gets the user info for the profile page
@@ -59,6 +60,7 @@ def get_user_info(user_id: str):
 
 # Checked
 # PUT /api/users/<string:user_id>: Update user profile
+# Endpoint to update user information based on user ID
 @users.route("/<string:user_id>", methods=['PUT'], strict_slashes=False)
 def update_user(user_id: str):
     """updates the user details
@@ -99,21 +101,28 @@ def update_user(user_id: str):
 @users.route("/<string:user_id>/interests/<string:event_id>",
              methods=["POST"], strict_slashes=False)
 def create_interest(user_id, event_id):
-    """Create interest in an event"""
+    """
+    Registers a user's interest in a specific event.
+    Args:
+        user_id (str): The ID of the user showing interest.
+        event_id (str): The ID of the event the user is interested in.
+    Returns:
+        JSON response indicating the success or failure of the operation.
+    """
     try:
         user = query_one_filtered(Users, id=user_id)
         event = query_one_filtered(Events, id=event_id)
 
         if not user:
-            return jsonify({"Error": "User not found"}), 404
+            return jsonify({"error": "User not found"}), 404
 
         if not event:
-            return jsonify({"Error": "Event not found"}), 404
+            return jsonify({"error": "Event not found"}), 404
 
         user.interested_events.append(event)
         user.update()
 
-        return jsonify({"message": "Interest registered"}), 200
+        return jsonify({"message": "Interest registered"}), 201
 
     except Exception as e:
         db.session.rollback()

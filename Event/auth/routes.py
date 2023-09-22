@@ -30,6 +30,10 @@ IOS_CLIENT_ID = os.environ.get("IOS_CLIENT_ID")
 def register_or_login():
     """Register and Login route for google authentication"""
     data = request.get_json()
+    
+    # lets check if the request body has the required data 
+    if not data:
+     raise CustomError("Bad Request", 400, "Missing JSON data in request")
 
     # lets collect the credential token from request body
     credential_token = data.get("token")
