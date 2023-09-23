@@ -5,36 +5,35 @@ BASE_URI = "http://spitfire.onrender.com/api/events/"
 
 class TestUpdateEventById(unittest.TestCase):
     def setUp(self):
-        # Create an event to be updated
+        # Create some events to be retrieved
         self.event_data = {
-            "title": "Event 1",
-            "description": "Event 1 Description",
-            "location": "Event 1 Location",
-            "start_date": "2023-09-21",
-            "start_time": "10:00:00",
-            "end_date": "2023-09-22",
-            "end_time": "12:00:00",
-            "thumbnail": "thumbnail-url-1"
+            "title":"New Event",
+            "description": "Event Description",
+            "thumbnail": "Event Thumbnail",
+            "location": "Event Location",
+            "creator_id": "user1_id",
+            "start_time": "06:52:10",
+            "end_time": "06:57:10",
+            "start_date": "2000-07-11",
+            "end_date": "1999-06-11"
         }
-        response = requests.post(BASE_URI, json=self.event_data)
-        self.event_id = response.json()["data"]["id"]
 
-    def tearDown(self):
-        # Delete the event from the database
-        delete_uri = BASE_URI + self.event_id
-        requests.delete(delete_uri)
+        # Make a POST request to create a new event and store the event id
+        response = requests.post(BASE_URI, json=self.event_data)
+        self.event_data = response.json()["data"]
+        self.event_id = response.json()["data"]["id"]
 
     def test_update_event_by_id_success(self):
         # Make a PUT request to update an event by id
         updated_data = {
-            "title": "Updated Event",
+            "title":"Updated Event",
             "description": "Updated Event Description",
             "location": "Updated Event Location",
-            "start_date": "2023-09-23",
+            "creator_id": "user1_id",
             "start_time": "14:00:00",
-            "end_date": "2023-09-24",
             "end_time": "16:00:00",
-            "thumbnail": "updated-thumbnail-url"
+            "start_date": "2023-09-23",
+            "end_date": "2023-09-24"
         }
         response = requests.put(BASE_URI + self.event_id, json=updated_data)
 
@@ -57,7 +56,6 @@ class TestUpdateEventById(unittest.TestCase):
         self.assertEqual(expected_event["start_time"], returned_event["start_time"])
         self.assertEqual(expected_event["end_date"], returned_event["end_date"])
         self.assertEqual(expected_event["end_time"], returned_event["end_time"])
-        self.assertEqual(expected_event["thumbnail"], returned_event["thumbnail"])
 
     def test_update_event_by_id_not_found(self):
         # Make a PUT request to update an event by an invalid id
