@@ -264,7 +264,7 @@ def add_comments(event_id: str):
                     "message": "Comment saved successfully",
                     "data": {"id": new_comment.id, "body": new_comment.body},
                 }
-            )
+            ), 201
         except Exception as error:
             print(f"{type(error).__name__}: {error}")
             return jsonify(
