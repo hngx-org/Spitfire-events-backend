@@ -304,4 +304,3 @@ def add_comments(event_id: str):
             ),
             400,
         )
-

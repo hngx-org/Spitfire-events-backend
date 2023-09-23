@@ -167,3 +167,4 @@ cython_debug/
 test_endpoints.py
 
 flask_session
+.vscode
