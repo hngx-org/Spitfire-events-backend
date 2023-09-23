@@ -28,48 +28,37 @@ def add_images(comment_id):
             new_image.insert()
             return jsonify(
                 {
-                    "status": "success",
                     "message": "Image saved successfully",
                     "data": {
                         "id": new_image.id,
                         "image_url": new_image.image_url,
                     },
                 }
-            )
+            ), 201
         except Exception as error:
             print(f"{type(error).__name__}: {error}")
-            return (
-                jsonify(
+            return jsonify(
                     {
-                        "status": "failed",
                         "message": "Error: image data could not be saved",
-                        "error": str(error)
+                        "error": "Bad Request"
                     }
-                ),
-                400,
-            )
-
+                ),  400
     # GET images
     try:
         all_images = query_all_filtered("images", comment_id=comment_id)
         return jsonify(
             {
-                "status": "success",
                 "message": "all images successfully fetched",
                 "data": [comment.format() for comment in all_images]
                 if all_images
                 else [],
             }
-        )
+        ), 200
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
-        return (
-            jsonify(
-                {
-                    "status": "failed",
-                    "message": "An error occured while fetching all images",
-                    "error": str(error)
-                }
-            ),
-            400,
-        )
+        return jsonify(
+                    {
+                        "message": "An error occured while fetching all images",
+                        "error": "Bad Request"
+                    }
+            ), 400
