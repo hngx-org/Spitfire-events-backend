@@ -45,7 +45,7 @@ def number_of_likes(comment_id):
         return jsonify(
             {
                 "message": "Number of likes", 
-                "data": number_of_likes
+                "data": f"{number_of_likes}"
             }
         ), 200
     
@@ -61,47 +61,63 @@ def number_of_likes(comment_id):
 
 
 
-# @likes.route("/<string:comment_id>",
-#              methods=["POST"],
-#              )
-# def like_comment(comment_id):
-#     """
-#     Like a particular comment
+@likes.route("/<string:comment_id>",
+             methods=["POST"],
+             )
+def like_and_unlike_comment(comment_id):
+    """
+    Like or unlike a comment.
 
-#     Returns:
-#         str: A success message.
-#     """
+    Args:
+        comment_id (str): The ID of the comment to be liked or unliked.
 
-#     #UNCOMMENT THIS IN PRODUCTION
-#     # user_id = is_logged_in(session)  
-#     # print(user_id)
-#     user_id = "user3_id"
+    Returns:
+        dict: A success response with the message "liked/unliked" and the updated number of likes.
+              An error response if the user is not logged in or if the comment or user object is not found.
+    """
+
+    # user_id = is_logged_in(session)  
+    user_id =123
 
 
-#     #THIS GETS THE COMMENT OBJECT    
-#     try:
-#         user = query_one_filtered(Users, id=user_id)
-#         comment = query_one_filtered(Comments, id=comment_id)
-#         if not comment or not user:
-#             return jsonify(
-#                 {
-#                     "error": "Not Found",
-#                     "message": "Event Not Found",
-#                 }
-#             )
-#         number_of_likes = len(comment.user_likes)
-#         return jsonify(
-#             {
-#                 "message": "Number of likes", 
-#                 "data": number_of_likes
-#                 }
-#                 ), 200
+    #THIS GETS THE COMMENT OBJECT    
+    try:
+        user = query_one_filtered(Users, id=user_id)
+        print(user)
+        comment = query_one_filtered(Comments, id=comment_id)
+        if not comment or not user:
+            return jsonify(
+                {
+                    "error": "Not Found",
+                    "message": "Event Not Found",
+                }
+            ), 404
+        if comment in user.likes:
+            user.likes.remove(comment)
+            user.update()
+            return jsonify(
+                {
+                    "message": "unliked",
+                    "data":  len(comment.user_likes)
+                }
+            ), 200
+
+        # FOR LIKES SCENARIP
+        user.likes.append(comment)
+        user.update()
+        return jsonify(
+                {
+                    "message": "liked", 
+                    "data":  len(comment.user_likes),
+                    }
+                    ), 200
     
-#     except Exception as exc:
-#         return jsonify(
-#             {
-#                 "error": "Forbidden",
-#                 "message": "you are not allowed to oerform such actions",
-#             }
-#         ), 403
+    except Exception as exc:
+        print(str(exc))
+        return jsonify(
+            {
+                "error": "Forbidden",
+                "message": "you are not allowed to oerform such actions",
+            }
+        ), 403
 
