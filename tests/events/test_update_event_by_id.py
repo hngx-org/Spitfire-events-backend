@@ -1,7 +1,7 @@
 import unittest
 import requests
 
-BASE_URI = "http://localhost:5000/api/events/"
+BASE_URI = "http://spitfire.onrender.com/api/events/"
 
 class TestUpdateEventById(unittest.TestCase):
     def setUp(self):
