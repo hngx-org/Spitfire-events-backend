@@ -207,17 +207,16 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "data": {
-    "id": "user-id",
-    "name": "John Doe",
-    "email": "johndoe@example.com",
-    "avatar": "avatar-url",
-    "created_at": "time_created in UTCNow",
-    "updated_at": "time_updated in UTCNow"
-  },
-
-  "message": "user details fetched successfully"
-
+     "data": {
+       "id": "user-id",
+       "name": "John Doe",
+       "email": "johndoe@example.com",
+       "avatar": "avatar-url",
+       "created_at": "time_created in UTCNow",
+       "updated_at": "time_updated in UTCNow"
+     },
+   
+     "message": "user details fetched successfully"
 }
 ```
 - **Error Responses**:
@@ -331,7 +330,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 ```JSON
 { 
   "message": "Event Created",
-  "event": {
+  "data": {
     "id": "event-id",
     "title": "New Event",
     "description": "Event Description",
@@ -363,37 +362,38 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Status Code**: 200
     - **Response**:
 ```JSON
-[
-  {
-    "message": "events returned succesfully", 
-    "id": "event-id-1",
-    "creator_id":"user_id",
-    "title": "Event 1",
-    "description": "Description 1",
-    "location": "Location 1",
-    "start_date": "2023-09-21",
-    "start_time": "10:00:00",
-    "end_date": "2023-09-22",
-    "end_time": "12:00:00",
-    "created_at": "2023-09-22 19:24:04",
-    "updated_at": "2023-09-22 19:24:04"
-  },
-
-  {
-    "id": "event-id-2",
-    "creator_id":"user_id",
-    "title": "Event 2",
-    "description": "Description 2",
-    "location": "Location 2",
-    "start_date": "2023-09-23",
-    "start_time": "14:00:00",
-    "end_date": "2023-09-24",
-    "end_time": "16:00:00",
-    "created_at": "2023-09-22 19:24:04",
-    "updated_at": "2023-09-22 19:24:04"
-  }
-]
-
+{
+   "message": "events returned succesfully", 
+   [
+     {
+       "id": "event-id-1",
+       "creator_id":"user_id",
+       "title": "Event 1",
+       "description": "Description 1",
+       "location": "Location 1",
+       "start_date": "2023-09-21",
+       "start_time": "10:00:00",
+       "end_date": "2023-09-22",
+       "end_time": "12:00:00",
+       "created_at": "2023-09-22 19:24:04",
+       "updated_at": "2023-09-22 19:24:04"
+     },
+   
+     {
+       "id": "event-id-2",
+       "creator_id":"user_id",
+       "title": "Event 2",
+       "description": "Description 2",
+       "location": "Location 2",
+       "start_date": "2023-09-23",
+       "start_time": "14:00:00",
+       "end_date": "2023-09-24",
+       "end_time": "16:00:00",
+       "created_at": "2023-09-22 19:24:04",
+       "updated_at": "2023-09-22 19:24:04"
+     }
+   ]
+}
 ```
 - **Error Responses**:
     - **400 Bad Request**:
@@ -542,7 +542,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Endpoint**: **POST** `/api/events/{id}/comments`
 - **Description**:Add a comment to an event.
 - **Input**:JSON with comment details (body).
-```
+```JSON
 {
   "body": "This is a comment"
 }
@@ -567,16 +567,16 @@ The API handles errors gracefully and returns JSON responses with appropriate st
         - **Response Body**:
   ```JSON
   {
-  "message": "Failed to save to database",
-  "error": "Bad Request"
+     "message": "Failed to save to database",
+     "error": "Bad Request"
    }
 
   ```
   **OR**
   ```JSON
   {
-  "message": "Comment could not be saved",
-  "error": "Bad Request"
+     "message": "Comment could not be saved",
+     "error": "Bad Request"
    }
 
   ```
@@ -659,9 +659,9 @@ The API handles errors gracefully and returns JSON responses with appropriate st
         - **Response Body**:
   ```JSON
   {
-   
-  "message":  "Error: image data could not be saved",
-  "error":  "Bad Request"
+      
+     "message":  "Error: image data could not be saved",
+     "error":  "Bad Request"
   }
   ```
 
@@ -696,8 +696,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
         - **Response Body**:
   ```JSON
   {
-  "message": "An error occurred while fetching all images",
-  "error":  "Bad Request"
+     "message": "An error occurred while fetching all images",
+     "error":  "Bad Request"
   }
   ```
 ## Likes
@@ -711,8 +711,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
   ```JSON
     {
-      "message": "success",
-      "comment_id": "comment-id"
+         "message": "success",
+         "comment_id": "comment-id"
     }
 
   ```
@@ -737,7 +737,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response Body**:
   ```JSON
   {
-  "error": "Comment not found"
+     "error": "Comment not found"
   }
   ```
 
@@ -752,7 +752,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "message": "Interest registered."
+     "message": "Interest registered.",
+     "data": f"{user_id} has shown interest in {event_id}"
 }
 ```
 - **Error Responses**:
@@ -761,8 +762,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
         - **Response Body**:
   ```JSON
   {
-  "message": "Something went wrong",
-  "error":  "Bad Request"
+     "message": "Something went wrong",
+     "error":  "Bad Request"
   }
   ```
     - **404 Bad Request**:
@@ -783,9 +784,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "response": {
-    "success": "Interest deleted"
-  }
+     "message": "Interest deleted",
+     "data": "No content"
 }
 ```
 - **Error Responses**:
@@ -794,8 +794,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
         - **Response Body**:
   ```JSON
   {
-  "message": "Something went wrong",
-  "error":  "Bad Request"
+     "message": "Something went wrong",
+     "error":  "Bad Request"
   }
   ```
     - **404 Bad Request**:
@@ -803,8 +803,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
         - **Response Body**:
   ```JSON
   {
-    "Error": "Not Found",
-    "message": "User or Event not found"
+       "Error": "Not Found",
+       "message": "User or Event not found"
   }
   ```
 
@@ -938,7 +938,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
    ```JSON
    {
       "message": "User removed from group successfully",
-      "data":group_id
+      "data": "group_id"
    }
    ```
 
@@ -947,9 +947,9 @@ The API handles errors gracefully and returns JSON responses with appropriate st
         - **Status Code**: 400
         - **Response Body**:
   ```JSON
-  {
-  "error": "Bad Request",
-  "message": "Your request could not be completed."
+     {
+     "error": "Bad Request",
+     "message": "Your request could not be completed."
   }
   ```
   - **404 Not Found**:
@@ -973,13 +973,10 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Status Code**: 200
     - **Response**:
 ```JSON
-{
   {
-  "data": group.id,
-  "message": "User added to Group"
+     "data": "group_id",
+     "message": "User added to Group"
   }
-
-}
 ```
 - **Error Responses**:
     - **404 Not Found**:
@@ -1030,8 +1027,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
         - **Response Body**:
   ```JSON
   {
-      "error":"forbidden",
-      "message":"User is not a member of this group"
+      "error": "forbidden",
+      "message": "User is not a member of this group"
   }
   ```
 
