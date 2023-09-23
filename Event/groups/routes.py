@@ -17,9 +17,13 @@ def add_user_to_group(groupId, userId):
         group = query_one_filtered(Groups,id=groupId)
         user = query_one_filtered(Users,id=userId)
 
-        # Check if the group and user exist
-        if group is None or user is None:
-            return jsonify({"error": "Group or user not found"}), 404
+        # Check if the group exist
+        if group is None:
+            return jsonify({"error": "Group not found"}), 404
+
+        # Check if the user exist
+        if user is None:
+            return jsonify({"error": "User not found"}), 404
 
         newgroup=user.user_groups
         if group.id in [group.id for group in newgroup ]:
@@ -146,15 +150,20 @@ def remove_user_from_group(group_id, user_id):
     user_id (str): The ID of the user to be removed from the group.
 
     Returns:
-    tuple: A tuple containing response message and status code.
+    A JSON response depending on the outcome of the method.
     """
     try:
-        # Check if the group and user exist in the database
+        # Retrieve group and user ids
         group = query_one_filtered(Groups,id=group_id)
         user = query_one_filtered(Users,id=user_id)
 
-        if group is None or user is None:
-            return jsonify({"message": "Group or user not found"}), 404
+        # Check if group exist
+        if group is None:
+            return jsonify({"message": "Group not found"}), 404
+
+        # Check if the user exist
+        if user is None:
+            return jsonify({"error": "User not found"})
 
         user_groups=user.user_groups
         if group_id not in [group.id for group in user_groups ]:
