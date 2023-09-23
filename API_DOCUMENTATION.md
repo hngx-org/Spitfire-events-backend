@@ -207,14 +207,17 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "status": "success",
-  "message": "user {user_id} details fetched successfully",
   "data": {
     "id": "user-id",
     "name": "John Doe",
     "email": "johndoe@example.com",
-    "avatar": "avatar-url"
-  }
+    "avatar": "avatar-url",
+    "created_at": "time_created in UTCNow",
+    "updated_at": "time_updated in UTCNow"
+  },
+  "status": "success",
+  "message": "user {user_id} details fetched successfully"
+
 }
 ```
 - **Error Responses**:
@@ -254,7 +257,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 {
   "name": "Updated Name",
   "email": "updated@example.com",
-  "avatar": "updated-avatar-url"
+  "avatar": "updated-avatar-url",
 }
 
 ```
@@ -263,15 +266,16 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "status": "success",
-  "message": "user {user_id}  details updated successfully",
   "data": {  
   "id": "user-id",
   "name": "Updated Name",
   "email": "updated@example.com",
-  "avatar": "updated-avatar-url"
-
-  }
+  "avatar": "updated-avatar-url",
+  "created_at": "time_created in UTCNow",
+  "updated_at": "time_updated in UTCNow"
+  },
+  "status": "success",
+  "message": "user {user_id}  details updated successfully",
 }
 ```
 - **Error Responses**:
@@ -311,6 +315,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Input**: JSON with event details (title, description, location, start date/time, end date/time, thumbnail).
 ```JSON
 {
+  "creator_id":"user_id",
   "title": "New Event",
   "description": "Event Description",
   "location": "Event Location",
@@ -337,7 +342,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     "start_time": "10:00:00",
     "end_date": "2023-09-22",
     "end_time": "12:00:00",
-    "thumbnail": "thumbnail-url"
+    "created_at": "2023-09-22 19:24:04",
+    "updated_at": "2023-09-22 19:24:04"
   }
 }
 ```
@@ -362,6 +368,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 [
   {
     "id": "event-id-1",
+    "creator_id":"user_id",
     "title": "Event 1",
     "description": "Description 1",
     "location": "Location 1",
@@ -369,10 +376,13 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     "start_time": "10:00:00",
     "end_date": "2023-09-22",
     "end_time": "12:00:00",
-    "thumbnail": "thumbnail-url-1"
+    "created_at": "2023-09-22 19:24:04",
+    "updated_at": "2023-09-22 19:24:04"
   },
+
   {
     "id": "event-id-2",
+    "creator_id":"user_id",
     "title": "Event 2",
     "description": "Description 2",
     "location": "Location 2",
@@ -380,7 +390,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     "start_time": "14:00:00",
     "end_date": "2023-09-24",
     "end_time": "16:00:00",
-    "thumbnail": "thumbnail-url-2"
+    "created_at": "2023-09-22 19:24:04",
+    "updated_at": "2023-09-22 19:24:04"
   }
 ]
 
@@ -394,16 +405,21 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "id": "event-id",
-  "title": "Event Title",
-  "description": "Event Description",
-  "creator_id": "creator-id",
-  "location": "Event Location",
-  "start_date": "2023-09-21",
-  "start_time": "10:00:00",
-  "end_date": "2023-09-22",
-  "end_time": "12:00:00",
-  "thumbnail": "thumbnail-url"
+  "data": {
+    "id": "event-id",
+    "title": "Event Title",
+    "description": "Event Description",
+    "creator_id": "creator-id",
+    "location": "Event Location",
+    "start_date": "2023-09-21",
+    "start_time": "10:00:00",
+    "end_date": "2023-09-22",
+    "end_time": "12:00:00",
+    "created_at": "2023-09-22 19:24:04",
+    "updated_at": "2023-09-22 19:24:04"
+  },
+  "message": "event returned succesfully",
+  "status": "success"
 }
 ```
 - **Error Responses**:
@@ -422,14 +438,16 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Input**: JSON with event details to update (title, description, location, start date/time, end date/time, thumbnail).
 ```JSON
 {
-  "title": "Updated Event Title",
-  "description": "Updated Event Description",
-  "location": "Updated Location",
-  "start_date": "2023-09-23",
-  "start_time": "14:00:00",
-  "end_date": "2023-09-24",
-  "end_time": "16:00:00",
-  "thumbnail": "updated-thumbnail-url"
+  "creator_id":"user_id",
+  "title": "New Event",
+  "description": "Event Description",
+  "location": "Event Location",
+  "start_date": "2023-09-21",
+  "start_time": "10:00:00",
+  "end_date": "2023-09-22",
+  "end_time": "12:00:00",
+  "thumbnail": "thumbnail-url",
+
 }
 ```
 - **Success Response**:
@@ -447,7 +465,9 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     "start_time": "14:00:00",
     "end_date": "2023-09-24",
     "end_time": "16:00:00",
-    "thumbnail": "updated-thumbnail-url"
+    "thumbnail": "updated-thumbnail-url",
+    "created_at": "2023-09-22 19:24:04",
+    "updated_at": "2023-09-22 19:24:04"
   }
 }
 
@@ -513,7 +533,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   ```
 
 ### Get Comments for an Event
-- **Endpoint**: **GET** `/api/events/{id}/comments``
+- **Endpoint**: **GET** `/api/events/{event_id}/comments``
 - **Description**: Get comments for an event.
 - **Success Response**:
     - **Status Code**: 200
@@ -525,11 +545,19 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   "data": [
     {
       "id": "comment-id-1",
-      "body": "Comment body 1"
+      "event_id": "event-id",
+      "user_id":"user_id",
+      "body": "Comment body 1",
+      "created_at": "2023-09-22 19:24:04",
+      "updated_at": "2023-09-22 19:24:04"
     },
     {
       "id": "comment-id-2",
-      "body": "Comment body 2"
+      "event_id": "event-id",
+      "user_id":"user_id",
+      "body": "Comment body 2",
+      "created_at": "2023-09-22 19:24:04",
+      "updated_at": "2023-09-22 19:24:04"
     }
     // Additional comments...
   ]
@@ -663,7 +691,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "message": "Interest expressed successfully."
+  "message": "Interest registered."
 }
 ```
 - **Error Responses**:
@@ -691,7 +719,9 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "message": "Interest removed successfully."
+  "response": {
+    "success": "Interest deleted"
+  }
 }
 ```
 
@@ -700,11 +730,10 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 ### Create a New Group
 - **Endpoint**: **POST** `/api/groups`
 - **Description**: Create a new group.
-- **Input**: JSON with group details (name, description).
+- **Input**: JSON with group title.
 ```JSON
 {
-  "name": "Group Name",
-  "description": "Group Description"
+  "title": "Group Title",
 }
 
 ```
@@ -713,12 +742,13 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "message": "Group ID {group_id} created successfully",
   "data": {
+    "created_at": "2023-09-22 09:58:43",
     "id": "group-id",
-    "name": "Group Name",
-    "description": "Group Description"
-  }
+    "title": "group-title",
+    "updated": "2023-09-22 09:58:43"
+  },
+  "message": "Group created successfully"
 }
 ```
 - **Error Responses**:
@@ -777,8 +807,13 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "id": "group-id",
-  "title": "Updated Title"
+  "group": {
+    "created_at": "2023-09-22 10:14:10",
+    "id": "group-id",
+    "title": "Updated Title",
+    "updated": "2023-09-22 10:16:12"
+  },
+  "message": "Group updated successfully"
 }
 ```
 - **Error Responses**:
@@ -807,12 +842,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 - **Description**: Delete a group by ID.
 - **Success Response**:
     - **Status Code**: 204 (No Content)
-    - **Response**:
-```JSON
-  {
-    "message": "Group ID {group_id} deleted successfully"
-  }
-```
+
 - **Error Responses**:
     - **400 Bad Request**:
         - **Status Code**: 400
@@ -846,9 +876,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 ```JSON
 {
   {
-  "success": true,
   "id": "user-group-id",
-  "message": "User ID {user_id} added to Group ID {group_id}"
+  "message": "User added to Group"
   }
 
 }
