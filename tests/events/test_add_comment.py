@@ -19,11 +19,6 @@ class TestAddComments(unittest.TestCase):
         response = requests.post(BASE_URI, json=self.event_data)
         self.event_id = response.json()["data"]["id"]
 
-    def tearDown(self):
-        # Delete the event from the database
-        delete_uri = BASE_URI + self.event_id
-        requests.delete(delete_uri)
-
     def test_add_comment_success(self):
         # Make a POST request to add a comment to an event
         comment_data = {
@@ -45,7 +40,7 @@ class TestAddComments(unittest.TestCase):
 
     def test_add_comment_missing_fields(self):
         # Make a POST request to add a comment to an event with missing fields
-        comment_data = {
+        comment_data = {    
             "user_id": "user-1"
         }
         response = requests.post(BASE_URI + self.event_id + "/comments", json=comment_data)

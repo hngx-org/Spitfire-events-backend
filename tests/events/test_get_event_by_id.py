@@ -62,7 +62,7 @@ class TestGetEventById(unittest.TestCase):
         # Check if the response data contains the expected fields
         response_data = response.json()
         self.assertEqual(response_data["error"], "Not found")
-        self.assertEqual(response_data["message"], "Invalid event id")
+        self.assertEqual(response_data["message"], "Event not found")
 
     def test_get_event_by_id_error(self):
         # skip this test for now
