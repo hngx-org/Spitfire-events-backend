@@ -228,7 +228,9 @@ def add_comments(event_id: str):
                 400,
             )
 
-    # GET comments
+# route to get all comments for an event
+@events.route("/api/events/<event_id>/comments", methods=["GET"])
+def get_comments(event_id):
     try:
         all_comments = query_all_filtered(Comments, event_id=event_id)
         if all_comments is None:
