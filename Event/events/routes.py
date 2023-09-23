@@ -41,7 +41,6 @@ def create_event():
         event.thumbnail.append(new_image)
         event.update()
     except Exception as e:
-        print(e)
         return {"message": "An error occurred creating the event."}, 400
     return jsonify({
         'message': "Event Created",
@@ -258,3 +257,4 @@ def add_comments(event_id: str):
             ),
             400,
         )
+
