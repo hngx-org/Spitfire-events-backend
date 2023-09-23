@@ -31,7 +31,6 @@ def create_event():
         data = request.get_json()
         thumbnail=data.get("thumbnail")
         data.pop("thumbnail")
-        print(f"data: {data}")
         event = Events(**data)
         event.insert()
         result = event.format()
@@ -41,11 +40,17 @@ def create_event():
         event.thumbnail.append(new_image)
         event.update()
     except Exception as e:
-        return {"message": "An error occurred creating the event."}, 400
-    return jsonify({
+        print(str(e))
+        return jsonify({
+                        "error": "Bad Request",
+            "message": "An error occurred creating the event.", 
+        }), 400
+    return jsonify(
+        {
         'message': "Event Created",
         'data': result
-    }), 201
+    }
+    ), 201
 
 # to check later
 # DELETE /api/events/:eventId: Delete an event
@@ -66,15 +71,29 @@ def delete_event(id):
         del_event = query_one_filtered(Events, id=id)
         print(del_event)
         if del_event:
-            print('in')
             del_event.delete()
-            return jsonify(response={"success": "Event deleted"}), 200
+            return jsonify(
+                {
+                    "Message": "Event deleted",
+                    "data": "None"
+                    }
+                    ), 204
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
-        return jsonify(error="an error has occured, couldn't complete request"), 400
+        return jsonify(
+            {
+                "Error": "Bad request",
+                "message": "something went wrong"                
+            }
+        ), 400
     
     # if no event was found and no error was raised
-    return jsonify(error={"Not Found": "Event not found"}), 404
+    return jsonify(
+        {
+            "error": "Not Found",
+            "message": "Event not found"
+            }
+            ), 404
 
 # checked
 # GET /api/events: Get a list of events
@@ -89,13 +108,19 @@ def all_events():
     try:
         all_events = query_all(Events)
     except Exception:
-        return jsonify({"error": "events not found"})
+        return jsonify(
+            {
+                "error": "Bad Request",
+                "message": "something went wrong"
+                }
+                ), 400
     
-    return jsonify({
-        "status": "success", 
-        "message": "events returned succesfully", 
-        "data": [event.format() for event in all_events] if all_events else []
-    }), 200
+    return jsonify(
+        {
+            "message": "events returned succesfully", 
+            "data": [event.format() for event in all_events] if all_events else []
+        }
+        ), 200
 
 # Checked  
 # Get events based on event id
@@ -119,14 +144,27 @@ def get_event(event_id):
     try:
         event = query_one_filtered(table=Events, id=event_id)
         if event:
-            return jsonify({
-                "status": "success", 
-                "message": "event returned succesfully", 
-                "data": event.format()
-            }), 200
+            return jsonify(
+                {
+                    "message": "Event succesfully Found", 
+                    "data": event.format()
+                }
+            ), 200
+        return jsonify(
+        {
+        "error": "Not Found",
+        "message": "Event Not Found"
+        }
+        ), 404
+
 
     except Exception as error:
-        return jsonify({"error": str(error)}), 404
+        return jsonify(
+            {
+                "error": "Bad Request",
+                "message": "something went wrong"
+                }
+                ), 400
 
 # checked
 # PUT /api/events/:eventId: Update event details
@@ -148,7 +186,12 @@ def update_event(event_id: str) -> tuple:
         req = request.get_json()
         db_data = query_one_filtered(Events, id=event_id)
         if not db_data:
-            return jsonify({"message": "Event not Found"}), 404
+            return jsonify(
+                {
+                    "error": "Not Found",
+                    "message": "Event not Found",
+                    }
+                    ), 404
         
             
         for k, v in req.items():
@@ -157,13 +200,20 @@ def update_event(event_id: str) -> tuple:
                 continue
             setattr(db_data, k, v)
         db_data.update()
-        return jsonify({
+        return jsonify(
+            {
             "message": "item updated",
-            "Event_id": event_id,
-            "data": db_data.format()}), 201
+            # "Event_id": event_id,
+            "data": db_data.format()
+            }
+            ), 201
     except Exception as exc:
         print(f"{type(exc).__name__}: {exc}")
-        return jsonify({"error": str(exc)}), 400
+        return jsonify(
+            {"error": "Bad Request",
+             "message":"Something Went Wrong"
+            }
+    ), 400
 
 # checked
 @events.route("/<string:event_id>/comments", methods=["GET", "POST"])
@@ -204,55 +254,52 @@ def add_comments(event_id: str):
                         print(f"{type(error).__name__}: {error}")
                         return jsonify(
                             {
-                                "status": "failed",
                                 "message": "Failed to save to database",
-                                "error": str(error)
+                                "error": "Bad Request"
                             }
                         ), 400
 
             return jsonify(
                 {
-                    "status": "success",
                     "message": "Comment saved successfully",
                     "data": {"id": new_comment.id, "body": new_comment.body},
                 }
             )
         except Exception as error:
             print(f"{type(error).__name__}: {error}")
-            return (
-                jsonify(
+            return jsonify(
                     {
-                        "status": "failed",
                         "message": "Comment data could not be saved",
-                        "error": str(error)
+                        "error": "Bad Request"
                     }
-                ),
-                400,
-            )
+                ), 400
+            
 
     # GET comments
     try:
         all_comments = query_all_filtered(Comments, event_id=event_id)
         if not all_comments:
-            return jsonify({"status": "failed", "message": "comments not found"}), 404
+            return jsonify(
+                {"status": "failed", 
+                 "message": "Comments not found"
+                 }
+                 ), 404
         # if found
         return jsonify(
             {
-                "status": "success",
-                "message": "all comments successfully fetched",
+                "message": "comments fetched successfully",
                 "data": [comment.format() for comment in all_comments]
                 if all_comments
                 else [],
             }
-        )
+        ), 200
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
         return (
             jsonify(
                 {
-                    "status": "failed",
+                    "error": "Bad Request",
                     "message": "An error occured while fetching all comments",
-                    "error": str(error)
                 }
             ),
             400,
