@@ -152,6 +152,7 @@ def update_group(group_id):
                     "data": group.format(),
                 }
             ), 201
+
     except Exception as error:  # pylint: disable=broad-except
         return jsonify(
             {
@@ -309,6 +310,7 @@ def delete_group(group_id):
              ),204
 
     except Exception as e:
+
         # Handle any exceptions that may occur during deletion
         return jsonify(
             {
@@ -316,3 +318,43 @@ def delete_group(group_id):
                 "Message": "Something went wrong with this request"
                 }
                 ), 400
+
+# Get all groups available
+@groups.route("/", methods=["GET"])
+def get_all_groups():
+    """
+    Get all groups.
+
+    Returns:
+        JSON response with a list of group details.
+    """
+    is_logged_in(session)
+    try:
+        # Query the database to retrieve all groups
+        all_groups = Groups.query.all()
+
+        # Format the groups as a list of dictionaries
+        group_list = [
+            {
+                "created_at": group.created_at,
+                "id" : group.id,
+                "title": group.title,
+                "updated_at": group.updated_at,
+            }
+            for group in all_groups
+        ]
+
+        return jsonify(
+            {
+                "message": "All groups successfully fetched",
+                "data": group_list,
+            }
+        ), 200
+
+    except Exception as e:
+        return jsonify(
+            {
+                "error": "Bad Request",
+                "message": "An error occurred while fetching all groups",
+            }
+        ), 400

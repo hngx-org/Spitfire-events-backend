@@ -117,6 +117,7 @@ def all_events():
     """
     try:
         all_events = query_all(Events)
+        all_events.reverse()
     except Exception:
         return jsonify(
             {
@@ -157,7 +158,7 @@ def get_event(event_id):
         if event:
             return jsonify(
                 {
-                    "message": "Event succesfully Found", 
+                    "message": "Event successfully Found", 
                     "data": event.format()
                 }
             ), 200

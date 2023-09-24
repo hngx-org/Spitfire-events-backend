@@ -28,6 +28,7 @@ class App_Config:
     SESSION_COOKIE_HTTPONLY = False
     PERMANENT_SESSION_LIFETIME = datetime.timedelta(days=30)
 
+
     def nothing(self):
         """_summary_"""
 

@@ -4,6 +4,7 @@ summary
 from Event import db
 from Event.errors.handlers import CustomError
 from datetime import datetime
+import os
 
 
 
@@ -126,7 +127,8 @@ def is_logged_in(session):
             - logged in users id
     """
     # user = session.get("user")
-    user = { "id": "user11_id"}
+    # hardcoded because of failure of mobile integration
+    user = { "id": os.environ.get("LOGGED_IN_USER", "user11_id") }
 
     if not user:
         raise CustomError("Unauthorized", 401, "You are not logged in")
