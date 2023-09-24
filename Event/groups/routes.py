@@ -337,6 +337,7 @@ def get_all_groups():
         group_list = [
             {
                 "created_at": group.created_at,
+                "id" : group.id,
                 "title": group.title,
                 "updated_at": group.updated_at,
             }
