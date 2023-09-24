@@ -5,7 +5,7 @@ Module containing user-related routes for the Events-App, Team Spitfire.
 from flask import Blueprint, session, jsonify
 from Event.models.users import Users, likes
 from Event.models.comments import Comments
-from Event.utils import query_all_filtered, is_logged_in, query_one_filtered
+from Event.utils import is_logged_in, query_one_filtered
 from Event import db
 
 likes = Blueprint("likes", __name__, url_prefix="/api/likes")
@@ -32,6 +32,7 @@ def number_of_likes(comment_id):
           "data": 5
         }
     """
+    is_logged_in(session)
     try:
         comment = query_one_filtered(Comments, id=comment_id)
         if not comment:
@@ -77,7 +78,6 @@ def like_and_unlike_comment(comment_id):
     """
 
     user_id = is_logged_in(session)  
-    # user_id =123
 
 
     #THIS GETS THE COMMENT OBJECT    
@@ -117,7 +117,7 @@ def like_and_unlike_comment(comment_id):
         return jsonify(
             {
                 "error": "Forbidden",
-                "message": "you are not allowed to oerform such actions",
+                "message": "you are not allowed to perform such actions",
             }
         ), 403
 

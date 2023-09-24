@@ -2,17 +2,18 @@
 Module for removing user from a group.
 """
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, session
 from Event.models.users import Users
 from Event.models.groups import Groups
 from Event import db
-from Event.utils import query_one_filtered
+from Event.utils import query_one_filtered, is_logged_in
 
 
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
 
 @groups.route("/<string:groupId>/members/<string:userId>",methods=["POST"])
 def add_user_to_group(groupId, userId):
+    is_logged_in(session)
     try:
         group = query_one_filtered(Groups,id=groupId)
         user = query_one_filtered(Users,id=userId)
@@ -64,6 +65,7 @@ def get_group_by_id(group_id):
     Returns:
         dict: A JSON response with group details.
     """
+    is_logged_in(session)
     try:
         group = query_one_filtered(Groups,id=group_id)
 
@@ -95,6 +97,7 @@ def get_group_by_id(group_id):
             }
             ), 400
 
+
 @groups.route("/<string:group_id>", methods=["PUT"])
 def update_group(group_id):
     """
@@ -118,6 +121,7 @@ def update_group(group_id):
         400 Internal Server Error: If any server error occurs
         during the update process.
     """
+    is_logged_in(session)
     try:
         data = request.get_json()
         if "title" not in data:
@@ -128,7 +132,7 @@ def update_group(group_id):
                     }
                     ), 400
 
-        group = query_one_filtered(Groups,id=group_id)
+        group = query_one_filtered(Groups, id=group_id)
 
         if not group:
             return jsonify(
@@ -161,6 +165,7 @@ def update_group(group_id):
 # Define the route to remove a user from a group
 @groups.route("/<string:group_id>/members/<string:user_id>", methods=["DELETE"])
 def remove_user_from_group(group_id, user_id):
+    is_logged_in(session)
     """
     Remove a user from a group.
 
@@ -171,6 +176,7 @@ def remove_user_from_group(group_id, user_id):
     Returns:
     tuple: A tuple containing response message and status code.
     """
+    is_logged_in(session)
     try:
         # Check if the group and user exist in the database
         group = query_one_filtered(Groups,id=group_id)
@@ -229,6 +235,7 @@ def create_group():
         JSON response with information about the created
         group or an error message.
     """
+    is_logged_in(session)
     try:
         # Attempt to extract JSON data from the incoming request.
         data = request.get_json()
@@ -280,6 +287,7 @@ def delete_group(group_id):
     Returns:
     tuple: A tuple containing response message and status code.
     """
+    is_logged_in(session)
     try:
         # Retrieve the group from the database
         group = query_one_filtered(Groups,id=group_id)
