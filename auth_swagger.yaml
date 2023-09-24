@@ -5,7 +5,7 @@ info:
   description: API documentation for All Endpoints
 basePath: #/api/auth
 schemes:
-  - https
+  - http
 paths:
   /api/auth:
     post:
@@ -644,26 +644,26 @@ paths:
                   error:
                     type: string
   /api/users:
-    get:
-      summary: Get Active Signals
-      description: Retrieve and return active signals.
-      responses:
-        200:
-          description: Active signals retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: string
-  /api/users/{id}:
+    # get:
+    #   summary: Get Active Signals
+    #   description: Retrieve and return active signals.
+    #   responses:
+    #     200:
+    #       description: Active signals retrieved successfully
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: string
+  /api/users/:
     get:
       summary: Get User Profile
       description: Get user profile details for the provided user ID.
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the user to retrieve.
-          required: true
-          type: string
+      # parameters:
+      #   - name: id
+      #     in: path
+      #     description: The ID of the user to retrieve.
+      #     required: true
+      #     type: string
       responses:
         200:
           description: User profile retrieved successfully
@@ -701,11 +701,11 @@ paths:
               email: "updated@example.com"
               avatar: "updated-avatar-url"
       parameters:
-        - name: id
-          in: path
-          description: The ID of the user to update.
-          required: true
-          type: string
+        # - name: id
+        #   in: path
+        #   description: The ID of the user to update.
+        #   required: true
+        #   type: string
         - name: Updated User 
           in: body
           description: add only what you want to update
@@ -742,16 +742,16 @@ paths:
                 properties:
                   error:
                     type: string
-  /api/users/{user_id}/interests/{event_id}:
+  /api/users/interests/{event_id}:
     post:
       summary: Create Interest in an Event
       description: Create an interest in an event for the provided user and event IDs.
       parameters:
-        - name: user_id
-          in: path
-          description: The ID of the user.
-          required: true
-          type: string
+        # - name: user_id
+        #   in: path
+        #   description: The ID of the user.
+        #   required: true
+          # type: string
         - name: event_id
           in: path
           description: The ID of the event.
@@ -780,11 +780,11 @@ paths:
       summary: Remove Interest in an Event
       description: Remove an interest in an event for the provided user and event IDs.
       parameters:
-        - name: user_id
-          in: path
-          description: The ID of the user.
-          required: true
-          type: string
+        # - name: user_id
+        #   in: path
+        #   description: The ID of the user.
+        #   required: true
+        #   type: string
         - name: event_id
           in: path
           description: The ID of the event.
