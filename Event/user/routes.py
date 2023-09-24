@@ -27,7 +27,7 @@ def get_user_info():
         str: details of the user info.
 
     """
-    user_id = is_logged_in(session)
+    is_logged_in(session)
     try:
         user = query_one_filtered(Users, id=user_id)
         # Check if the user is a member of the group
@@ -73,7 +73,7 @@ def update_user():
         str: the new user info.
 
     """
-    user_id = is_logged_in(session)
+    is_logged_in(session)
     try:
         data = request.get_json()
         user = query_one_filtered(Users, id=user_id)
@@ -114,7 +114,7 @@ def update_user():
 )
 def create_interest(event_id):
     """Create interest in an event"""
-    user_id = is_logged_in(session)
+    is_logged_in(session)
     try:
         user = query_one_filtered(Users, id=user_id)
         event = query_one_filtered(Events, id=event_id)
@@ -163,7 +163,7 @@ def delete_user_interest(event_id):
     Returns:
         str: success msessage
     """
-    user_id = is_logged_in(session)
+    is_logged_in(session)
     try:
         user = query_one_filtered(Users, id=user_id)
         event = query_one_filtered(Events, id=event_id)
