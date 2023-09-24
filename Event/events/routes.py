@@ -6,6 +6,7 @@ from flask import Blueprint, request, jsonify, session
 from Event.models.images import Images
 from Event.models.comments import Comments
 from Event.models.events import Events
+from Event.models.users import Users
 # from Event.models.comment_images import CommentImages
 from Event.utils import query_all_filtered, query_all, query_one_filtered, is_logged_in
 
@@ -70,18 +71,33 @@ def delete_event(event_id):
     """
 
     user_id = is_logged_in(session)
-    # check if logged in user is the creator
     try:
+        user = query_one_filtered(Users, id=user_id)
         del_event = query_one_filtered(Events, id=event_id)
         print(del_event)
-        if del_event:
-            del_event.delete()
-            return jsonify(
-                {
-                    "Message": "Event deleted",
-                    "data": []
+        if not del_event:
+            return (
+                jsonify({"Error": "Not Found", "message": "Event not found"}),
+                404,
+            )
+        # check if logged in user is the creator
+        if user.id != del_event.creator_id:
+            return (
+                jsonify(
+                    {
+                        "Error": "Not Authorized", 
+                        "message": "Only the creator can delete group"
                     }
-                    ), 200
+                ),
+                403
+            )
+        del_event.delete()
+        return jsonify(
+            {
+                "Message": "Event deleted",
+                "data": []
+            }
+        ), 204
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
         return jsonify(
@@ -90,14 +106,7 @@ def delete_event(event_id):
                 "message": "something went wrong"                
             }
         ), 400
-    
-    # if no event was found and no error was raised
-    return jsonify(
-        {
-            "error": "Not Found",
-            "message": "Event not found"
-            }
-            ), 404
+
 
 # checked
 # GET /api/events: Get a list of events
