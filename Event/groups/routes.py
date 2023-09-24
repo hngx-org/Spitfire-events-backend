@@ -346,6 +346,7 @@ def delete_group(group_id):
                 }
                 ), 400
 
+
 # Get all groups available
 @groups.route("/", methods=["GET"])
 def get_all_groups():
@@ -355,7 +356,7 @@ def get_all_groups():
     Returns:
         JSON response with a list of group details.
     """
-    #is_logged_in(session)
+    is_logged_in(session)
     try:
         # Query the database to retrieve all groups
         all_groups = Groups.query.all()
