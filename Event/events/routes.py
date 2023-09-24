@@ -157,7 +157,7 @@ def get_event(event_id):
         if event:
             return jsonify(
                 {
-                    "message": "Event succesfully Found", 
+                    "message": "Event successfully Found", 
                     "data": event.format()
                 }
             ), 200
