@@ -335,7 +335,8 @@ def get_all_groups():
 
         # Format the groups as a list of dictionaries
         group_list = [
-            {
+            {   
+                "id": group.id,
                 "created_at": group.created_at,
                 "id" : group.id,
                 "title": group.title,
