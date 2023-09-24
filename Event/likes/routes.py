@@ -6,7 +6,6 @@ from flask import Blueprint, session, jsonify
 from Event.models.users import Users, likes
 from Event.models.comments import Comments
 from Event.utils import is_logged_in, query_one_filtered
-from Event import db
 
 likes = Blueprint("likes", __name__, url_prefix="/api/likes")
 
@@ -41,7 +40,7 @@ def number_of_likes(comment_id):
                     "error": "Not Found",
                     "message": "Event Not Found",
                 }
-            )
+            ), 404
         number_of_likes = len(comment.user_likes)
         return jsonify(
             {
@@ -83,7 +82,6 @@ def like_and_unlike_comment(comment_id):
     #THIS GETS THE COMMENT OBJECT    
     try:
         user = query_one_filtered(Users, id=user_id)
-        print(user)
         comment = query_one_filtered(Comments, id=comment_id)
         if not comment or not user:
             return jsonify(
@@ -102,7 +100,7 @@ def like_and_unlike_comment(comment_id):
                 }
             ), 200
 
-        # FOR LIKES SCENARIP
+        # FOR LIKES SCENARIO
         user.likes.append(comment)
         user.update()
         return jsonify(
@@ -113,11 +111,9 @@ def like_and_unlike_comment(comment_id):
                     ), 200
     
     except Exception as exc:
-        print(str(exc))
         return jsonify(
             {
                 "error": "Forbidden",
                 "message": "you are not allowed to perform such actions",
             }
         ), 403
-
