@@ -13,21 +13,11 @@ from Event.models.events import Events
 users = Blueprint("users", __name__, url_prefix="/api/users")
 
 
-@users.route("/")
-def get_active_signals():
-    """
-        Retrieve and return active signals.
-
-    Returns:
-        str: A placeholder return value.
-    """
-    return
-
 
 # Checked
 # GET /api/users/<string:user_id>: Get user profile
-@users.route("/<string:user_id>")
-def get_user_info(user_id: str):
+@users.route("/")
+def get_user_info():
     """gets the user info for the profile page
 
     Args:
@@ -73,8 +63,8 @@ def get_user_info(user_id: str):
 
 # Checked
 # PUT /api/users/<string:user_id>: Update user profile
-@users.route("/<string:user_id>", methods=["PUT"], strict_slashes=False)
-def update_user(user_id: str):
+@users.route("/", methods=["PUT"], strict_slashes=False)
+def update_user():
     """updates the user details
 
     Args:
@@ -84,7 +74,7 @@ def update_user(user_id: str):
         str: the new user info.
 
     """
-    is_logged_in(session)
+    user_id = is_logged_in(session)
     try:
         data = request.get_json()
         user = query_one_filtered(Users, id=user_id)
@@ -120,13 +110,13 @@ def update_user(user_id: str):
 # Checked
 # POST /api/users/<string:user_id>/interests/<string:event_id>: Show interests
 @users.route(
-    "/<string:user_id>/interests/<string:event_id>",
+    "/interests/<string:event_id>",
     methods=["POST"],
     strict_slashes=False,
 )
-def create_interest(user_id, event_id):
+def create_interest(event_id):
     """Create interest in an event"""
-    is_logged_in(session)
+    user_id = is_logged_in(session)
     try:
         user = query_one_filtered(Users, id=user_id)
         event = query_one_filtered(Events, id=event_id)
@@ -136,15 +126,25 @@ def create_interest(user_id, event_id):
                 jsonify({"Error": "Not Found", "message": "User or Event not found"}),
                 404,
             )
+        if event not in user.interested_events:
+            user.interested_events.append(event)
+            user.update()
 
-        user.interested_events.append(event)
-        user.update()
-
+            return (
+                jsonify(
+                    {
+                        "message": "Interest registered",
+                        "data": f"{user_id} has shown interest in {event_id}",
+                    }
+                ),
+                201,
+            )
+        # else return interest shown already
         return (
             jsonify(
                 {
-                    "message": "Interest registered",
-                    "data": f"{user_id} has shown interest in {event_id}",
+                    "message": "Interest cannot be registered twice",
+                    "error": f"{user_id} has shown interest in {event_id} previously",
                 }
             ),
             201,
@@ -157,12 +157,14 @@ def create_interest(user_id, event_id):
 
 
 # DELETE /api/users/userId/interests/eventId
-@users.route("<string:user_id>/interests/<string:event_id>", methods=["DELETE"])
-def delete_user_interest(user_id, event_id):
+@users.route("/interests/<string:event_id>", methods=["DELETE"])
+def delete_user_interest(event_id):
     """Delete interest in event
-    Args:     userId: The id of the user
-    eventId: the id of the event to be deleted
-    Returns:     str: success msessage
+    Args:
+        user_id: The id of the user
+        event_id: the id of the event to be deleted
+    Returns:
+        str: success msessage
     """
     user_id = is_logged_in(session)
     try:

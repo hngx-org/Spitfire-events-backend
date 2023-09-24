@@ -56,8 +56,8 @@ def create_event():
 
 # to check later
 # DELETE /api/events/:eventId: Delete an event
-@events.route("/<string:id>", methods=["DELETE"])
-def delete_event(id):
+@events.route("/<string:event_id>", methods=["DELETE"])
+def delete_event(event_id):
     """
     Delete an event.
 
@@ -69,10 +69,10 @@ def delete_event(id):
         If the event does not exist, a not found error response with status code 404 and a JSON body indicating the event was not found.
     """
 
-    is_logged_in(session)
-
+    user_id = is_logged_in(session)
+    # check if logged in user is the creator
     try:
-        del_event = query_one_filtered(Events, id=id)
+        del_event = query_one_filtered(Events, id=event_id)
         print(del_event)
         if del_event:
             del_event.delete()
@@ -128,7 +128,7 @@ def all_events():
 
 # Checked  
 # Get events based on event id
-@events.route("/<event_id>", methods=["GET"])
+@events.route("/<string:event_id>", methods=["GET"])
 def get_event(event_id):
     """
     Get event based on its ID.
@@ -240,7 +240,6 @@ def add_comments(event_id: str):
     if request.method == "POST":
         try:
             data = request.get_json()
-            user_id = user_id
             body = data.get("body")
             image_url_list = data.get("image_url_list", None)
             new_comment = Comments(event_id=event_id, user_id=user_id,

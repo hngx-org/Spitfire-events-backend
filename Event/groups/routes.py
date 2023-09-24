@@ -11,12 +11,12 @@ from Event.utils import query_one_filtered, is_logged_in
 
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
 
-@groups.route("/<string:groupId>/members/<string:userId>",methods=["POST"])
-def add_user_to_group(groupId, userId):
-    is_logged_in(session)
+@groups.route("/<string:group_id>/members",methods=["POST"])
+def add_user_to_group(group_id):
+    user_id = is_logged_in(session)
     try:
-        group = query_one_filtered(Groups,id=groupId)
-        user = query_one_filtered(Users,id=userId)
+        group = query_one_filtered(Groups,id=group_id)
+        user = query_one_filtered(Users,id=user_id)
 
         # Check if the group and user exist
         if group is None or user is None:
@@ -28,7 +28,7 @@ def add_user_to_group(groupId, userId):
                     ), 404
 
         newgroup=user.user_groups
-        if group.id in [group.id for group in newgroup ]:
+        if group.id in [group.id for group in newgroup]:
             return jsonify(
                 {
                     "error":"Forbidden",
@@ -163,9 +163,8 @@ def update_group(group_id):
 
 
 # Define the route to remove a user from a group
-@groups.route("/<string:group_id>/members/<string:user_id>", methods=["DELETE"])
-def remove_user_from_group(group_id, user_id):
-    is_logged_in(session)
+@groups.route("/<string:group_id>/members", methods=["DELETE"])
+def remove_user_from_group(group_id):
     """
     Remove a user from a group.
 
@@ -176,7 +175,7 @@ def remove_user_from_group(group_id, user_id):
     Returns:
     tuple: A tuple containing response message and status code.
     """
-    is_logged_in(session)
+    user_id = is_logged_in(session)
     try:
         # Check if the group and user exist in the database
         group = query_one_filtered(Groups,id=group_id)
