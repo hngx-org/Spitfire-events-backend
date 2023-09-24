@@ -68,10 +68,10 @@ def register_or_login():
         jsonify(
             {
                 "message": "success",
-                "id":user.id,
-                "email": user.email,
-                "name": user.name,
-                "avatar": user.avatar,
+                "data": {"id":user.id,
+                            "email": user.email,
+                            "name": user.name,
+                            "avatar": user.avatar,},
             }
         ),
         200,
@@ -90,14 +90,14 @@ def see_sess():
         user = query_one_filtered(Users, id=user_id)
         return (
             jsonify(
-                {
-                    "message": "Success",
-                    "id":user.id,
-                    "email": user.email,
-                    "name": user.name,
-                    "avatar": user.avatar,
-                }
-            ),
+            {
+                "message": "success",
+                "data": {"id":user.id,
+                            "email": user.email,
+                            "name": user.name,
+                            "avatar": user.avatar,},
+            }
+        ),
             200,
         )
     except Exception:

@@ -42,19 +42,24 @@ def get_user_info(user_id: str):
         user = query_one_filtered(Users, id=user_id)
         # Check if the user is a member of the group
         if user is None:
-            return jsonify({"error": "User not found"}), 404
+            return jsonify(
+                {
+                    "error": "Not Found",
+                    "messgae": "User not found",
+          }
+          ), 404
         user_details = user.format()
-        return jsonify({
-            "status": "success",
-            "message": f"user {user_id} details fetched successfully",
-            "data": user_details
-        })
+        return jsonify(
+            {
+                "message": f"user  details fetched successfully",
+                "data": user_details
+                }
+                ), 200
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
         return jsonify({
-            "status": "failed",
             "message": "your request could not be completed",
-            "error": str(error)
+            "error": "Bad Request"
         }), 400
 
 # Checked
@@ -74,23 +79,26 @@ def update_user(user_id: str):
         data = request.get_json()
         user = query_one_filtered(Users, id=user_id)
         if user is None:
-            return jsonify({"error": "User not found"}), 404
+            return jsonify(
+                {
+                    "error": "Not Found",
+                    "message": "User not found"
+                    }
+                    ), 404
         for key, value in data.items():
             if key == 'id' or key == 'created_at':
                 continue
             setattr(user, key, value)
         user.update()
         return jsonify({
-            "status": "success",
             "message": f"user {user_id} details updated successfully",
             "data": user.format()
-        })
+        }), 201
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
         return jsonify({
-            "status": "failed",
             "message": "your request could not be completed",
-            "error": str(error)
+            "error": "Bad Request"
         }), 400
   
 
@@ -104,31 +112,60 @@ def create_interest(user_id, event_id):
         user = query_one_filtered(Users, id=user_id)
         event = query_one_filtered(Events, id=event_id)
 
-        if not user:
-            return jsonify({"Error": "User not found"}), 404
+        if not user or not event:
+            return jsonify(
+                {
+                    "Error": "Not Found",
+                    "message": "User or Event not found"
+                    }
+                    ), 404
 
-        if not event:
-            return jsonify({"Error": "Event not found"}), 404
+        # if not event:
+        #     return jsonify(
+        #         {
+        #             "Error": "Not found",
+        #             "message": "Event Not Found To Show interest"
+        #             }
+        #             ), 404
 
         user.interested_events.append(event)
         user.update()
 
-        return jsonify({"message": "Interest registered"}), 200
+        return jsonify(
+            {
+                "message": "Interest registered",
+                "data": f"{user_id} has shown interest in {event_id}"
+                }
+                ), 201
 
     except Exception as e:
         db.session.rollback()
-        return jsonify({"error": str(e)}), 500
+        print(str(e))
+        return jsonify(
+            {
+                "error": "Bad Request",
+                "message": "Something went wrong"
+                }
+                ), 400
 
 # DELETE /api/users/userId/interests/eventId    
 @users.route("<string:userId>/interests/<string:eventId>", methods=["DELETE"])    
 def delete_user_interest(userId,eventId):     
-    """     Delete interest in event         Args:     userId: The id of the user     eventId: the id of the event to be deleted         Returns:     str: success msessage     """ 
+    """     Delete interest in event         
+    Args:     userId: The id of the user     
+    eventId: the id of the event to be deleted         
+    Returns:     str: success msessage     """ 
     # user_id=is_logged_in(session)    
     try:     
         user= query_one_filtered(Users,id=userId)
         event=query_one_filtered(Events,id=eventId)
         if not user or not event:
-            return jsonify({"error":"Not Found","message":"id does not exist"})
+            return jsonify(
+                {
+                    "error":"Not Found",
+                    "message":"Interest not found"
+                    }
+                    ), 404
         new_interested_events=user.interested_events
         
         for key,interest in enumerate(user.interested_events):
@@ -138,6 +175,17 @@ def delete_user_interest(userId,eventId):
         user.update()
 
         
-        return jsonify(response={"success": "Interest deleted"}), 200
-    except Exception as error:        
-        return jsonify({"error": str(error)}), 500
+        return jsonify(
+            {
+                "message": "Interest deleted",
+                "data": "No content"
+                }
+                ), 204
+    except Exception as error: 
+        print(str(error))       
+        return jsonify(
+            {
+                "error": "Bad Request",
+                "message": "Something went wrong"
+                }
+                ), 400
