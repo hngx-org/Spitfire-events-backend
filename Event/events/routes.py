@@ -117,6 +117,7 @@ def all_events():
     """
     try:
         all_events = query_all(Events)
+        all_events.reverse()
     except Exception:
         return jsonify(
             {
