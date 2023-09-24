@@ -204,8 +204,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     ```
 
 ### Get User Profile
-- **Endpoint**: **GET** `/api/users/{id}`
-- **Description**: Get user profile by ID.
+- **Endpoint**: **GET** `/api/users`
+- **Description**: Get logged in user profile.
 - **Success Response**:
     - **Status Code**: 200 (OK)
     - **Response**:
@@ -253,8 +253,8 @@ The API handles errors gracefully and returns JSON responses with appropriate st
         ```
 
 ### Update User Profile
-- **Endpoint**: **PUT** `/api/users/{id}`
-- **Description**: Update user profile by ID.
+- **Endpoint**: **PUT** `/api/users`
+- **Description**: Update logged in user  profile.
 - **Input**: JSON with user profile data (name, email, avatar).
 ```JSON
 {
