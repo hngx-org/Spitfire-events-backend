@@ -125,12 +125,8 @@ def is_logged_in(session):
         id(str):
             - logged in users id
     """
-<<<<<<< HEAD
-    #user = session.get("user")
-=======
     # user = session.get("user")
     # hardcoded because of failure of mobile integration
->>>>>>> 05e6ba08283c53ebac907a39f45a3c720245e00a
     user = { "id": "user11_id"}
 
     if not user:
