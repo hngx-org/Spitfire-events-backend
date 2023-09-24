@@ -345,3 +345,36 @@ def delete_group(group_id):
                 "Message": "Something went wrong with this request"
                 }
                 ), 400
+
+# Get all groups available
+@groups.route("/", methods=["GET"])
+def get_all_groups():
+    """
+    Get all groups.
+
+    Returns:
+        JSON response with a list of group details.
+    """
+    #is_logged_in(session)
+    try:
+        # Query the database to retrieve all groups
+        all_groups = Groups.query.all()
+
+        # Format the groups as a list of dictionaries
+        group_list = [group.format() for group in all_groups]
+
+        return jsonify(
+            {
+                "message": "All groups successfully fetched",
+                "data": group_list,
+            }
+        ), 200
+
+    except Exception as e:
+        print(f"{type(e).__name__}: {e}")
+        return jsonify(
+            {
+                "error": "Bad Request",
+                "message": "An error occurred while fetching all groups",
+            }
+        ), 400
