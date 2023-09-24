@@ -28,6 +28,8 @@ class App_Config:
     SESSION_COOKIE_HTTPONLY = False
     PERMANENT_SESSION_LIFETIME = datetime.timedelta(days=30)
 
+    LOGGED_IN_USER = os.environ.get("LOGGED_IN_USER", "user11_id")
+
     def nothing(self):
         """_summary_"""
 
