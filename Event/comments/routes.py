@@ -41,7 +41,6 @@ def add_images(comment_id):
                 }
             ), 201
         except Exception as error:
-            print(f"{type(error).__name__}: {error}")
             return jsonify(
                     {
                         "message": "Error: image data could not be saved",
@@ -61,7 +60,6 @@ def add_images(comment_id):
             }
         ), 200
     except Exception as error:
-        print(f"{type(error).__name__}: {error}")
         return jsonify(
                     {
                         "message": "An error occured while fetching all images",

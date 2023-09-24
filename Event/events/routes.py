@@ -11,7 +11,6 @@ from Event.models.users import Users
 from Event.utils import query_all_filtered, query_all, query_one_filtered, is_logged_in
 
 
-# url_prefix includes /api/events before all endpoints in blueprint
 events = Blueprint("events", __name__, url_prefix="/api/events")
 
 # checked
@@ -43,7 +42,6 @@ def create_event():
         event.thumbnail.append(new_image)
         event.update()
     except Exception as e:
-        print(str(e))
         return jsonify({
                         "error": "Bad Request",
             "message": "An error occurred creating the event.", 
@@ -99,7 +97,6 @@ def delete_event(event_id):
             }
         ), 204
     except Exception as error:
-        print(f"{type(error).__name__}: {error}")
         return jsonify(
             {
                 "Error": "Bad request",
@@ -210,7 +207,6 @@ def update_event(event_id: str) -> tuple:
         
             
         for k, v in req.items():
-            print(db_data)
             if k == 'creator_id' or k == 'created_at':
                 continue
             setattr(db_data, k, v)
@@ -223,7 +219,6 @@ def update_event(event_id: str) -> tuple:
             }
             ), 201
     except Exception as exc:
-        print(f"{type(exc).__name__}: {exc}")
         return jsonify(
             {"error": "Bad Request",
              "message":"Something Went Wrong"
@@ -266,7 +261,6 @@ def add_comments(event_id: str):
                         new_comment.images.append(new_image)
                         new_comment.update()
                     except Exception as error:
-                        print(f"{type(error).__name__}: {error}")
                         return jsonify(
                             {
                                 "message": "Failed to save to database",
@@ -281,7 +275,6 @@ def add_comments(event_id: str):
                 }
             ), 201
         except Exception as error:
-            print(f"{type(error).__name__}: {error}")
             return jsonify(
                     {
                         "message": "Comment data could not be saved",
@@ -309,7 +302,6 @@ def add_comments(event_id: str):
             }
         ), 200
     except Exception as error:
-        print(f"{type(error).__name__}: {error}")
         return (
             jsonify(
                 {

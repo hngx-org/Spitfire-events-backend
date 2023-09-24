@@ -90,7 +90,6 @@ def get_group_by_id(group_id):
                 404,
             )
     except Exception as e:
-        print(f"{type(e).__name__}: {e}")
         return jsonify(
             {
                 "error": "Bad Request",
@@ -154,7 +153,6 @@ def update_group(group_id):
                 }
             ), 201
     except Exception as error:  # pylint: disable=broad-except
-        print(str(error))
         return jsonify(
             {
                 "error": "Bad Request",
@@ -267,7 +265,6 @@ def create_group():
 
     # Handle exceptions and return an error response if any occur.
     except Exception as error:
-        print(str(error))
         return jsonify(
             {
                 "message": "group creation failed",
@@ -313,7 +310,6 @@ def delete_group(group_id):
 
     except Exception as e:
         # Handle any exceptions that may occur during deletion
-        print(str(e))
         return jsonify(
             {
                 "error": "Bad Request",
