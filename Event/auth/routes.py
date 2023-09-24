@@ -43,7 +43,6 @@ def register_or_login():
             id_token=credential_token, request=requests.Request()
         )
     except GoogleAuthError as error:
-        print(error)  # remove before production after testing auth on mobile
         raise CustomError("Bad Request", 400, "invalid token")
     except ValueError:
         raise CustomError("Bad Request", 400, "invalid token")

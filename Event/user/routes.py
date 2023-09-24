@@ -59,7 +59,6 @@ def get_user_info(user_id: str):
             200,
         )
     except Exception as error:
-        print(f"{type(error).__name__}: {error}")
         return (
             jsonify(
                 {
@@ -105,7 +104,6 @@ def update_user(user_id: str):
             201,
         )
     except Exception as error:
-        print(f"{type(error).__name__}: {error}")
         return (
             jsonify(
                 {
@@ -152,7 +150,6 @@ def create_interest(user_id, event_id):
 
     except Exception as e:
         db.session.rollback()
-        print(str(e))
         return jsonify({"error": "Bad Request", "message": "Something went wrong"}), 400
 
 
@@ -180,5 +177,4 @@ def delete_user_interest(user_id, event_id):
 
         return jsonify({"message": "Interest deleted", "data": "No content"}), 204
     except Exception as error:
-        print(str(error))
         return jsonify({"error": "Bad Request", "message": "Something went wrong"}), 400
