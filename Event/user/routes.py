@@ -171,7 +171,7 @@ def delete_user_interest(event_id):
             return jsonify({"error": "Not Found", "message": "Interest not found"}), 404
         new_interested_events = user.interested_events
 
-        if event in user.interested_likes:
+        if event in user.interested_events:
             for key, interest in enumerate(user.interested_events):
                 if event.id == interest.id:
                     new_interested_events.pop(key)
@@ -185,6 +185,6 @@ def delete_user_interest(event_id):
                 "message": "user has not previously shown interest", 
                 "error": "Nothing to delete"
             }
-        ), 400
+        ), 403
     except Exception as error:
         return jsonify({"error": "Bad Request", "message": "Something went wrong"}), 400
