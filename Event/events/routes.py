@@ -6,11 +6,11 @@ from flask import Blueprint, request, jsonify, session
 from Event.models.images import Images
 from Event.models.comments import Comments
 from Event.models.events import Events
+from Event.models.users import Users
 # from Event.models.comment_images import CommentImages
 from Event.utils import query_all_filtered, query_all, query_one_filtered, is_logged_in
 
 
-# url_prefix includes /api/events before all endpoints in blueprint
 events = Blueprint("events", __name__, url_prefix="/api/events")
 
 # checked
@@ -42,7 +42,6 @@ def create_event():
         event.thumbnail.append(new_image)
         event.update()
     except Exception as e:
-        print(str(e))
         return jsonify({
                         "error": "Bad Request",
             "message": "An error occurred creating the event.", 
@@ -56,8 +55,8 @@ def create_event():
 
 # to check later
 # DELETE /api/events/:eventId: Delete an event
-@events.route("/<string:id>", methods=["DELETE"])
-def delete_event(id):
+@events.route("/<string:event_id>", methods=["DELETE"])
+def delete_event(event_id):
     """
     Delete an event.
 
@@ -69,35 +68,42 @@ def delete_event(id):
         If the event does not exist, a not found error response with status code 404 and a JSON body indicating the event was not found.
     """
 
-    is_logged_in(session)
-
+    user_id = is_logged_in(session)
     try:
-        del_event = query_one_filtered(Events, id=id)
+        user = query_one_filtered(Users, id=user_id)
+        del_event = query_one_filtered(Events, id=event_id)
         print(del_event)
-        if del_event:
-            del_event.delete()
-            return jsonify(
-                {
-                    "Message": "Event deleted",
-                    "data": []
+        if not del_event:
+            return (
+                jsonify({"Error": "Not Found", "message": "Event not found"}),
+                404,
+            )
+        # check if logged in user is the creator
+        if user.id != del_event.creator_id:
+            return (
+                jsonify(
+                    {
+                        "Error": "Not Authorized", 
+                        "message": "Only the creator can delete group"
                     }
-                    ), 200
+                ),
+                403
+            )
+        del_event.delete()
+        return jsonify(
+            {
+                "Message": "Event deleted",
+                "data": []
+            }
+        ), 204
     except Exception as error:
-        print(f"{type(error).__name__}: {error}")
         return jsonify(
             {
                 "Error": "Bad request",
                 "message": "something went wrong"                
             }
         ), 400
-    
-    # if no event was found and no error was raised
-    return jsonify(
-        {
-            "error": "Not Found",
-            "message": "Event not found"
-            }
-            ), 404
+
 
 # checked
 # GET /api/events: Get a list of events
@@ -128,7 +134,7 @@ def all_events():
 
 # Checked  
 # Get events based on event id
-@events.route("/<event_id>", methods=["GET"])
+@events.route("/<string:event_id>", methods=["GET"])
 def get_event(event_id):
     """
     Get event based on its ID.
@@ -201,7 +207,6 @@ def update_event(event_id: str) -> tuple:
         
             
         for k, v in req.items():
-            print(db_data)
             if k == 'creator_id' or k == 'created_at':
                 continue
             setattr(db_data, k, v)
@@ -214,7 +219,6 @@ def update_event(event_id: str) -> tuple:
             }
             ), 201
     except Exception as exc:
-        print(f"{type(exc).__name__}: {exc}")
         return jsonify(
             {"error": "Bad Request",
              "message":"Something Went Wrong"
@@ -240,7 +244,6 @@ def add_comments(event_id: str):
     if request.method == "POST":
         try:
             data = request.get_json()
-            user_id = user_id
             body = data.get("body")
             image_url_list = data.get("image_url_list", None)
             new_comment = Comments(event_id=event_id, user_id=user_id,
@@ -258,7 +261,6 @@ def add_comments(event_id: str):
                         new_comment.images.append(new_image)
                         new_comment.update()
                     except Exception as error:
-                        print(f"{type(error).__name__}: {error}")
                         return jsonify(
                             {
                                 "message": "Failed to save to database",
@@ -273,7 +275,6 @@ def add_comments(event_id: str):
                 }
             ), 201
         except Exception as error:
-            print(f"{type(error).__name__}: {error}")
             return jsonify(
                     {
                         "message": "Comment data could not be saved",
@@ -301,7 +302,6 @@ def add_comments(event_id: str):
             }
         ), 200
     except Exception as error:
-        print(f"{type(error).__name__}: {error}")
         return (
             jsonify(
                 {

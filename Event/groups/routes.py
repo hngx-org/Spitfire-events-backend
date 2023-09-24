@@ -11,24 +11,25 @@ from Event.utils import query_one_filtered, is_logged_in
 
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
 
-@groups.route("/<string:groupId>/members/<string:userId>",methods=["POST"])
-def add_user_to_group(groupId, userId):
+@groups.route("/<string:group_id>/members/<string:new_member_id>",methods=["POST"])
+def add_user_to_group(group_id, new_member_id):
     is_logged_in(session)
     try:
-        group = query_one_filtered(Groups,id=groupId)
-        user = query_one_filtered(Users,id=userId)
+        group = query_one_filtered(Groups,id=group_id)
+        # user = query_one_filtered(Users,id=user_id)
+        new_member = query_one_filtered(Users,id=new_member_id)
 
         # Check if the group and user exist
-        if group is None or user is None:
+        if group is None or new_member is None:
             return jsonify(
                 {
                     "message": f"Group or user not found",
                     "error": "Not Found"
-                    }
-                    ), 404
+                }
+            ), 404
 
-        newgroup=user.user_groups
-        if group.id in [group.id for group in newgroup ]:
+        newgroup=new_member.user_groups
+        if group.id in [group.id for group in newgroup]:
             return jsonify(
                 {
                     "error":"Forbidden",
@@ -37,8 +38,8 @@ def add_user_to_group(groupId, userId):
                     ),403
         newgroup.append(group)
 
-        user.user_groups=newgroup
-        user.update()
+        new_member.user_groups=newgroup
+        new_member.update()
         
         return jsonify(
             {
@@ -151,7 +152,8 @@ def update_group(group_id):
                     "data": group.format(),
                 }
             ), 201
-    except Exception as error:  # pylint: disable=broad-excep
+
+    except Exception as error:  # pylint: disable=broad-except
         return jsonify(
             {
                 "error": "Bad Request",
@@ -161,9 +163,8 @@ def update_group(group_id):
 
 
 # Define the route to remove a user from a group
-@groups.route("/<string:group_id>/members/<string:user_id>", methods=["DELETE"])
-def remove_user_from_group(group_id, user_id):
-    is_logged_in(session)
+@groups.route("/<string:group_id>/members/<string:member_id>", methods=["DELETE"])
+def remove_user_from_group(group_id, member_id):
     """
     Remove a user from a group.
 
@@ -178,9 +179,9 @@ def remove_user_from_group(group_id, user_id):
     try:
         # Check if the group and user exist in the database
         group = query_one_filtered(Groups,id=group_id)
-        user = query_one_filtered(Users,id=user_id)
+        member = query_one_filtered(Users,id=member_id)
 
-        if group is None or user is None:
+        if group is None or member is None:
             return jsonify(
                 {
                     "message": "Group or user not found",
@@ -188,7 +189,7 @@ def remove_user_from_group(group_id, user_id):
                     }
                     ), 404
 
-        user_groups=user.user_groups
+        user_groups=member.user_groups
         if group_id not in [group.id for group in user_groups ]:
             return jsonify(
                 {
@@ -197,11 +198,11 @@ def remove_user_from_group(group_id, user_id):
                     }
                     ),403
 
-        for key,group in enumerate(user.user_groups):
+        for key,group in enumerate(member.user_groups):
             if group_id==group.id:
                 user_groups.pop(key)
-        user.user_groups=user_groups
-        user.update()
+        member.user_groups=user_groups
+        member.update()
 
         return jsonify(
             {
@@ -309,7 +310,8 @@ def delete_group(group_id):
              ),204
 
     except Exception as e:
-        # Handle any exceptions that may occur during delet
+
+        # Handle any exceptions that may occur during deletion
         return jsonify(
             {
                 "error": "Bad Request",
