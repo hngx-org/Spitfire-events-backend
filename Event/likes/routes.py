@@ -76,8 +76,8 @@ def like_and_unlike_comment(comment_id):
               An error response if the user is not logged in or if the comment or user object is not found.
     """
 
-    # user_id = is_logged_in(session)  
-    user_id =123
+    user_id = is_logged_in(session)  
+    # user_id =123
 
 
     #THIS GETS THE COMMENT OBJECT    
