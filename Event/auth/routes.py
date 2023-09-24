@@ -20,8 +20,9 @@ auth = Blueprint(
     "auth", __name__, url_prefix="/api/auth"
 )  # url_prefix includes /auth before all endpoints in blueprint
 
-ANDROID_CLIENT_ID = os.environ.get("ANDROID_CLIENT_ID")
-IOS_CLIENT_ID = os.environ.get("IOS_CLIENT_ID")
+CLIENT_ID_1 = os.environ.get("CLIENT_ID_1")
+CLIENT_ID_2 = os.environ.get("CLIENT_ID_2")
+CLIENT_ID_3 = os.environ.get("CLIENT_ID_3")
 
 
 # ...
@@ -48,7 +49,7 @@ def register_or_login():
         raise CustomError("Bad Request", 400, "invalid token")
 
     # lets check if the token was issued for us
-    if id_info["aud"] not in [ANDROID_CLIENT_ID, IOS_CLIENT_ID]:
+    if id_info["aud"] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
         raise CustomError("Forbidden", 403, "Token is of unknown origin")
 
     user = query_one_filtered(Users, id=id_info["sub"])

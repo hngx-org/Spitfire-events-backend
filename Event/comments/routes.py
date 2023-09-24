@@ -1,7 +1,8 @@
 """Comments route module"""
-from flask import jsonify, Blueprint, request
-from Event.utils import query_all_filtered
+from flask import jsonify, Blueprint, request, session
+from Event.utils import is_logged_in, query_one_filtered
 from Event.models.images import Images
+from Event.models.comments import Comments
 
 """_summary_
 
@@ -13,26 +14,30 @@ from Event.models.images import Images
 comments = Blueprint("comments", __name__, url_prefix="/api/comments")
 
 
-# POST /api/comments/<comment_id>/images: Add an image to a comment
-# GET /api/comments/<comment_id>/images: Get images for a comment
+# POST /api/comments/<comment_id>/images: Add an image or images to a comment
+# GET /api/comments/<comment_id>/images: Get all images for a comment
 @comments.route("/<comment_id>/images", methods=["GET", "POST"])
 def add_images(comment_id):
     """Add an image or images to a comment in an event discussion
     Args:
         comment_id (str): The id of the comment in the discussion
     """
+    is_logged_in(session)
     if request.method == "POST":
+        response = []
         try:
-            image_url = request.get_json().get("image_url")
-            new_image = Images(comment_id, image_url)
-            new_image.insert()
+            comment = query_one_filtered(Comments, id=comment_id)
+            image_url_list = request.get_json().get("image_url_list")
+            for image_url in image_url_list:
+                new_image = Images(url=image_url)
+                new_image.insert()
+                comment.images.append(new_image)
+                comment.update()
+                response.append(new_image.format())
             return jsonify(
                 {
                     "message": "Image saved successfully",
-                    "data": {
-                        "id": new_image.id,
-                        "image_url": new_image.image_url,
-                    },
+                    "data": response,
                 }
             ), 201
         except Exception as error:
@@ -45,11 +50,12 @@ def add_images(comment_id):
                 ),  400
     # GET images
     try:
-        all_images = query_all_filtered("images", comment_id=comment_id)
+        comment = query_one_filtered(Comments, id=comment_id)
+        all_images = comment.images
         return jsonify(
             {
                 "message": "all images successfully fetched",
-                "data": [comment.format() for comment in all_images]
+                "data": [image.format() for image in all_images]
                 if all_images
                 else [],
             }
