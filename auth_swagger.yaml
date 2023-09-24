@@ -415,7 +415,7 @@ paths:
           type: string
         - name: member_id
           in: path
-          description: The group ID of the user to be removed from the group.
+          description: The ID of the user to be removed from the group.
           required: true
           type: string
       responses:
