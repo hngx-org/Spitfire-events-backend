@@ -353,7 +353,7 @@ def get_all_groups():
         ), 200
 
     except Exception as e:
-        print(f"{type(e).__name__}: {e}")
+        print(str(e)0)
         return jsonify(
             {
                 "error": "Bad Request",
