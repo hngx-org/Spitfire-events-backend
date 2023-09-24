@@ -10,7 +10,7 @@ group_events = db.Table('group_events',
     db.Column('event_id', db.String(60), db.ForeignKey("events.id"), primary_key=True, nullable=False)
 )
 # Association table between groups and images
-group_image = db.Table('group_events',
+group_image = db.Table('group_image',
     db.Column('group_id', db.String(60), db.ForeignKey("groups.id"), primary_key=True, nullable=False),
     db.Column('image_id', db.String(60), db.ForeignKey("images.id"), primary_key=True, nullable=False)
 )
