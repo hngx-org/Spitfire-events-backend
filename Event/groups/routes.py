@@ -25,18 +25,40 @@ def add_user_to_group(groupId, userId):
         # Check if the user exist
         if user is None:
             return jsonify({"error": "User not found"}), 404
+        # Check if the group and user exist
+        if group is None or user is None:
+            return jsonify(
+                {
+                    "message": f"Group or user not found",
+                    "error": "Not Found"
+                    }
+                    ), 404
 
         newgroup=user.user_groups
         if group.id in [group.id for group in newgroup ]:
-            return jsonify({"error":"forbidden","message":"User already in group"}),403
+            return jsonify(
+                {
+                    "error":"Forbidden",
+                    "message":"User already in group"
+                    }
+                    ),403
         newgroup.append(group)
 
         user.user_groups=newgroup
         user.update()
         
-        return jsonify({ "id": group.id, "message": "User added to Group"}), 201
+        return jsonify(
+            {
+                 "data": group.id,
+                   "message": "User added to Group"
+                   }
+                   ), 201
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify(
+            {"error": "Bad Request",
+             "message":"Something went wrong with the request",
+             }
+             ), 400
 
 
 @groups.route("/<string:group_id>", methods=["GET"])
@@ -65,7 +87,6 @@ def get_group_by_id(group_id):
             group_details = {"id":group.id if group.id else "","group_id": group.id, "title": group.title}
             return jsonify(
                 {
-                    "status": "success",
                     "message": "Group details successfully fetched",
                     "data": group_details,
                 }
@@ -76,22 +97,20 @@ def get_group_by_id(group_id):
                     {
                         "status": "failed",
                         "message": f"Group with groupId {id} not found",
+                        "error": "Not Found",
+                        "message": f"Group not found",
                     }
                 ),
                 404,
             )
     except Exception as e:
         print(f"{type(e).__name__}: {e}")
-        return (
-            jsonify(
-                {
-                    "status": "failed",
-                    "message": "An error occurred while fetching group details",
-                }
-            ),
-            400,
-        )
-
+        return jsonify(
+            {
+                "error": "Bad Request",
+                "message": "An error occurred while fetching group details",
+            }
+            ), 400
 
 @groups.route("/<string:group_id>", methods=["PUT"])
 def update_group(group_id):
@@ -119,32 +138,41 @@ def update_group(group_id):
     try:
         data = request.get_json()
         if "title" not in data:
-            return jsonify({"error": "Missing 'title' in request"}), 400
+            return jsonify(
+                {
+                    "error": "Bad Request",
+                    "message": "Something is wrong with the request data"
+                    }
+                    ), 400
 
         group = query_one_filtered(Groups,id=group_id)
 
         if not group:
-            return (
-                jsonify({"error": f"Group with ID {group_id} not found"}),
-                404,
-            )
+            return jsonify(
+                {
+                    "error": "Not Found",
+                    "message": f"Group with ID {group_id} not found"
+                    }
+                    ), 404
 
         group.title = data["title"]
 
         group.update()
 
-        return (
-            jsonify(
+        return jsonify(
                 {
                     "message": "Group updated successfully",
-                    "group": group.format(),
+                    "data": group.format(),
                 }
-            ),
-            201,
-        )
-
+            ), 201
     except Exception as error:  # pylint: disable=broad-except
-        return jsonify({"error": str(error)}), 400
+        print(str(error))
+        return jsonify(
+            {
+                "error": "Bad Request",
+                "message": " Something went wrong"
+                }
+                ), 400
 
 
 @groups.route("/<group_id>/members/<user_id>", methods=["DELETE"])
@@ -202,10 +230,22 @@ def remove_user_from_group(group_id, user_id):
         # Check if the user exist
         if user is None:
             return jsonify({"error": "User not found"})
+        if group is None or user is None:
+            return jsonify(
+                {
+                    "message": "Group or user not found",
+                    "error":"Not Found"
+                    }
+                    ), 404
 
         user_groups=user.user_groups
         if group_id not in [group.id for group in user_groups ]:
-            return jsonify({"error":"forbidden","message":"User is not a member of this group"}),403
+            return jsonify(
+                {
+                    "error":"forbidden",
+                    "message":"User is not a member of this group"
+                    }
+                    ),403
 
         for key,group in enumerate(user.user_groups):
             if group_id==group.id:
@@ -213,11 +253,20 @@ def remove_user_from_group(group_id, user_id):
         user.user_groups=user_groups
         user.update()
 
-        return jsonify({"message": "User removed from group successfully","group_id":group_id}), 204
+        return jsonify(
+            {
+                "message": "User removed from group successfully",
+                "data":group_id}
+                ), 204
 
     except Exception as e:
         # Handle any potential errors
-        return jsonify({"error": str(e)}), 500
+        return jsonify(
+            {
+                "error": "Bad Request",
+                "message": "Something went wrong"
+                }
+                ), 400
 
 
 @groups.route("/create", methods=["POST"])
@@ -240,7 +289,11 @@ def create_group():
 
         # Check if the 'title' key is present in the JSON data.
         if "title" not in data:
-            return jsonify({"error": "Missing 'title' in request"}), 400
+            return jsonify(
+                {"error": "Bad Request",
+                 "message": "Missing 'title' in request",
+                 }
+                 ), 400
 
         # Extract the 'title' from the JSON data.
         title = data["title"]
@@ -252,19 +305,22 @@ def create_group():
         new_group.insert()
 
         # Return a JSON response indicating successful group creation.
-        return (
-            jsonify(
+        return jsonify(
                 {
                     "message": "Group created successfully",
                     "data": new_group.format(),
                 }
-            ),
-            201,
-        )
+            ), 201
 
     # Handle exceptions and return an error response if any occur.
     except Exception as error:
-        return jsonify({"message": "group creation failed", "error": str(error)}), 400
+        print(str(error))
+        return jsonify(
+            {
+                "message": "group creation failed",
+                  "error": "Bad Request"
+                }
+                ), 400
 
       
 @groups.route("/<string:group_id>", methods=["DELETE"])
@@ -284,7 +340,12 @@ def delete_group(group_id):
 
         # Check if the group exists
         if group is None:
-            return jsonify({"error": "Group not found"}), 404
+            return jsonify(
+                {
+                    "error": "Not found",
+                    "message":"Group not found"
+                 }
+                 ), 404
 
         # Delete the group from the database
         group.delete()
@@ -299,3 +360,19 @@ def delete_group(group_id):
         # Handle any exceptions that may occur during deletion
         db.session.rollback()
         return jsonify({"error": str(e)}), 400
+        return jsonify(
+            {
+                "message": "Group deleted successfully",
+                "data": "No Content",
+             }
+             ),204
+
+    except Exception as e:
+        # Handle any exceptions that may occur during deletion
+        print(str(e))
+        return jsonify(
+            {
+                "error": "Bad Request",
+                "Message": "Something went wrong with this request"
+                }
+                ), 400
