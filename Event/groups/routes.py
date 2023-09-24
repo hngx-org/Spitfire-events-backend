@@ -336,7 +336,14 @@ def get_all_groups():
         all_groups = Groups.query.all()
 
         # Format the groups as a list of dictionaries
-        group_list = [group.format() for group in all_groups]
+        group_list = [
+            {
+                "created_at": group.created_at,
+                "title": group.title,
+                "updated_at": group.updated_at,
+            }
+            for group in all_groups
+        ]
 
         return jsonify(
             {
