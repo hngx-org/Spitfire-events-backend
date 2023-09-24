@@ -2,12 +2,12 @@
 """_summary_
 """
 # pylint: disable=unused-import
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from Event.models.images import Images
 from Event.models.comments import Comments
 from Event.models.events import Events
 # from Event.models.comment_images import CommentImages
-from Event.utils import query_all_filtered, query_all, query_one_filtered, format_date, format_time
+from Event.utils import query_all_filtered, query_all, query_one_filtered, is_logged_in
 
 
 # url_prefix includes /api/events before all endpoints in blueprint
@@ -27,8 +27,10 @@ def create_event():
              - `event` (string): A string representation of the created event.
     """
     # destructure the request dict to kwargs
+    user_id = is_logged_in(session)
     try:
         data = request.get_json()
+        data['creator_id'] = user_id
         thumbnail=data.get("thumbnail")
         data.pop("thumbnail")
         event = Events(**data)
@@ -67,6 +69,8 @@ def delete_event(id):
         If the event does not exist, a not found error response with status code 404 and a JSON body indicating the event was not found.
     """
 
+    is_logged_in(session)
+
     try:
         del_event = query_one_filtered(Events, id=id)
         print(del_event)
@@ -75,9 +79,9 @@ def delete_event(id):
             return jsonify(
                 {
                     "Message": "Event deleted",
-                    "data": "None"
+                    "data": []
                     }
-                    ), 204
+                    ), 200
     except Exception as error:
         print(f"{type(error).__name__}: {error}")
         return jsonify(
@@ -141,6 +145,7 @@ def get_event(event_id):
     This code snippet demonstrates how to make a GET request to retrieve the event with ID 123.
     The expected output is a JSON response containing the event details if it exists, or an error message if the event is not found.
     """
+    is_logged_in(session)
     try:
         event = query_one_filtered(table=Events, id=event_id)
         if event:
@@ -182,6 +187,7 @@ def update_event(event_id: str) -> tuple:
     Raises:
         Exception: If an error occurs during the update process.
     """
+    is_logged_in(session)
     try:
         req = request.get_json()
         db_data = query_one_filtered(Events, id=event_id)
@@ -230,10 +236,11 @@ def add_comments(event_id: str):
         For GET requests:
             dict: A JSON response with the status, message, and data containing a list of all comments associated with the event.
     """
+    user_id = is_logged_in(session)
     if request.method == "POST":
         try:
             data = request.get_json()
-            user_id = data.get("user_id")
+            user_id = user_id
             body = data.get("body")
             image_url_list = data.get("image_url_list", None)
             new_comment = Comments(event_id=event_id, user_id=user_id,

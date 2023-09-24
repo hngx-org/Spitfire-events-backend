@@ -3,7 +3,6 @@
 
 from Event import db
 from Event.models.base_model import BaseModel
-from datetime import datetime
 
 
 # Association table between Comments and Images
@@ -58,7 +57,9 @@ class Comments(BaseModel):
 
     # event = db.relationship("Events", backref=db.backref("comments", lazy=True))
     # user = db.relationship("Users", backref=db.backref("comments", lazy=True))
-    images = db.relationship("Images", backref="comments", secondary=comment_images, lazy="dynamic")
+    images = db.relationship("Images", backref="comments",
+                             secondary=comment_images, lazy="dynamic",
+                             cascade="all, delete")
 
     def __init__(self, event_id, user_id, body):
         """Initialize the Comment object"""
