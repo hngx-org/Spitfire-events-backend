@@ -1,19 +1,19 @@
 """
-Module for removing user from a group.
+Module for performing various operations on the /api/groups route.
 """
 
-import logging
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, session
 from Event.models.users import Users
 from Event.models.groups import Groups
 from Event import db
-from Event.utils import query_one_filtered
+from Event.utils import query_one_filtered, is_logged_in
 
 
 groups = Blueprint("groups", __name__, url_prefix="/api/groups")
 
 @groups.route("/<string:groupId>/members/<string:userId>",methods=["POST"])
 def add_user_to_group(groupId, userId):
+    is_logged_in(session)
     try:
         group = query_one_filtered(Groups,id=groupId)
         user = query_one_filtered(Users,id=userId)
@@ -72,6 +72,7 @@ def get_group_by_id(group_id):
     Returns:
         dict: A JSON response with group details.
     """
+    is_logged_in(session)
     try:
         group = query_one_filtered(Groups,id=group_id)
 
@@ -112,6 +113,7 @@ def get_group_by_id(group_id):
             }
             ), 400
 
+
 @groups.route("/<string:group_id>", methods=["PUT"])
 def update_group(group_id):
     """
@@ -135,6 +137,7 @@ def update_group(group_id):
         400 Internal Server Error: If any server error occurs
         during the update process.
     """
+    is_logged_in(session)
     try:
         data = request.get_json()
         if "title" not in data:
@@ -145,7 +148,7 @@ def update_group(group_id):
                     }
                     ), 400
 
-        group = query_one_filtered(Groups,id=group_id)
+        group = query_one_filtered(Groups, id=group_id)
 
         if not group:
             return jsonify(
@@ -175,36 +178,6 @@ def update_group(group_id):
                 ), 400
 
 
-@groups.route("/<group_id>/members/<user_id>", methods=["DELETE"])
-def remove_group_member(group_id, user_id):
-    """
-    Remove a user from a group.
-
-    Parameters:
-        group_id (str): The ID of the group.
-        user_id (str): The ID of the user to be removed from the group.
-
-    Returns:
-        JSON response with information about the
-        if user left group or an error message.
-    """
-    group = Groups.query.get(group_id)
-    user = Users.query.get(user_id)
-
-    # Check if the group and user exist
-    if group is None or user is None:
-        return jsonify({"error": "Group or user not found"}), 404
-
-    # Check if the user is a member of the group
-    if user not in group.members:
-        return jsonify({"error": "User is not a member of the group"}), 400
-
-    # Remove the user from the group
-    group.members.remove(user)
-    db.session.commit()
-
-    return jsonify({"message": "User removed from group successfully"}), 200
-
 # Define the route to remove a user from a group
 @groups.route("/<string:group_id>/members/<string:user_id>", methods=["DELETE"])
 def remove_user_from_group(group_id, user_id):
@@ -218,18 +191,12 @@ def remove_user_from_group(group_id, user_id):
     Returns:
     A JSON response depending on the outcome of the method.
     """
+    is_logged_in(session)
     try:
         # Retrieve group and user ids
         group = query_one_filtered(Groups,id=group_id)
         user = query_one_filtered(Users,id=user_id)
 
-        # Check if group exist
-        if group is None:
-            return jsonify({"message": "Group not found"}), 404
-
-        # Check if the user exist
-        if user is None:
-            return jsonify({"error": "User not found"})
         if group is None or user is None:
             return jsonify(
                 {
@@ -283,6 +250,7 @@ def create_group():
         JSON response with information about the created
         group or an error message.
     """
+    is_logged_in(session)
     try:
         # Attempt to extract JSON data from the incoming request.
         data = request.get_json()
@@ -334,6 +302,7 @@ def delete_group(group_id):
     Returns:
     tuple: A tuple containing response message and status code.
     """
+    is_logged_in(session)
     try:
         # Retrieve the group from the database
         group = query_one_filtered(Groups,id=group_id)

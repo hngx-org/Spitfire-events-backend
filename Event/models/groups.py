@@ -3,7 +3,6 @@
 
 from Event import db
 from Event.models.base_model import BaseModel
-from datetime import datetime
 
 
 class Groups(BaseModel):
