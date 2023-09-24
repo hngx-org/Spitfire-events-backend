@@ -33,6 +33,7 @@
    - 5.6 [Delete a Group](#delete-a-group)
    - 5.7 [Add a User to a Group](#add-a-user-to-a-group)
    - 5.8 [Remove a User from a Group](#remove-a-user-from-a-group)
+   - 5.9 [Get All Groups](#get-all-groups)
 6. [Models](#models)
    - 6.1 [Users Model](#users-model)
    - 6.2 [Images Model](#images-model)
@@ -148,13 +149,13 @@ The API handles errors gracefully and returns JSON responses with appropriate st
           "message": "Invalid token."
         }
         ```
-    - **500 Internal Server Error**:
-        - **Status Code**: 500
+    - **403 Forbidden**:
+        - **Status Code**: 403
         - **Response Body**:
   ```JSON
   {
-    "error": "Internal Server Error",
-    "message": "It's not you, it's us. We encountered an internal server error."
+    "error": "Forbidden",
+    "message": "Token is of unknown origin"
   }
   ```
 
@@ -168,22 +169,25 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     {
 
       "message": "success",
-      "name": "user display name",
-      "email": "user email",
-      "avatar": "user image url"
+      "data:{
+         "id": "user_id",
+         "name": "user display name",
+         "email": "user email",
+         "avatar": "user image url"
+       }
     }
     ```
     - **Attributes**:
         - `avatar` (string): mage url to users avatar.
 
 - **Error Responses**:
-    - **401 Unauthorised**:
-        - **Status Code**: 400
+    - **500 Internal Server Error**:
+        - **Status Code**: 500
         - **Response Body**:
         ```JSON
         {
-          "error": "Unauthorised",
-          "message": "You are not logged in"
+          "error": "Internal server error",
+          "message": "It's not you it's us
         }
         ```
 
@@ -265,6 +269,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
+  "message": "user {user_id}  details updated successfully",
   "data": {  
   "id": "user-id",
   "name": "Updated Name",
@@ -272,8 +277,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   "avatar": "updated-avatar-url",
   "created_at": "time_created in UTCNow",
   "updated_at": "time_updated in UTCNow"
-  },
-  "message": "user {user_id}  details updated successfully",
+  }
 }
 ```
 - **Error Responses**:
@@ -415,7 +419,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "message": "event returned succesfully",
+  "message": "Event successfully Found",
   "data": {
     "id": "event-id",
     "title": "Event Title",
@@ -513,7 +517,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   ```JSON
     {
        "Message": "Event deleted",
-       "data": "None"
+       "data": []
     }
   ```
 - **Error Responses**:
@@ -524,6 +528,16 @@ The API handles errors gracefully and returns JSON responses with appropriate st
         {
           "error": "Bad Request",
           "message":  "something went wrong."
+        }
+  ```
+
+   - **403 Unauthorized**:
+        - **Status Code**: 403
+        - **Response Body**:
+  ```JSON
+        {
+          "error": "Not Authorized",
+          "Not Found": "Only the creator can delete group"
         }
   ```
     - **404 Not Found**:
@@ -553,7 +567,6 @@ The API handles errors gracefully and returns JSON responses with appropriate st
     - **Response**:
 ```JSON
 {
-  "status": "success",
   "message": "Comment saved successfully",
   "data": {
     "id": "comment-id",
@@ -674,7 +687,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 ```JSON
 {
    "message": "all images successfully fetched",
-   "data":{
+   "data":
       [
         {
           "image_id": "image-id-1",
@@ -687,7 +700,6 @@ The API handles errors gracefully and returns JSON responses with appropriate st
           "image_url": "image-url-2"
         }
       ]
-   }
 }
 ```
 - **Error Responses**:
@@ -704,18 +716,46 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 
 ### Like A Comment
 - **Endpoint** : `/like_comment/{comment_id}`
-- **Description**: Like a particular comment.
+- **Description**: Like Or Unlike a particular comment.
 - **Input Parameters**:`comment_id` (string, required): The ID of the comment to be liked.
 - **Success Response**:
   - **Status Code**: 200
     - **Response**:
+    - **FOR LIKE**
   ```JSON
     {
-         "message": "success",
-         "comment_id": "comment-id"
+        "message": "Liked", 
+        "data": "number_of_likes"
     }
 
   ```
+   - **FOR UNLIKE**
+  ```JSON
+    {
+        "message": "UnLiked", 
+        "data": "number_of_likes"
+    }
+
+  ```
+ - **Error Responses**:
+    - **403 Forbidden**:
+    - **Status Code**: 403
+    - **Response Body**:
+  ```JSON
+  {
+      "error": "Forbidden",
+      "message": "you are not allowed to perform such actions"
+  }
+  ```
+ - **404 Not Found**:
+ - **Status Code**: 404
+ - **Response Body**:
+```JSON
+{
+  "error": "Not Found",
+  "message": "Event Not Found",
+}
+```
 
 ### Get Total Likes for a Comment
 - **Endpoint** : `/likes/{comment_id}`
@@ -725,21 +765,32 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   - **Status Code**: 200
     - **Response**:
   ```JSON
-  {
-    "message": "success",
-    "total_likes": 42
-  }
+    {
+        "message": "Number of likes", 
+        "data": "number_of_likes"
+    }
 
   ```
-  - **Error Responses**:
-    - **404 Not Found**:
-    - **Status Code**: 404
+ - **Error Responses**:
+    - **403 Forbidden**:
+    - **Status Code**: 403
     - **Response Body**:
   ```JSON
   {
-     "error": "Comment not found"
+      "error": "Forbidden",
+      "message": "you are not allowed to perform such actions"
   }
   ```
+ - **404 Not Found**:
+ - **Status Code**: 404
+ - **Response Body**:
+```JSON
+{
+  "error": "Not Found",
+  "message": "Event Not Found",
+}
+```
+
 
 
 ## User Interactions
@@ -753,6 +804,13 @@ The API handles errors gracefully and returns JSON responses with appropriate st
 ```JSON
 {
      "message": "Interest registered.",
+     "data": f"{user_id} has shown interest in {event_id}"
+}
+```
+**OR**
+```JSON
+{
+     "message": "Interest cannot be registered twice.",
      "data": f"{user_id} has shown interest in {event_id}"
 }
 ```
@@ -788,6 +846,14 @@ The API handles errors gracefully and returns JSON responses with appropriate st
      "data": "No content"
 }
 ```
+**OR**
+```JSON
+{
+     "message": "user has not previously shown interest
+     "data": "Nothing to delete"
+}
+```
+**OR**
 - **Error Responses**:
     - **400 Bad Request**:
         - **Status Code**: 400
@@ -964,7 +1030,7 @@ The API handles errors gracefully and returns JSON responses with appropriate st
   ```
 
 ### Add a User to a Group
-- **Endpoint**: **POST** `/api/groups/{group_id}/members/{user_id}`
+- **Endpoint**: **POST** `/api/groups/{group_id}/members/{member_id}`
 - **Description**:  Add a user to a group.
 - **Input Parameters** :
     - `group_id` (string, required): The ID of the group to which the user will be added.
@@ -998,19 +1064,17 @@ The API handles errors gracefully and returns JSON responses with appropriate st
       "message":"User already in group"
   }
    ```
-  
-
- 
 
 ### Remove a User from a Group
-- **Endpoint**: **DELETE** `/api/groups/{id}/members/{user_id}`
+- **Endpoint**: **DELETE** `/api/groups/{id}/members/{member_id}`
 - **Description**:  Remove a user from a group.
 - **Success Response**:
     - **Status Code**: 200
     - **Response**:
 ```JSON
 {
-  "message": "User ID {user_id} removed from the group ID {group_id} successfully."
+  "message": "User removed from group successfully",
+  "data":group_id
 }
 ```
 - **Error Responses**:
@@ -1041,7 +1105,38 @@ The API handles errors gracefully and returns JSON responses with appropriate st
      "error":"Not Found"
   }
 
+### Get All Groups
+- **Endpoint**: **GET** `/api/groups/`
+- **Description**:  A list of group details.
+- **Success Response**:
+    - **Status Code**: 200
+    - **Response**:
+```JSON
+{
+  "message": "All groups successfully fetched",
+  "data": group_list,
+}
+```
+- **Error Responses**:
+    - **400 Bad Request**:
+      - **Status Code**: 400
+      - **Response Body**:
+  ```JSON
+  {
+      "error": "Bad Request",
+       "message": "An error occurred while fetching all groups"
+  }
+  ```
+  - **404 Not Found**:
+        - **Status Code**: 404
+        - **Response Body**:
+  ```JSON
+  {
+     "message": "Group  not found",
+     "error":"Not Found"
+  }
 
+  
 ## Models
 ### Users Model
 - Represents user data with attributes:
