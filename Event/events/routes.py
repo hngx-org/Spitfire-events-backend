@@ -118,6 +118,7 @@ def all_events():
     try:
         null = None
         all_events = query_all(Events)
+        for event in events['data']: event['description'] = event.get('description', None)
         all_events['data'].sort(key=lambda event: event['updated_at'], reverse=True)
     except Exception:
         return jsonify(
