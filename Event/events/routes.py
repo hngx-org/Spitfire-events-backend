@@ -288,6 +288,8 @@ def add_comments(event_id: str):
     # GET comments
     try:
         all_comments = query_all_filtered(Comments, event_id=event_id)
+        #sort all_comments by creation date
+        all_comments.sort(key=lambda element: element.created_at, reverse=False)
         if not all_comments:
             return jsonify(
                 {"status": "failed", 
