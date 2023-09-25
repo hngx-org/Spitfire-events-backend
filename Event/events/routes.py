@@ -117,7 +117,7 @@ def all_events():
     """
     try:
         all_events = query_all(Events)
-        all_events.reverse()
+        all_events.sort(key=lambda event: event['data']['updated_at'], reverse=True)
     except Exception:
         return jsonify(
             {
