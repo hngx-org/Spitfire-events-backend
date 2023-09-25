@@ -326,7 +326,46 @@ paths:
                   error:
                     type: string
 
-  /api/groups/{group_id}/members/{user_id}:
+  /api/groups:
+    get:
+      summary: Get all Groups
+      description: Retrieve all events in DB.
+      # parameters:
+      #   - name: id
+      #     in: path
+      #     description: The ID of the event to retrieve.
+      #     required: true
+      #     type: string
+      responses:
+        200:
+          description: All Groups retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      title:
+                        type: string
+        404:
+          description: Groups Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /api/groups/{group_id}/members/{new_member_id}:
     post:
       summary: Add a user to a group
       description: Add a user to a group with the provided group and user IDs.
@@ -336,7 +375,7 @@ paths:
           description: The ID of the group to add the user to.
           required: true
           type: string
-        - name: user_id
+        - name: new_member_id
           in: path
           description: The ID of the user to be added to the group.
           required: true
@@ -364,16 +403,17 @@ paths:
                 properties:
                   error:
                     type: string
+  /api/groups/{group_id}/members/{member_id}:                    
     delete:
       summary: Remove a user from a group
-      description: Remove a user from a group with the provided group and user IDs.
+      description: Remove a user from a group with the provided group and group IDs.
       parameters:
         - name: group_id
           in: path
           description: The ID of the group to remove the user from.
           required: true
           type: string
-        - name: user_id
+        - name: member_id
           in: path
           description: The ID of the user to be removed from the group.
           required: true
@@ -604,26 +644,26 @@ paths:
                   error:
                     type: string
   /api/users:
-    get:
-      summary: Get Active Signals
-      description: Retrieve and return active signals.
-      responses:
-        200:
-          description: Active signals retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: string
-  /api/users/{id}:
+    # get:
+    #   summary: Get Active Signals
+    #   description: Retrieve and return active signals.
+    #   responses:
+    #     200:
+    #       description: Active signals retrieved successfully
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: string
+  /api/users/:
     get:
       summary: Get User Profile
       description: Get user profile details for the provided user ID.
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the user to retrieve.
-          required: true
-          type: string
+      # parameters:
+      #   - name: id
+      #     in: path
+      #     description: The ID of the user to retrieve.
+      #     required: true
+      #     type: string
       responses:
         200:
           description: User profile retrieved successfully
@@ -661,11 +701,11 @@ paths:
               email: "updated@example.com"
               avatar: "updated-avatar-url"
       parameters:
-        - name: id
-          in: path
-          description: The ID of the user to update.
-          required: true
-          type: string
+        # - name: id
+        #   in: path
+        #   description: The ID of the user to update.
+        #   required: true
+        #   type: string
         - name: Updated User 
           in: body
           description: add only what you want to update
@@ -702,16 +742,16 @@ paths:
                 properties:
                   error:
                     type: string
-  /api/users/{user_id}/interests/{event_id}:
+  /api/users/interests/{event_id}:
     post:
       summary: Create Interest in an Event
       description: Create an interest in an event for the provided user and event IDs.
       parameters:
-        - name: user_id
-          in: path
-          description: The ID of the user.
-          required: true
-          type: string
+        # - name: user_id
+        #   in: path
+        #   description: The ID of the user.
+        #   required: true
+          # type: string
         - name: event_id
           in: path
           description: The ID of the event.
@@ -740,11 +780,11 @@ paths:
       summary: Remove Interest in an Event
       description: Remove an interest in an event for the provided user and event IDs.
       parameters:
-        - name: user_id
-          in: path
-          description: The ID of the user.
-          required: true
-          type: string
+        # - name: user_id
+        #   in: path
+        #   description: The ID of the user.
+        #   required: true
+        #   type: string
         - name: event_id
           in: path
           description: The ID of the event.
