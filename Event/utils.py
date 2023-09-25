@@ -126,9 +126,9 @@ def is_logged_in(session):
         id(str):
             - logged in users id
     """
-    # user = session.get("user")
+    user = session.get("user")
     # hardcoded because of failure of mobile integration
-    user = { "id": os.environ.get("LOGGED_IN_USER", "user11_id") }
+    # user = { "id": os.environ.get("LOGGED_IN_USER", "user11_id") }
 
     if not user:
         raise CustomError("Unauthorized", 401, "You are not logged in")
