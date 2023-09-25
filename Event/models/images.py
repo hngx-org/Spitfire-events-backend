@@ -3,7 +3,6 @@
 
 from Event import db
 from Event.models.base_model import BaseModel
-from datetime import datetime
 
 
 class Images(BaseModel):
@@ -13,9 +12,7 @@ class Images(BaseModel):
     Attributes:
         id (str):
             Primary key for the table.
-        comment_id (str):
-            Foreign key for the comment table.
-        image_url (str):
+        url (str):
             The URL or path to the image.
 
     Methods:
