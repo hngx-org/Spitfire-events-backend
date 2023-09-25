@@ -3,7 +3,17 @@
 
 from Event import db
 from Event.models.base_model import BaseModel
-from datetime import datetime
+
+# Association table between groups and events
+group_events = db.Table('group_events',
+    db.Column('group_id', db.String(60), db.ForeignKey("groups.id"), primary_key=True, nullable=False),
+    db.Column('event_id', db.String(60), db.ForeignKey("events.id"), primary_key=True, nullable=False)
+)
+# Association table between groups and images
+group_image = db.Table('group_image',
+    db.Column('group_id', db.String(60), db.ForeignKey("groups.id"), primary_key=True, nullable=False),
+    db.Column('image_id', db.String(60), db.ForeignKey("images.id"), primary_key=True, nullable=False)
+)
 
 
 class Groups(BaseModel):
@@ -27,6 +37,11 @@ class Groups(BaseModel):
 
     title = db.Column(db.String(60), unique=True, nullable=False)
     # creator_id = db.column(db.Strings(60), db.ForeignKey("users.id") nullable=False)
+
+    # many to many relationships with groups
+    events = db.relationship("Events", secondary=group_events, backref=db.backref("involved_groups", lazy=True), lazy="subquery")
+
+    thumbnails = db.relationship("Images", secondary=group_image, backref=db.backref("group", lazy=True), lazy="subquery")
 
     def __init__(self, title):
         """Constructor for the Groups class."""

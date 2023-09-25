@@ -4,6 +4,7 @@ summary
 from Event import db
 from Event.errors.handlers import CustomError
 from datetime import datetime
+import os
 
 
 
