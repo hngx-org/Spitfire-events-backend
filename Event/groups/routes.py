@@ -332,6 +332,8 @@ def get_all_groups():
     try:
         # Query the database to retrieve all groups
         all_groups = Groups.query.all()
+        #sort all groups by updated_at
+        all_groups.sort(key=lambda x: x.updated_at, reverse=True)
 
         # Format the groups as a list of dictionaries
         group_list = [
