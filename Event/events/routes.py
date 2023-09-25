@@ -116,9 +116,10 @@ def all_events():
         json: A JSON response containing all events created.
     """
     try:
-        null = None
         all_events = query_all(Events)
+        print(all_events)
         all_events.sort(key=lambda element: element['updated_at'], reverse=True)
+        print(all_events)
     except Exception:
         return jsonify(
             {
